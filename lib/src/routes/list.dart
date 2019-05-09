@@ -1,0 +1,13 @@
+const String home = "/";
+const String intro = "/intro";
+const String edit_profile = "/edit_profile";
+const String view_profile = "/view_profile";
+const String initial_screen = "/initial_screen";
+const String request_otp = "/request_otp";
+const String verify_otp = "/verify_otp";
+const String stop = "/stop";
+const String tab = "/tab";
+const String gender = "/gender";
+const String location = "/location";
+const String profession = "/profession";
+const String level = "/level";
