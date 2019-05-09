@@ -1,14 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:multipart_request/multipart_request.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
+import 'package:pauzr/src/blocs/user/event.dart';
+import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/location.dart';
 import 'package:pauzr/src/models/profession.dart';
+import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
 import 'package:pauzr/src/screens/users/tappable.dart';
-import 'package:intl/intl.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -21,6 +29,9 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePage extends State<EditProfilePage> {
+  ApiProvider apiProvider = ApiProvider();
+  bool loading = false;
+
   UserBloc userBloc;
 
   TextEditingController nameController = TextEditingController();
@@ -86,6 +97,7 @@ class _EditProfilePage extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(height: 20.0),
+              if (widget.shouldPop == true) photoUpload(),
               BlocBuilder(
                 bloc: userBloc,
                 builder: (context, state) {
@@ -227,6 +239,33 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
   }
 
+  BlocBuilder<UserEvent, UserState> photoUpload() {
+    return BlocBuilder(
+      bloc: userBloc,
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: uploadImage,
+          child: Container(
+            height: 120.0,
+            width: 120.0,
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: ClipOval(
+              child: loading == false
+                  ? Image.network(
+                      "$baseUrl/users/${state.user.avatar}",
+                      width: 120.0,
+                      height: 120.0,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    )
+                  : CircularProgressIndicator(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void onSubmit() {
     XsProgressHud.show(context);
 
@@ -240,6 +279,35 @@ class _EditProfilePage extends State<EditProfilePage> {
 
         return Navigator.pushReplacementNamed(context, routeList.tab);
       }
+    });
+  }
+
+  void uploadImage() async {
+    final file = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      loading = true;
+    });
+
+    final Response response = await apiProvider.uploadAvatar(file);
+
+    response.onError = () {
+      setState(() {
+        loading = false;
+      });
+    };
+
+    response.onComplete = (response) {
+      setState(() {
+        loading = false;
+      });
+
+      Map data = json.decode(response);
+      userBloc.setAuthUser(data['user']);
+    };
+
+    response.progress.listen((int progress) {
+      print("progress from response object " + progress.toString());
     });
   }
 }

@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
-import 'package:image_picker/image_picker.dart';
-import 'package:multipart_request/multipart_request.dart';
 
 class ViewProfilePage extends StatefulWidget {
   final bool shouldPop;
@@ -21,9 +16,7 @@ class ViewProfilePage extends StatefulWidget {
 }
 
 class _ViewProfilePage extends State<ViewProfilePage> {
-  ApiProvider apiProvider = ApiProvider();
   UserBloc userBloc;
-  bool loading = false;
 
   @override
   void initState() {
@@ -75,19 +68,14 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                   child: Center(
                     child: Hero(
                       tag: 'profile-image',
-                      child: GestureDetector(
-                        onTap: uploadImage,
-                        child: Container(
-                          child: ClipOval(
-                            child: loading == false
-                                ? Image.network(
-                                    "$baseUrl/users/${state.user.avatar}",
-                                    width: 150.0,
-                                    height: 150.0,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.center,
-                                  )
-                                : CircularProgressIndicator(),
+                      child: Container(
+                        child: ClipOval(
+                          child: Image.network(
+                            "$baseUrl/users/${state.user.avatar}",
+                            width: 150.0,
+                            height: 150.0,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
                           ),
                         ),
                       ),
@@ -153,34 +141,5 @@ class _ViewProfilePage extends State<ViewProfilePage> {
         },
       ),
     );
-  }
-
-  void uploadImage() async {
-    final file = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      loading = true;
-    });
-
-    final Response response = await apiProvider.uploadAvatar(file);
-
-    response.onError = () {
-      setState(() {
-        loading = false;
-      });
-    };
-
-    response.onComplete = (response) {
-      setState(() {
-        loading = false;
-      });
-
-      Map data = json.decode(response);
-      userBloc.setAuthUser(data['user']);
-    };
-
-    response.progress.listen((int progress) {
-      print("progress from response object " + progress.toString());
-    });
   }
 }
