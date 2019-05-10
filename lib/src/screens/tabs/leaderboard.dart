@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
+import 'package:swipedetector/swipedetector.dart';
 
 class LeaderboardPage extends StatefulWidget {
   LeaderboardPage({Key key}) : super(key: key);
@@ -21,45 +22,82 @@ class _LeaderboardPage extends State<LeaderboardPage>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              getSwitch(
-                items: ["Today", "This Week", "This Month"],
-                selected: period,
-                onSelect: (index, value) {
-                  setState(() {
-                    period = value;
-                  });
-                },
-              ),
-              Container(
-                margin: EdgeInsets.all(5.0),
-                child: getCards(),
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: getLocation(),
-              ),
-              getSwitch(
-                items: ["My Profession", "All Profession"],
-                selected: profession,
-                onSelect: (index, value) {
-                  setState(() {
-                    profession = value;
-                  });
-                },
-              ),
-            ],
+    return SwipeDetector(
+      swipeConfiguration: SwipeConfiguration(
+        verticalSwipeMinVelocity: 100.0,
+        verticalSwipeMinDisplacement: 50.0,
+        verticalSwipeMaxWidthThreshold: 100.0,
+        horizontalSwipeMaxHeightThreshold: 50.0,
+        horizontalSwipeMinDisplacement: 50.0,
+        horizontalSwipeMinVelocity: 200.0,
+      ),
+      onSwipeLeft: () {
+        if (period == "Today") {
+          setState(() {
+            period = "This Week";
+          });
+        } else if (period == "This Week") {
+          setState(() {
+            period = "This Month";
+          });
+        }
+      },
+      onSwipeRight: () {
+        if (period == "This Month") {
+          setState(() {
+            period = "This Week";
+          });
+        } else if (period == "This Week") {
+          setState(() {
+            period = "Today";
+          });
+        }
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                getSwitch(
+                  items: ["Today", "This Week", "This Month"],
+                  selected: period,
+                  onSelect: (index, value) {
+                    setState(() {
+                      period = value;
+                    });
+                  },
+                ),
+                Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: getCards(),
+                ),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: getLocation(),
+                ),
+                getSwitch(
+                  items: ["My Profession", "All Profession"],
+                  selected: profession,
+                  onSelect: (index, value) {
+                    setState(() {
+                      profession = value;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(getList()),
-        ),
-      ],
+          SliverList(
+            delegate: SliverChildListDelegate(getList()),
+          ),
+        ],
+      ),
     );
   }
 
