@@ -15,24 +15,25 @@ Card getInfoCard(level) {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
       ),
-      child: rank < 3 ? Text(
-  "You have successfully cleared this level.",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.green,
-          fontSize: 18.0,
-          fontFamily: Fonts.titilliumWebSemiBold,
-        ),
-      ):
-      Text(
-  "You need atleast ${points.toString()} points to clear this level.",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.red,
-          fontSize: 18.0,
-          fontFamily: Fonts.titilliumWebSemiBold,
-        ),
-      ),
+      child: rank < 3
+          ? Text(
+              "You have successfully cleared this level.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 18.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            )
+          : Text(
+              "Earn ${points.toString()} points to clear this level.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 18.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
     ),
   );
 }
