@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
-import 'package:pauzr/src/screens/levels.dart';
+import 'package:pauzr/src/screens/levels/info.dart';
 import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/otp/verify_otp.dart';
 import 'package:pauzr/src/screens/stop.dart';

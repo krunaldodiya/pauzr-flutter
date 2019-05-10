@@ -154,14 +154,24 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
       XsProgressHud.hide();
 
       if (results != false) {
+        User user = User.fromMap(results['user']);
+
         userBloc.setAuthToken(results['access_token']);
         userBloc.setAuthUser(results['user']);
 
-        User user = User.fromMap(results['user']);
-        return Navigator.pushReplacementNamed(
-          context,
-          user.status == 1 ? routeList.tab : routeList.edit_profile,
-        );
+        if (user.status == 1) {
+          return Navigator.of(context).pushReplacementNamed(
+            routeList.tab,
+            arguments: null,
+          );
+        }
+
+        if (user.status == 0) {
+          return Navigator.of(context).pushReplacementNamed(
+            routeList.edit_profile,
+            arguments: {"shouldPop": false},
+          );
+        }
       }
     });
   }
