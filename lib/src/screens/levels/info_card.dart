@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 
-Card getInfoCard(level) {
+Card getInfoCard(level, user) {
   int rank = level['index'];
   int points = level['points'];
 
@@ -15,7 +15,7 @@ Card getInfoCard(level) {
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
       ),
-      child: rank < 3
+      child: rank <= user.level
           ? Text(
               "You have successfully cleared this level.",
               textAlign: TextAlign.center,

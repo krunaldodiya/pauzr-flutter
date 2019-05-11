@@ -1,6 +1,9 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/blocs/user/bloc.dart';
+import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/screens/levels/info_card.dart';
 import 'package:pauzr/src/screens/levels/levels.dart';
@@ -14,9 +17,15 @@ class LevelPage extends StatefulWidget {
 }
 
 class _LevelPage extends State<LevelPage> with SingleTickerProviderStateMixin {
+  UserBloc userBloc;
+
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      userBloc = BlocProvider.of<UserBloc>(context);
+    });
   }
 
   @override
@@ -47,33 +56,24 @@ class _LevelPage extends State<LevelPage> with SingleTickerProviderStateMixin {
             itemBuilder: (context, int index) {
               final level = levels[index];
 
-              return FlipCard(
-                direction: FlipDirection.VERTICAL,
-                front: Container(
-                  child: getMainCard(level),
-                ),
-                back: Container(
-                  child: getInfoCard(level),
-                ),
+              return BlocBuilder(
+                bloc: userBloc,
+                builder: (context, UserState state) {
+                  return FlipCard(
+                    direction: FlipDirection.VERTICAL,
+                    front: Container(
+                      child: getMainCard(level, state.user),
+                    ),
+                    back: Container(
+                      child: getInfoCard(level, state.user),
+                    ),
+                  );
+                },
               );
             },
           ),
         ),
       ),
     );
-  }
-
-  getList() {
-    List<Widget> list = [];
-
-    list.add(Container(height: 10.0));
-
-    for (var i = 0; i < 10; i++) {
-      final int rank = i + 1;
-
-      list.add(getMainCard(rank));
-    }
-
-    return list;
   }
 }

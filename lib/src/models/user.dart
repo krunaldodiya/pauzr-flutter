@@ -13,6 +13,7 @@ class User {
   final String gender;
   final Location location;
   final Profession profession;
+  final int level;
   final int status;
 
   User({
@@ -25,6 +26,7 @@ class User {
     this.gender,
     this.location,
     this.profession,
+    this.level,
     this.status,
   });
 
@@ -39,6 +41,7 @@ class User {
       gender: json["gender"] ?? this.gender,
       location: json["location"] ?? this.location,
       profession: json["profession"] ?? this.profession,
+      level: json["level"] ?? this.level,
       status: json["status"] ?? this.status,
     );
   }
@@ -57,6 +60,7 @@ class User {
         profession = json["profession"] is Profession
             ? json["profession"]
             : Profession.fromMap(json["profession"]),
+        level = json["level"],
         status = json["status"];
 
   static fromList(List users) {

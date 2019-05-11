@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/blocs/user/bloc.dart';
+import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
@@ -13,12 +16,18 @@ class LeaderboardPage extends StatefulWidget {
 
 class _LeaderboardPage extends State<LeaderboardPage>
     with SingleTickerProviderStateMixin {
+  UserBloc userBloc;
+
   String period = "Today";
   String profession = "My Profession";
 
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      userBloc = BlocProvider.of<UserBloc>(context);
+    });
   }
 
   @override
@@ -217,53 +226,57 @@ class _LeaderboardPage extends State<LeaderboardPage>
             onTap: () {
               Navigator.pushNamed(context, routeList.level);
             },
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0),
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.green, Colors.blue],
-                      ),
-                    ),
-                    height: 90.0,
-                    child: Center(
-                      child: Text(
-                        "1/10",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 36.0,
-                          fontFamily: Fonts.titilliumWebBold,
+            child: BlocBuilder(
+                bloc: userBloc,
+                builder: (context, UserState state) {
+                  return Card(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5.0),
+                              topRight: Radius.circular(5.0),
+                            ),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Colors.green, Colors.blue],
+                            ),
+                          ),
+                          height: 90.0,
+                          child: Center(
+                            child: Text(
+                              "${state.user.level}/10",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 36.0,
+                                fontFamily: Fonts.titilliumWebBold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        Container(
+                          width: 80.0,
+                          padding: EdgeInsets.all(5.0),
+                          color: Colors.white,
+                          child: Text(
+                            "Levels Cleared",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontFamily: Fonts.titilliumWebSemiBold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Container(
-                    width: 80.0,
-                    padding: EdgeInsets.all(5.0),
-                    color: Colors.white,
-                    child: Text(
-                      "Levels Cleared",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontFamily: Fonts.titilliumWebSemiBold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                  );
+                }),
           ),
         ),
       ],
