@@ -116,170 +116,93 @@ class _LeaderboardPage extends State<LeaderboardPage>
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, routeList.level);
-            },
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0),
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.green, Colors.blue],
-                      ),
-                    ),
-                    height: 90.0,
-                    child: Center(
-                      child: Text(
-                        "180",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 36.0,
-                          fontFamily: Fonts.titilliumWebBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 80.0,
-                    padding: EdgeInsets.all(5.0),
-                    color: Colors.white,
-                    child: Text(
-                      "Minutes Saved",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontFamily: Fonts.titilliumWebSemiBold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.level);
-            },
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5.0),
-                        topRight: Radius.circular(5.0),
-                      ),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.green, Colors.blue],
-                      ),
-                    ),
-                    height: 90.0,
-                    child: Center(
-                      child: Text(
-                        "13",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 36.0,
-                          fontFamily: Fonts.titilliumWebBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 80.0,
-                    padding: EdgeInsets.all(5.0),
-                    color: Colors.white,
-                    child: Text(
-                      "Points Earned",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontFamily: Fonts.titilliumWebSemiBold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.level);
+              Navigator.pushNamed(context, routeList.minutes);
             },
             child: BlocBuilder(
-                bloc: userBloc,
-                builder: (context, UserState state) {
-                  return Card(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5.0),
-                              topRight: Radius.circular(5.0),
-                            ),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.green, Colors.blue],
-                            ),
-                          ),
-                          height: 90.0,
-                          child: Center(
-                            child: Text(
-                              "${state.user.level}/10",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 36.0,
-                                fontFamily: Fonts.titilliumWebBold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 80.0,
-                          padding: EdgeInsets.all(5.0),
-                          color: Colors.white,
-                          child: Text(
-                            "Levels Cleared",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontFamily: Fonts.titilliumWebSemiBold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+              bloc: userBloc,
+              builder: (context, UserState state) {
+                return getCard("180", "Minutes Saved");
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, routeList.points);
+            },
+            child: BlocBuilder(
+              bloc: userBloc,
+              builder: (context, UserState state) {
+                return getCard("13", "Points Earned");
+              },
+            ),
+          ),
+        ),
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, routeList.levels);
+            },
+            child: BlocBuilder(
+              bloc: userBloc,
+              builder: (context, UserState state) {
+                return getCard("${state.user.level}/10", "Levels Cleared");
+              },
+            ),
           ),
         ),
       ],
+    );
+  }
+
+  Card getCard(String title, String msg) {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5.0),
+                topRight: Radius.circular(5.0),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.green, Colors.blue],
+              ),
+            ),
+            height: 90.0,
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 36.0,
+                  fontFamily: Fonts.titilliumWebBold,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 80.0,
+            padding: EdgeInsets.all(5.0),
+            color: Colors.white,
+            child: Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+                fontSize: 14.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

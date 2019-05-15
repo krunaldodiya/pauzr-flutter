@@ -3,8 +3,10 @@ import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
+import 'package:pauzr/src/screens/minutes/info.dart';
 import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/otp/verify_otp.dart';
+import 'package:pauzr/src/screens/points/info.dart';
 import 'package:pauzr/src/screens/stop.dart';
 import 'package:pauzr/src/screens/tab.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
@@ -79,9 +81,21 @@ class RouteGenerator {
         });
         break;
 
-      case routeList.level:
+      case routeList.levels:
         return MaterialPageRoute(builder: (context) {
-          return LevelPage();
+          return LevelsPage();
+        });
+        break;
+
+      case routeList.points:
+        return MaterialPageRoute(builder: (context) {
+          return PointsPage();
+        });
+        break;
+
+      case routeList.minutes:
+        return MaterialPageRoute(builder: (context) {
+          return MinutesPage();
         });
         break;
 

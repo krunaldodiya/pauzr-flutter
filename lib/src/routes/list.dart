@@ -10,4 +10,6 @@ const String tab = "/tab";
 const String gender = "/gender";
 const String location = "/location";
 const String profession = "/profession";
-const String level = "/level";
+const String levels = "/levels";
+const String points = "/points";
+const String minutes = "/minutes";

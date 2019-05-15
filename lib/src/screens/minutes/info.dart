@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
@@ -10,14 +9,14 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 
-class PointsPage extends StatefulWidget {
-  PointsPage({Key key}) : super(key: key);
+class MinutesPage extends StatefulWidget {
+  MinutesPage({Key key}) : super(key: key);
 
   @override
-  _PointsPage createState() => _PointsPage();
+  _MinutesPage createState() => _MinutesPage();
 }
 
-class _PointsPage extends State<PointsPage>
+class _MinutesPage extends State<MinutesPage>
     with SingleTickerProviderStateMixin {
   UserBloc userBloc;
 
@@ -37,7 +36,7 @@ class _PointsPage extends State<PointsPage>
       appBar: AppBar(
         backgroundColor: Colors.red,
         title: Text(
-          "Points".toUpperCase(),
+          "Minutes".toUpperCase(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -48,7 +47,7 @@ class _PointsPage extends State<PointsPage>
       ),
       body: SafeArea(
         child: FutureBuilder(
-          future: ApiProvider().getEarnedPoints(),
+          future: ApiProvider().getSavedMinutes(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(
@@ -189,14 +188,14 @@ class _PointsPage extends State<PointsPage>
         ),
         child: ListTile(
           leading: Icon(
-            MaterialCommunityIcons.coin,
+            Icons.timelapse,
             size: 42.0,
             color: Colors.green,
           ),
           title: Container(
             margin: EdgeInsets.only(bottom: 5.0),
             child: Text(
-              "${item['amount']} Points",
+              "${item['duration']} Minutes",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,

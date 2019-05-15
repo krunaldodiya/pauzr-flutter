@@ -9,14 +9,15 @@ import 'package:pauzr/src/screens/levels/info_card.dart';
 import 'package:pauzr/src/screens/levels/levels.dart';
 import 'package:pauzr/src/screens/levels/main_card.dart';
 
-class LevelPage extends StatefulWidget {
-  LevelPage({Key key}) : super(key: key);
+class LevelsPage extends StatefulWidget {
+  LevelsPage({Key key}) : super(key: key);
 
   @override
-  _LevelPage createState() => _LevelPage();
+  _LevelsPage createState() => _LevelsPage();
 }
 
-class _LevelPage extends State<LevelPage> with SingleTickerProviderStateMixin {
+class _LevelsPage extends State<LevelsPage>
+    with SingleTickerProviderStateMixin {
   UserBloc userBloc;
 
   @override

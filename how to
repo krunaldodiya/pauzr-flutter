@@ -1,0 +1,11 @@
+flutter create --org com.pauzr -i swift -a kotlin --description 'A time saver app' pauzr
+flutter build apk --release
+
+keytool -genkey -v -keystore ./milestone.jks -keyalg RSA -keysize 2048 -validity 20000 -alias milestone
+
+id=com.milestone.org
+
+storePassword=milestone@1987
+keyPassword=milestone@1987
+keyAlias=milestone
+storeFile=./milestone.jks

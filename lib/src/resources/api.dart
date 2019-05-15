@@ -11,6 +11,14 @@ class ApiProvider {
     return sendRequest(Api.me);
   }
 
+  Future getEarnedPoints() async {
+    return sendRequest(Api.getEarnedPoints);
+  }
+
+  Future getSavedMinutes() async {
+    return sendRequest(Api.getSavedMinutes);
+  }
+
   Future requestOtp(String mobile) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -66,4 +74,6 @@ class Api {
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";
   static String uploadAvatar = "$baseUrl/api/users/avatar/upload";
+  static String getEarnedPoints = "$baseUrl/api/timer/points";
+  static String getSavedMinutes = "$baseUrl/api/timer/minutes";
 }
