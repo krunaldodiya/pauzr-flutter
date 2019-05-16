@@ -12,7 +12,6 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/location.dart';
-import 'package:pauzr/src/models/profession.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
@@ -208,30 +207,6 @@ class _EditProfilePage extends State<EditProfilePage> {
                   },
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, routeList.profession)
-                      .then((profession) {
-                    final Profession data = profession;
-
-                    if (data != null) {
-                      print(data.name);
-                    }
-                  }).catchError((onError) {
-                    print(onError);
-                  });
-                },
-                child: BlocBuilder(
-                  bloc: userBloc,
-                  builder: (context, state) {
-                    return TappableFormField(
-                      controller: professionController,
-                      labelText: "Profession",
-                      errorText: getErrorText(state, "profession_id"),
-                    );
-                  },
-                ),
-              )
             ],
           ),
         ),

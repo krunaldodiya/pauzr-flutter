@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
 import 'package:swipedetector/swipedetector.dart';
@@ -19,7 +24,6 @@ class _LeaderboardPage extends State<LeaderboardPage>
   UserBloc userBloc;
 
   String period = "Today";
-  String profession = "My Profession";
 
   @override
   void initState() {
@@ -68,49 +72,72 @@ class _LeaderboardPage extends State<LeaderboardPage>
           });
         }
       },
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                getSwitch(
-                  items: ["Today", "This Week", "This Month"],
-                  selected: period,
-                  onSelect: (index, value) {
-                    setState(() {
-                      period = value;
-                    });
-                  },
-                ),
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: getCards(),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: getLocation(),
-                ),
-                getSwitch(
-                  items: ["My Profession", "All Profession"],
-                  selected: profession,
-                  onSelect: (index, value) {
-                    setState(() {
-                      profession = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(getList()),
-          ),
-        ],
+      child: FutureBuilder(
+        future: ApiProvider().getRankings(period),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return new Text('Error: ${snapshot.error}');
+          }
+
+          Response data = snapshot.data;
+          Map body = json.decode(data.body);
+
+          return BlocBuilder(
+            bloc: userBloc,
+            builder: (context, UserState state) {
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        getSwitch(
+                          items: ["Today", "This Week", "This Month"],
+                          selected: period,
+                          onSelect: (index, value) {
+                            setState(() {
+                              period = value;
+                            });
+                          },
+                        ),
+                        Container(
+                          margin: EdgeInsets.all(5.0),
+                          child: getCards(body),
+                        ),
+                        Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: Text(
+                            "City: ${state.user.location.city}",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22.0,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      getList(state.user, body),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
 
-  getCards() {
+  getCards(body) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -121,7 +148,10 @@ class _LeaderboardPage extends State<LeaderboardPage>
             child: BlocBuilder(
               bloc: userBloc,
               builder: (context, UserState state) {
-                return getCard("180", "Minutes Saved");
+                return getCard(
+                  body['minutes_saved'].toString(),
+                  "Minutes Saved",
+                );
               },
             ),
           ),
@@ -134,7 +164,10 @@ class _LeaderboardPage extends State<LeaderboardPage>
             child: BlocBuilder(
               bloc: userBloc,
               builder: (context, UserState state) {
-                return getCard("13", "Points Earned");
+                return getCard(
+                  body['points_earned'].toString(),
+                  "Points Earned",
+                );
               },
             ),
           ),
@@ -206,21 +239,15 @@ class _LeaderboardPage extends State<LeaderboardPage>
     );
   }
 
-  getLocation() {
-    return Text(
-      "City: Ahmedabad",
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 22.0,
-        fontFamily: Fonts.titilliumWebRegular,
-      ),
-    );
-  }
-
-  getList() {
+  getList(user, body) {
     List<Widget> list = [];
 
-    list.add(getRankCard(545));
+    Map rankings = body['rankings'];
+
+    Map authUserRanking =
+        rankings.values.where((timer) => timer['user']['id'] == user.id).first;
+
+    list.add(getRankCard(authUserRanking));
 
     list.add(
       Container(
@@ -230,40 +257,32 @@ class _LeaderboardPage extends State<LeaderboardPage>
       ),
     );
 
-    for (var i = 0; i < 10; i++) {
-      final int rank = i + 1;
-
-      list.add(getRankCard(rank));
-    }
+    rankings.forEach((_, ranking) {
+      list.add(getRankCard(ranking));
+    });
 
     return list;
   }
 
-  Card getRankCard(int rank) {
+  Card getRankCard(Map ranking) {
     return Card(
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
       child: Container(
         decoration: BoxDecoration(
-          border: rank == 545
-              ? Border.all(
-                  color: Colors.black,
-                  width: 0.5,
-                )
-              : null,
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: ListTile(
           leading: CircleAvatar(
             radius: 30.0,
             backgroundImage: NetworkImage(
-              "https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png",
+              "$baseUrl/users/${ranking['user']['avatar']}",
             ),
           ),
           title: Container(
             margin: EdgeInsets.only(bottom: 5.0),
             child: Text(
-              "Krunal Dodiya",
+              ranking['user']['name'].toUpperCase(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
@@ -276,7 +295,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
             child: Row(
               children: <Widget>[
                 Text(
-                  "Rank: $rank",
+                  "Rank: ${ranking['rank']}",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.black,
@@ -290,7 +309,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
                   child: Text("|"),
                 ),
                 Text(
-                  "Level: 5",
+                  "Level: ${ranking['user']['level']}",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.black,
@@ -305,7 +324,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
             child: Column(
               children: <Widget>[
                 Text(
-                  "300",
+                  ranking['duration'].toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.black,

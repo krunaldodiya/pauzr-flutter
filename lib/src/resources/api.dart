@@ -19,6 +19,12 @@ class ApiProvider {
     return sendRequest(Api.getSavedMinutes);
   }
 
+  Future getRankings(String period) async {
+    return sendRequest(Api.getRankings, {
+      "period": period,
+    });
+  }
+
   Future requestOtp(String mobile) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -76,4 +82,5 @@ class Api {
   static String uploadAvatar = "$baseUrl/api/users/avatar/upload";
   static String getEarnedPoints = "$baseUrl/api/timer/points";
   static String getSavedMinutes = "$baseUrl/api/timer/minutes";
+  static String getRankings = "$baseUrl/api/timer/rankings";
 }

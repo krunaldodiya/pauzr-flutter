@@ -99,6 +99,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                             fontFamily: Fonts.titilliumWebRegular,
                           ),
                         ),
+                        Container(height: 10.0),
                         Text(
                           "${state.user.gender}",
                           style: TextStyle(
@@ -107,6 +108,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                             fontFamily: Fonts.titilliumWebSemiBold,
                           ),
                         ),
+                        Container(height: 5.0),
                         Text(
                           "${state.user.dob}",
                           style: TextStyle(
@@ -115,16 +117,9 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                             fontFamily: Fonts.titilliumWebRegular,
                           ),
                         ),
+                        Container(height: 5.0),
                         Text(
                           "${state.user.location.city}",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.0,
-                            fontFamily: Fonts.titilliumWebRegular,
-                          ),
-                        ),
-                        Text(
-                          "${state.user.profession.name}",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18.0,
