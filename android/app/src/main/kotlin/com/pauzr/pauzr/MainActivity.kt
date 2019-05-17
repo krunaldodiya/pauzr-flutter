@@ -1,4 +1,4 @@
-package com.pauzr.pauzr
+package com.pauzr.org
 
 import android.os.Bundle
 

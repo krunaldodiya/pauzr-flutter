@@ -1,7 +1,7 @@
 name: pauzr
 description: A time saver app
 
-version: 1.0.0+1
+version: 1.0.2+2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -25,6 +25,7 @@ dependencies:
   multipart_request: ^0.1.1
   intl: ^0.15.8
   swipedetector: ^1.2.0
+  # flutter_local_notifications: ^0.7.1+1
 
 dev_dependencies:
   flutter_test:
