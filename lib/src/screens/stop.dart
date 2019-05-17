@@ -24,29 +24,30 @@ class _StopPage extends State<StopPage> with SingleTickerProviderStateMixin {
   double rotation = 360;
 
   WaterController waterController = WaterController();
+  bool started;
 
   @override
   void initState() {
     super.initState();
 
-    double tick = waterHeight / durationStatic;
-
-    WidgetsBinding widgetsBinding = WidgetsBinding.instance;
-
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      if (durationDynamic > 0) {
-        setState(() {
-          rotation = rotation - 1;
-          durationDynamic--;
-          waterController.changeWaterHeight(durationDynamic * tick);
-        });
-      } else {
-        rotation = 360;
-      }
+    setState(() {
+      started = true;
     });
 
-    widgetsBinding.addPostFrameCallback((callback) {
-      print("object");
+    double tick = waterHeight / durationStatic;
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (started == true) {
+        if (durationDynamic > 0) {
+          setState(() {
+            rotation = rotation - 1;
+            durationDynamic--;
+            waterController.changeWaterHeight(durationDynamic * tick);
+          });
+        } else {
+          rotation = 360;
+        }
+      }
     });
   }
 
@@ -149,6 +150,9 @@ class _StopPage extends State<StopPage> with SingleTickerProviderStateMixin {
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
+                setState(() {
+                  started = false;
+                });
                 Navigator.of(context).pop();
                 navigateAway();
               },

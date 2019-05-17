@@ -242,24 +242,44 @@ class _LeaderboardPage extends State<LeaderboardPage>
   getList(user, body) {
     List<Widget> list = [];
 
-    Map rankings = body['rankings'];
+    if (body['rankings'].length == 0) {
+      list.add(
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          child: Text(
+            "No history for ${period.toLowerCase()}.",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+              fontSize: 16.0,
+              fontFamily: Fonts.titilliumWebRegular,
+            ),
+          ),
+        ),
+      );
+    }
 
-    Map authUserRanking =
-        rankings.values.where((timer) => timer['user']['id'] == user.id).first;
+    if (body['rankings'].length > 0) {
+      Map rankings = body['rankings'];
 
-    list.add(getRankCard(authUserRanking));
+      Map authUserRanking = rankings.values
+          .where((timer) => timer['user']['id'] == user.id)
+          .first;
 
-    list.add(
-      Container(
-        height: 0.5,
-        color: Colors.black87,
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      ),
-    );
+      list.add(getRankCard(authUserRanking));
 
-    rankings.forEach((_, ranking) {
-      list.add(getRankCard(ranking));
-    });
+      list.add(
+        Container(
+          height: 0.5,
+          color: Colors.black87,
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        ),
+      );
+
+      rankings.forEach((_, ranking) {
+        list.add(getRankCard(ranking));
+      });
+    }
 
     return list;
   }
