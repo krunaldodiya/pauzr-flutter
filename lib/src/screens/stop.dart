@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
 
 class StopPage extends StatefulWidget {
@@ -14,7 +16,8 @@ class StopPage extends StatefulWidget {
       _StopPage(durationStatic: duration, durationDynamic: duration);
 }
 
-class _StopPage extends State<StopPage> with SingleTickerProviderStateMixin {
+class _StopPage extends State<StopPage>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   int durationStatic;
   int durationDynamic;
 
@@ -29,6 +32,8 @@ class _StopPage extends State<StopPage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
 
     setState(() {
       started = true;
@@ -49,6 +54,35 @@ class _StopPage extends State<StopPage> with SingleTickerProviderStateMixin {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        NotificationManager(
+          id: 1,
+          title: "Pauzr",
+          body: "Tap to go back",
+          onSelectNotification: onSelectNotification,
+        ).showOngoingNotification();
+        break;
+
+      default:
+        print("default");
+    }
+  }
+
+  Future onSelectNotification(String payload) async {
+    print(json.decode(payload));
   }
 
   @override

@@ -18,13 +18,13 @@ dependencies:
   waveprogressbar_flutter: ^0.1.2
   shared_preferences: ^0.5.2
   xs_progress_hud: ^1.0.2
-  connectivity: ^0.4.3+1
+  connectivity: any
   image_picker: ^0.6.0+1
   flip_card: ^0.2.1
   multipart_request: ^0.1.1
   intl: ^0.15.8
   swipedetector: ^1.2.0
-  flutter_local_notifications: ^0.7.1+1
+  flutter_local_notifications: any
 
 dev_dependencies:
   flutter_test:

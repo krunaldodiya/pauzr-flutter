@@ -1,55 +1,59 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:meta/meta.dart';
 
-NotificationDetails get _noSound {
-  final androidChannelSpecifics = AndroidNotificationDetails(
-    'silent channel id',
-    'silent channel name',
-    'silent channel description',
-    playSound: false,
-  );
-  final iOSChannelSpecifics = IOSNotificationDetails(presentSound: false);
+class NotificationManager {
+  final FlutterLocalNotificationsPlugin notifications =
+      FlutterLocalNotificationsPlugin();
 
-  return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
+  int id;
+  String title;
+  String body;
+  Function onSelectNotification;
+
+  NotificationManager({
+    int id,
+    String title,
+    String body,
+    Function onSelectNotification,
+  }) {
+    this.id = id;
+    this.title = title;
+    this.body = body;
+    this.onSelectNotification = onSelectNotification;
+
+    final settingAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final settingIos = IOSInitializationSettings(
+      onDidReceiveLocalNotification: (id, title, body, payload) {
+        return onSelectNotification(payload);
+      },
+    );
+
+    notifications.initialize(
+      InitializationSettings(settingAndroid, settingIos),
+      onSelectNotification: onSelectNotification,
+    );
+  }
+
+  Future showOngoingNotification() async {
+    final android = AndroidNotificationDetails(
+      "channel_id",
+      "channel_name",
+      "channel_description",
+      importance: Importance.Max,
+      priority: Priority.High,
+      ongoing: true,
+      autoCancel: true,
+    );
+
+    final ios = IOSNotificationDetails();
+
+    return notifications.show(
+      id,
+      title,
+      body,
+      NotificationDetails(android, ios),
+      payload: json.encode({"id": id, "title": title, "body": body}),
+    );
+  }
 }
-
-Future showSilentNotification(
-  FlutterLocalNotificationsPlugin notifications, {
-  @required String title,
-  @required String body,
-  int id = 0,
-}) =>
-    _showNotification(notifications,
-        title: title, body: body, id: id, type: _noSound);
-
-NotificationDetails get _ongoing {
-  final androidChannelSpecifics = AndroidNotificationDetails(
-    'your channel id',
-    'your channel name',
-    'your channel description',
-    importance: Importance.Max,
-    priority: Priority.High,
-    ongoing: true,
-    autoCancel: false,
-  );
-  final iOSChannelSpecifics = IOSNotificationDetails();
-  return NotificationDetails(androidChannelSpecifics, iOSChannelSpecifics);
-}
-
-Future showOngoingNotification(
-  FlutterLocalNotificationsPlugin notifications, {
-  @required String title,
-  @required String body,
-  int id = 0,
-}) =>
-    _showNotification(notifications,
-        title: title, body: body, id: id, type: _ongoing);
-
-Future _showNotification(
-  FlutterLocalNotificationsPlugin notifications, {
-  @required String title,
-  @required String body,
-  @required NotificationDetails type,
-  int id = 0,
-}) =>
-    notifications.show(id, title, body, type);
