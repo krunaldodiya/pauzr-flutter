@@ -11,6 +11,10 @@ class NotificationManager {
   String body;
   Function onSelectNotification;
 
+  NotificationManager.close(id) {
+    notifications.cancel(id);
+  }
+
   NotificationManager({
     int id,
     String title,
@@ -43,7 +47,7 @@ class NotificationManager {
       importance: Importance.Max,
       priority: Priority.High,
       ongoing: true,
-      autoCancel: true,
+      autoCancel: false,
     );
 
     final ios = IOSNotificationDetails();

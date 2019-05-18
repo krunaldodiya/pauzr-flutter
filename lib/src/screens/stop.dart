@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -27,7 +26,11 @@ class _StopPage extends State<StopPage>
   double rotation = 360;
 
   WaterController waterController = WaterController();
+
   bool started;
+  int notificationId = 1;
+
+  int pauseTime;
 
   @override
   void initState() {
@@ -43,6 +46,8 @@ class _StopPage extends State<StopPage>
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (started == true) {
+        print("counting down");
+
         if (durationDynamic > 0) {
           setState(() {
             rotation = rotation - 1;
@@ -68,12 +73,22 @@ class _StopPage extends State<StopPage>
 
     switch (state) {
       case AppLifecycleState.paused:
-        NotificationManager(
-          id: 1,
-          title: "Pauzr",
-          body: "Tap to go back",
-          onSelectNotification: onSelectNotification,
-        ).showOngoingNotification();
+        {
+          setState(() {
+            pauseTime = durationDynamic;
+          });
+
+          NotificationManager(
+            id: notificationId,
+            title: "Pauzr",
+            body: "Tap to go back",
+            onSelectNotification: onSelectNotification,
+          ).showOngoingNotification();
+        }
+        break;
+
+      case AppLifecycleState.resumed:
+        NotificationManager.close(notificationId);
         break;
 
       default:
@@ -82,7 +97,19 @@ class _StopPage extends State<StopPage>
   }
 
   Future onSelectNotification(String payload) async {
-    print(json.decode(payload));
+    int seconds = pauseTime - durationDynamic;
+
+    if (seconds > 5) {
+      setState(() {
+        started = false;
+      });
+
+      shouldCanceledPop(context, () {
+        return Navigator.of(context).pop();
+      });
+    } else {
+      print("resumed after $seconds seconds.");
+    }
   }
 
   @override
@@ -158,6 +185,33 @@ class _StopPage extends State<StopPage>
           ),
         ),
       ),
+    );
+  }
+
+  Future<bool> shouldCanceledPop(BuildContext context, navigateAway) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Oops! Better luck next time."),
+          actions: <Widget>[
+            RaisedButton(
+              color: Colors.red,
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                setState(() {
+                  started = false;
+                });
+                Navigator.of(context).pop();
+                navigateAway();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
