@@ -242,44 +242,24 @@ class _LeaderboardPage extends State<LeaderboardPage>
   getList(user, body) {
     List<Widget> list = [];
 
-    if (body['rankings'].length == 0) {
-      list.add(
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          child: Text(
-            "No history for ${period.toLowerCase()}.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-              fontSize: 16.0,
-              fontFamily: Fonts.titilliumWebRegular,
-            ),
-          ),
-        ),
-      );
-    }
+    List rankings = body['rankings'];
 
-    if (body['rankings'].length > 0) {
-      Map rankings = body['rankings'];
+    Map authUserRanking =
+        rankings.where((timer) => timer['user']['id'] == user.id).first;
 
-      Map authUserRanking = rankings.values
-          .where((timer) => timer['user']['id'] == user.id)
-          .first;
+    list.add(getRankCard(authUserRanking));
 
-      list.add(getRankCard(authUserRanking));
+    list.add(
+      Container(
+        height: 0.5,
+        color: Colors.black87,
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+      ),
+    );
 
-      list.add(
-        Container(
-          height: 0.5,
-          color: Colors.black87,
-          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-        ),
-      );
-
-      rankings.forEach((_, ranking) {
-        list.add(getRankCard(ranking));
-      });
-    }
+    rankings.forEach((ranking) {
+      list.add(getRankCard(ranking));
+    });
 
     return list;
   }
