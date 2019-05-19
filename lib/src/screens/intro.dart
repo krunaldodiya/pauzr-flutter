@@ -34,6 +34,8 @@ class _IntroPage extends State<IntroPage> {
       builder: (context, ThemeState themeState) {
         DefaultTheme theme = DefaultTheme.defaultTheme(themeState.theme);
 
+        print(theme.intro.backgroundColor);
+
         return Scaffold(
           backgroundColor: theme.intro.backgroundColor,
           body: SafeArea(

@@ -6,8 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+
   String authToken = prefs.getString("authToken");
-  String defaultTheme = prefs.getString("defaultTheme") ?? 'black';
+  String defaultTheme = prefs.getString("defaultTheme") ?? "black";
+
   // prefs.remove("authToken");
 
   runApp(

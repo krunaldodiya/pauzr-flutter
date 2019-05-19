@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ManageTheme extends StatefulWidget {
   ManageTheme({Key key}) : super(key: key);
@@ -46,13 +47,13 @@ class _ManageThemeState extends State<ManageTheme> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               getLable(
-                text: "Black",
+                text: "black",
                 borderColor: Colors.white,
                 backgroundColor: Colors.black,
                 textColor: Colors.white,
               ),
               getLable(
-                text: "Red",
+                text: "red",
                 borderColor: Colors.white,
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
@@ -67,6 +68,8 @@ class _ManageThemeState extends State<ManageTheme> {
   InkWell getLable({text, borderColor, backgroundColor, textColor}) {
     return InkWell(
       onTap: () async {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString("defaultTheme", text);
         themeBloc.setTheme(text);
         Navigator.of(context).pop();
       },
@@ -83,7 +86,7 @@ class _ManageThemeState extends State<ManageTheme> {
           ),
         ),
         child: Text(
-          text,
+          text.toUpperCase(),
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18.0,
