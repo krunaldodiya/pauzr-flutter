@@ -8,8 +8,8 @@ class ThemeState {
     @required this.theme,
   });
 
-  factory ThemeState.initial(theme) {
-    return ThemeState(theme: theme);
+  factory ThemeState.initial() {
+    return ThemeState(theme: null);
   }
 
   ThemeState copyWith({String theme}) {

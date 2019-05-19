@@ -32,9 +32,11 @@ class _IntroPage extends State<IntroPage> {
     return BlocBuilder(
       bloc: themeBloc,
       builder: (context, ThemeState themeState) {
-        DefaultTheme theme = DefaultTheme.defaultTheme(themeState.theme);
+        if (themeState.theme == null) {
+          return CircularProgressIndicator();
+        }
 
-        print(theme.intro.backgroundColor);
+        DefaultTheme theme = DefaultTheme.defaultTheme(themeState.theme);
 
         return Scaffold(
           backgroundColor: theme.intro.backgroundColor,

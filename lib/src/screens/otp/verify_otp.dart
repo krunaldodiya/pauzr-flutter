@@ -47,6 +47,10 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     return BlocBuilder(
       bloc: themeBloc,
       builder: (context, ThemeState themeState) {
+        if (themeState.theme == null) {
+          return CircularProgressIndicator();
+        }
+
         final theme = DefaultTheme.defaultTheme(themeState.theme);
 
         return Scaffold(

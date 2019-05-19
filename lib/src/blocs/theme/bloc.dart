@@ -10,7 +10,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   }
 
   @override
-  ThemeState get initialState => ThemeState.initial("red");
+  ThemeState get initialState => ThemeState.initial();
 
   @override
   Stream<ThemeState> mapEventToState(ThemeEvent event) async* {

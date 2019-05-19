@@ -39,6 +39,10 @@ class _RequestOtpPage extends State<RequestOtpPage> {
     return BlocBuilder(
       bloc: themeBloc,
       builder: (context, ThemeState themeState) {
+        if (themeState.theme == null) {
+          return CircularProgressIndicator();
+        }
+
         final theme = DefaultTheme.defaultTheme(themeState.theme);
 
         return Scaffold(
