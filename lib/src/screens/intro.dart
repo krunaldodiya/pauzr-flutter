@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/atp/provider.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:intro_slider/intro_slider.dart';
 
@@ -13,7 +13,16 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPage extends State<IntroPage> {
-  DefaultTheme theme = ThemeProvider.defaultTheme;
+  DefaultTheme theme;
+
+  @override
+  void initState() {
+    setState(() {
+      theme = ThemeProvider.defaultTheme();
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
