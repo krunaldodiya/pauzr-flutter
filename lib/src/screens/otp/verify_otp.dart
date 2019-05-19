@@ -5,6 +5,7 @@ import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
+import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
@@ -21,7 +22,9 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
+  ThemeBloc themeBloc;
   DefaultTheme theme;
+
   OtpBloc otpBloc;
   UserBloc userBloc;
   InitialScreenBloc initialScreenBloc;
@@ -31,10 +34,16 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     super.initState();
 
     setState(() {
-      theme = ThemeProvider.defaultTheme();
+      themeBloc = BlocProvider.of<ThemeBloc>(context);
       otpBloc = BlocProvider.of<OtpBloc>(context);
       userBloc = BlocProvider.of<UserBloc>(context);
       initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
+    });
+
+    themeBloc.state.listen((themeState) {
+      setState(() {
+        theme = themeState.theme;
+      });
     });
   }
 

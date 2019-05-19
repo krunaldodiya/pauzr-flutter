@@ -4,6 +4,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
+import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -18,17 +19,25 @@ class RequestOtpPage extends StatefulWidget {
 }
 
 class _RequestOtpPage extends State<RequestOtpPage> {
+  ThemeBloc themeBloc;
   DefaultTheme theme;
+
   OtpBloc otpBloc;
 
   @override
   void initState() {
-    super.initState();
-
     setState(() {
-      theme = ThemeProvider.defaultTheme();
+      themeBloc = BlocProvider.of<ThemeBloc>(context);
       otpBloc = BlocProvider.of<OtpBloc>(context);
     });
+
+    themeBloc.state.listen((themeState) {
+      setState(() {
+        theme = themeState.theme;
+      });
+    });
+
+    super.initState();
   }
 
   @override

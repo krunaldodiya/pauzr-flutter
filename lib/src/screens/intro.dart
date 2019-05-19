@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:intro_slider/intro_slider.dart';
 
@@ -13,12 +15,19 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPage extends State<IntroPage> {
+  ThemeBloc themeBloc;
   DefaultTheme theme;
 
   @override
   void initState() {
     setState(() {
-      theme = ThemeProvider.defaultTheme();
+      themeBloc = BlocProvider.of<ThemeBloc>(context);
+    });
+
+    themeBloc.state.listen((themeState) {
+      setState(() {
+        theme = themeState.theme;
+      });
     });
 
     super.initState();
@@ -30,16 +39,16 @@ class _IntroPage extends State<IntroPage> {
       backgroundColor: theme.intro.backgroundColor,
       body: SafeArea(
         child: IntroSlider(
-          colorActiveDot: Colors.black,
-          colorDot: Colors.white,
+          colorActiveDot: theme.intro.colorActiveDot,
+          colorDot: theme.intro.colorDot,
           styleNameDoneBtn: TextStyle(
-            color: Colors.black,
+            color: theme.intro.doneBtnColor,
           ),
           styleNamePrevBtn: TextStyle(
-            color: Colors.black,
+            color: theme.intro.prevBtnColor,
           ),
           styleNameSkipBtn: TextStyle(
-            color: Colors.black,
+            color: theme.intro.skipBtnColor,
           ),
           slides: [
             Slide(

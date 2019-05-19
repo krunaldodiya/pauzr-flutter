@@ -1,5 +1,5 @@
 class Fonts {
-  static String titilliumWebBlack = "TitilliumWeb-Black";
+  static String titilliumWebTheme = "TitilliumWeb-Black";
   static String titilliumWebBold = "TitilliumWeb-Bold";
   static String titilliumWebBoldItalic = "TitilliumWeb-BoldItalic";
   static String titilliumWebExtraLight = "TitilliumWeb-ExtraLight";

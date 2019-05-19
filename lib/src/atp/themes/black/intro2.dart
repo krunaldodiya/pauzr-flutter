@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 
-Intro2 intro2Black = Intro2(
+Intro2 intro2Theme = Intro2(
   backgroundColor: Colors.black,
   title: Intro2.initial().title,
   description: Intro2.initial().description,

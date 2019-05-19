@@ -16,17 +16,17 @@ import 'package:pauzr/src/atp/themes/black/verify_otp.dart';
 
 class Black implements DefaultTheme {
   @override
-  Intro intro = introBlack;
+  Intro intro = introTheme;
   @override
-  Intro1 intro1 = intro1Black;
+  Intro1 intro1 = intro1Theme;
   @override
-  Intro2 intro2 = intro2Black;
+  Intro2 intro2 = intro2Theme;
   @override
-  Intro3 intro3 = intro3Black;
+  Intro3 intro3 = intro3Theme;
   @override
-  Timer timer = timerBlack;
+  Timer timer = timerTheme;
   @override
-  RequestOtp requestOtp = requestOtpBlack;
+  RequestOtp requestOtp = requestOtpTheme;
   @override
-  VerifyOtp verifyOtp = verifyOtpBlack;
+  VerifyOtp verifyOtp = verifyOtpTheme;
 }

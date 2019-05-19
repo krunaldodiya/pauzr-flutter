@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/intro.dart';
 
-Intro introBlack = Intro(
-  backgroundColor: Colors.red,
+Intro introTheme = Intro(
+  backgroundColor: Colors.black,
+  colorActiveDot: Colors.white,
+  colorDot: Colors.cyan,
+  doneBtnColor: Colors.white,
+  prevBtnColor: Colors.white,
+  skipBtnColor: Colors.white,
 );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 
-Timer timerBlack = Timer(
+Timer timerTheme = Timer(
   backgroundColor: Colors.black,
 );

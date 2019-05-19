@@ -9,18 +9,12 @@ import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/black/black.dart';
 import 'package:pauzr/src/atp/themes/red/red.dart';
 
-class ThemeProvider {
+class DefaultTheme {
   static Map themes = {
     "red": Red(),
     "black": Black(),
   };
 
-  static defaultTheme([name = "red"]) {
-    return DefaultTheme.defaultTheme(themes[name]);
-  }
-}
-
-class DefaultTheme {
   Intro intro;
   Intro1 intro1;
   Intro2 intro2;
