@@ -29,8 +29,6 @@ class _MyAppState extends State<MyApp> {
       themeBloc = BlocProvider.of<ThemeBloc>(context);
       userBloc = BlocProvider.of<UserBloc>(context);
       initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
-
-      userBloc.initialScreenBloc = initialScreenBloc;
     });
 
     themeBloc.setTheme(widget.defaultTheme);

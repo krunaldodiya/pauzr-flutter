@@ -1,25 +1,18 @@
 import 'package:meta/meta.dart';
-import 'package:pauzr/src/atp/default.dart';
 
 @immutable
 class ThemeState {
-  final DefaultTheme theme;
+  final String theme;
 
   ThemeState({
     @required this.theme,
   });
 
   factory ThemeState.initial() {
-    Map themes = DefaultTheme.themes;
-
-    DefaultTheme defaultTheme = DefaultTheme.defaultTheme(
-      themes["black"],
-    );
-
-    return ThemeState(theme: defaultTheme);
+    return ThemeState(theme: "black");
   }
 
-  ThemeState copyWith({DefaultTheme theme}) {
+  ThemeState copyWith({String theme}) {
     return ThemeState(
       theme: theme ?? this.theme,
     );

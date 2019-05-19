@@ -5,6 +5,7 @@ import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
 import 'package:pauzr/src/blocs/theme/bloc.dart';
+import 'package:pauzr/src/blocs/theme/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -20,7 +21,6 @@ class RequestOtpPage extends StatefulWidget {
 
 class _RequestOtpPage extends State<RequestOtpPage> {
   ThemeBloc themeBloc;
-  DefaultTheme theme;
 
   OtpBloc otpBloc;
 
@@ -31,94 +31,95 @@ class _RequestOtpPage extends State<RequestOtpPage> {
       otpBloc = BlocProvider.of<OtpBloc>(context);
     });
 
-    themeBloc.state.listen((themeState) {
-      setState(() {
-        theme = themeState.theme;
-      });
-    });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: theme.requestOtp.backgroundColor,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
-                    "REQUEST OTP",
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      color: Colors.white,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(
-                    "Please enter your mobile to receive verifcation code.",
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.white,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
-                  ),
-                ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return EditableFormField(
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      controller: null,
-                      labelText: "Mobile Number",
-                      errorText: getErrorText(state, 'mobile'),
-                      onChanged: otpBloc.onChangeMobile,
-                    );
-                  },
-                ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return FlatButton(
-                      onPressed: onSubmit,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
+    return BlocBuilder(
+      bloc: themeBloc,
+      builder: (context, ThemeState themeState) {
+        final theme = DefaultTheme.defaultTheme(themeState.theme);
+
+        return Scaffold(
+          backgroundColor: theme.requestOtp.backgroundColor,
+          body: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(20.0),
                       child: Text(
-                        "SEND OTP",
+                        "REQUEST OTP",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: state.mobile != null && state.error != null
-                              ? Colors.white
-                              : Colors.white30,
+                          fontSize: 24.0,
+                          color: Colors.white,
                           fontFamily: Fonts.titilliumWebRegular,
                         ),
                       ),
-                      color: state.mobile != null && state.error != null
-                          ? Colors.red
-                          : Colors.grey,
-                    );
-                  },
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        "Please enter your mobile to receive verifcation code.",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontFamily: Fonts.titilliumWebRegular,
+                        ),
+                      ),
+                    ),
+                    BlocBuilder<OtpEvent, OtpState>(
+                      bloc: otpBloc,
+                      builder: (BuildContext context, OtpState state) {
+                        return EditableFormField(
+                          maxLength: 10,
+                          keyboardType: TextInputType.number,
+                          controller: null,
+                          labelText: "Mobile Number",
+                          errorText: getErrorText(state, 'mobile'),
+                          onChanged: otpBloc.onChangeMobile,
+                        );
+                      },
+                    ),
+                    BlocBuilder<OtpEvent, OtpState>(
+                      bloc: otpBloc,
+                      builder: (BuildContext context, OtpState state) {
+                        return FlatButton(
+                          onPressed: onSubmit,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 10.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "SEND OTP",
+                            style: TextStyle(
+                              color: state.mobile != null && state.error != null
+                                  ? Colors.white
+                                  : Colors.white30,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                          color: state.mobile != null && state.error != null
+                              ? Colors.red
+                              : Colors.grey,
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intro_slider/intro_slider.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/blocs/theme/state.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -31,7 +32,7 @@ class _IntroPage extends State<IntroPage> {
     return BlocBuilder(
       bloc: themeBloc,
       builder: (context, ThemeState themeState) {
-        final theme = themeState.theme;
+        DefaultTheme theme = DefaultTheme.defaultTheme(themeState.theme);
 
         return Scaffold(
           backgroundColor: theme.intro.backgroundColor,

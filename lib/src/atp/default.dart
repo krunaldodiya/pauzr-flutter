@@ -33,7 +33,9 @@ class DefaultTheme {
     @required this.verifyOtp,
   });
 
-  static DefaultTheme defaultTheme(theme) {
+  static DefaultTheme defaultTheme(String themeName) {
+    var theme = themes[themeName];
+
     return DefaultTheme(
       intro: theme.intro,
       intro1: theme.intro1,
