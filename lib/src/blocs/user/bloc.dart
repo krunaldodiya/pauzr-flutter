@@ -84,14 +84,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           dispatch(SetAuthUser(user: results['user']));
           event.callback(true);
         } else {
-          yield currentState.copyWith(
-            error: results['errors'],
-            loaded: true,
-            loading: false,
-          );
-
           event.callback(false);
         }
+
+        yield currentState.copyWith(
+          error: results['errors'],
+          loaded: true,
+          loading: false,
+        );
       } catch (e) {
         yield currentState.copyWith(
           error: {"errors": "Error, Something bad happened."},

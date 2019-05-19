@@ -103,6 +103,9 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   }
 
   getTimerCard(time) {
+    // int duration = time * 60;
+    int duration = time * 1;
+
     return Container(
       height: 130.0,
       width: MediaQuery.of(context).size.width / 3,
@@ -110,7 +113,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
       child: GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, routeList.stop, arguments: {
-            "duration": time * 60,
+            "duration": duration,
           });
         },
         child: getCard(time.toString(), "Minutes"),

@@ -38,6 +38,12 @@ class ApiProvider {
     });
   }
 
+  Future setTimer(int seconds) async {
+    return sendRequest(Api.setTimer, {
+      "seconds": seconds,
+    });
+  }
+
   Future updateProfile(User user) async {
     return sendRequest(Api.updateProfile, {
       "id": user.id.toString(),
@@ -83,4 +89,5 @@ class Api {
   static String getEarnedPoints = "$baseUrl/api/timer/points";
   static String getSavedMinutes = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";
+  static String setTimer = "$baseUrl/api/timer/set";
 }

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/blocs/timer/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
@@ -17,6 +19,8 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  TimerBloc timerBloc;
+
   int durationStatic;
   int durationDynamic;
 
@@ -40,22 +44,28 @@ class _StopPage extends State<StopPage>
 
     setState(() {
       started = true;
+      timerBloc = BlocProvider.of<TimerBloc>(context);
     });
 
     double tick = waterHeight / durationStatic;
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       if (started == true) {
-        print("counting down");
-
         if (durationDynamic > 0) {
           setState(() {
             rotation = rotation - 1;
             durationDynamic--;
             waterController.changeWaterHeight(durationDynamic * tick);
           });
-        } else {
-          rotation = 360;
+        }
+
+        if (durationDynamic == 0) {
+          setState(() {
+            started = false;
+            rotation = 360;
+          });
+
+          onSuccess(durationStatic);
         }
       }
     });
@@ -72,7 +82,7 @@ class _StopPage extends State<StopPage>
     super.didChangeAppLifecycleState(state);
 
     switch (state) {
-      case AppLifecycleState.paused:
+      case AppLifecycleState.inactive:
         {
           setState(() {
             pauseTime = durationDynamic;
@@ -102,10 +112,11 @@ class _StopPage extends State<StopPage>
     if (seconds > 5) {
       setState(() {
         started = false;
+        rotation = 360;
       });
 
-      shouldCanceledPop(context, () {
-        return Navigator.of(context).pop();
+      showCanceledPop(context, () {
+        Navigator.of(context).pop();
       });
     } else {
       print("resumed after $seconds seconds.");
@@ -117,7 +128,7 @@ class _StopPage extends State<StopPage>
     return WillPopScope(
       onWillPop: () async {
         return shouldPop(context, () {
-          print("cancelled");
+          Navigator.of(context).pop();
         });
       },
       child: Scaffold(
@@ -170,7 +181,7 @@ class _StopPage extends State<StopPage>
                     backgroundColor: Colors.red,
                     onPressed: () {
                       return shouldPop(context, () {
-                        return Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                       });
                     },
                     child: Icon(
@@ -188,7 +199,34 @@ class _StopPage extends State<StopPage>
     );
   }
 
-  Future<bool> shouldCanceledPop(BuildContext context, navigateAway) {
+  Future<bool> showSuccessPop(BuildContext context, navigateAway) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Congrats! You have unlocked points."),
+          actions: <Widget>[
+            RaisedButton(
+              color: Colors.green,
+              child: Text(
+                "Okay",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                setState(() {
+                  started = false;
+                });
+                Navigator.of(context).pop();
+                navigateAway();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool> showCanceledPop(BuildContext context, navigateAway) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -240,6 +278,7 @@ class _StopPage extends State<StopPage>
               onPressed: () {
                 setState(() {
                   started = false;
+                  rotation = 360;
                 });
                 Navigator.of(context).pop();
                 navigateAway();
@@ -259,5 +298,13 @@ class _StopPage extends State<StopPage>
     String min = minutes > 9 ? "$minutes" : "0$minutes";
 
     return "$min : $sec";
+  }
+
+  void onSuccess(seconds) {
+    timerBloc.setTimer(seconds, (success) {
+      showSuccessPop(context, () {
+        Navigator.of(context).pop();
+      });
+    });
   }
 }

@@ -49,6 +49,14 @@ class _InitialScreenState extends State<InitialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (connectivityResult == ConnectivityResult.none) {
+      return NoNetwork();
+    }
+
+    if (widget.authToken == null) {
+      return IntroPage();
+    }
+
     return GestureDetector(
       onLongPress: () {
         Navigator.push(
@@ -59,14 +67,6 @@ class _InitialScreenState extends State<InitialScreen> {
       child: BlocBuilder(
         bloc: initialScreenBloc,
         builder: (context, InitialScreenState state) {
-          if (connectivityResult == ConnectivityResult.none) {
-            return NoNetwork();
-          }
-
-          if (widget.authToken == null) {
-            return IntroPage();
-          }
-
           if (state.loaded == false) {
             return Center(child: CircularProgressIndicator());
           }
