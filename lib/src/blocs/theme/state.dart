@@ -10,7 +10,13 @@ class ThemeState {
   });
 
   factory ThemeState.initial() {
-    return ThemeState(theme: null);
+    Map themes = DefaultTheme.themes;
+
+    DefaultTheme defaultTheme = DefaultTheme.defaultTheme(
+      themes["black"],
+    );
+
+    return ThemeState(theme: defaultTheme);
   }
 
   ThemeState copyWith({DefaultTheme theme}) {

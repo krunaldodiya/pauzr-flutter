@@ -75,7 +75,15 @@ class _EditProfilePage extends State<EditProfilePage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Edit Profile"),
+        title: Text(
+          "Edit Profile",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 12.0,
+            color: Colors.white,
+            fontFamily: Fonts.titilliumWebSemiBold,
+          ),
+        ),
         leading: getLeadingIcon(),
         actions: <Widget>[
           FlatButton(
@@ -83,6 +91,8 @@ class _EditProfilePage extends State<EditProfilePage> {
             child: Text(
               "SUBMIT",
               style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 12.0,
                 color: Colors.white,
                 fontFamily: Fonts.titilliumWebSemiBold,
               ),
