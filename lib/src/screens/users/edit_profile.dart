@@ -200,7 +200,9 @@ class _EditProfilePage extends State<EditProfilePage> {
                     final Location data = location;
 
                     if (data != null) {
-                      print(data.city);
+                      setState(() {
+                        locationController.text = data.city;
+                      });
                     }
                   }).catchError((onError) {
                     print(onError);

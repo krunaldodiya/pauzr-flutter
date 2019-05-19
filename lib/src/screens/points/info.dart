@@ -8,7 +8,6 @@ import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/resources/api.dart';
-import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class PointsPage extends StatefulWidget {
   PointsPage({Key key}) : super(key: key);
@@ -71,29 +70,19 @@ class _PointsPage extends State<PointsPage>
     return Row(
       children: <Widget>[
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.minutes);
+          child: BlocBuilder(
+            bloc: userBloc,
+            builder: (context, UserState state) {
+              return getCard(body['sum'].toString(), "All Time Saving");
             },
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return getCard(body['sum'].toString(), "All Time Saving");
-              },
-            ),
           ),
         ),
         Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.points);
+          child: BlocBuilder(
+            bloc: userBloc,
+            builder: (context, UserState state) {
+              return getCard(body['avg'].toString(), "Average per day");
             },
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return getCard(body['avg'].toString(), "Average per day");
-              },
-            ),
           ),
         ),
       ],
