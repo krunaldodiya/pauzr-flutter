@@ -27,8 +27,20 @@ class _IntroPage extends State<IntroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: theme.intro.backgroundColor,
       body: SafeArea(
         child: IntroSlider(
+          colorActiveDot: Colors.black,
+          colorDot: Colors.white,
+          styleNameDoneBtn: TextStyle(
+            color: Colors.black,
+          ),
+          styleNamePrevBtn: TextStyle(
+            color: Colors.black,
+          ),
+          styleNameSkipBtn: TextStyle(
+            color: Colors.black,
+          ),
           slides: [
             Slide(
               title: theme.intro1.title,

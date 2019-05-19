@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
@@ -17,6 +18,7 @@ class RequestOtpPage extends StatefulWidget {
 }
 
 class _RequestOtpPage extends State<RequestOtpPage> {
+  DefaultTheme theme;
   OtpBloc otpBloc;
 
   @override
@@ -24,6 +26,7 @@ class _RequestOtpPage extends State<RequestOtpPage> {
     super.initState();
 
     setState(() {
+      theme = ThemeProvider.defaultTheme();
       otpBloc = BlocProvider.of<OtpBloc>(context);
     });
   }
@@ -31,7 +34,7 @@ class _RequestOtpPage extends State<RequestOtpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: theme.requestOtp.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

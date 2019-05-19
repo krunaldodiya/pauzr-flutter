@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
@@ -20,6 +21,7 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
+  DefaultTheme theme;
   OtpBloc otpBloc;
   UserBloc userBloc;
   InitialScreenBloc initialScreenBloc;
@@ -29,6 +31,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     super.initState();
 
     setState(() {
+      theme = ThemeProvider.defaultTheme();
       otpBloc = BlocProvider.of<OtpBloc>(context);
       userBloc = BlocProvider.of<UserBloc>(context);
       initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
@@ -38,7 +41,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: theme.verifyOtp.backgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
