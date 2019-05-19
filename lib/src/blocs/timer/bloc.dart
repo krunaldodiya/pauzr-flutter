@@ -9,8 +9,8 @@ import 'package:pauzr/src/resources/api.dart';
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final ApiProvider _apiProvider = ApiProvider();
 
-  void setTimer(seconds, callback) {
-    dispatch(SetTimer(seconds: seconds, callback: callback));
+  void setTimer(duration, callback) {
+    dispatch(SetTimer(duration: duration, callback: callback));
   }
 
   @override
@@ -22,7 +22,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield currentState.copyWith(loaded: false, loading: true);
 
       try {
-        final response = await _apiProvider.setTimer(event.seconds);
+        final response = await _apiProvider.setTimer(event.duration);
         final results = json.decode(response.body);
 
         if (results['success'] == true) {

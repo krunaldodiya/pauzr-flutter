@@ -1,8 +1,8 @@
 abstract class TimerEvent {}
 
 class SetTimer extends TimerEvent {
-  int seconds;
+  int duration;
   Function callback;
 
-  SetTimer({this.seconds, this.callback});
+  SetTimer({this.duration, this.callback});
 }

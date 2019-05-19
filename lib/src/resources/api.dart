@@ -38,9 +38,9 @@ class ApiProvider {
     });
   }
 
-  Future setTimer(int seconds) async {
+  Future setTimer(int duration) async {
     return sendRequest(Api.setTimer, {
-      "seconds": seconds,
+      "duration": duration,
     });
   }
 

@@ -5,13 +5,13 @@ class TimerState {
   final bool loading;
   final bool loaded;
   final Map error;
-  final int seconds;
+  final int duration;
 
   TimerState({
     @required this.loading,
     @required this.loaded,
     @required this.error,
-    @required this.seconds,
+    @required this.duration,
   });
 
   factory TimerState.initial() {
@@ -19,7 +19,7 @@ class TimerState {
       loading: false,
       loaded: false,
       error: null,
-      seconds: null,
+      duration: null,
     );
   }
 
@@ -27,13 +27,13 @@ class TimerState {
     bool loading,
     bool loaded,
     Map error,
-    int seconds,
+    int duration,
   }) {
     return TimerState(
       loading: loading ?? this.loading,
       loaded: loaded ?? this.loaded,
       error: error ?? this.error,
-      seconds: seconds ?? this.seconds,
+      duration: duration ?? this.duration,
     );
   }
 }

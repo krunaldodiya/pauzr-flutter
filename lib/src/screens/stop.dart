@@ -65,7 +65,7 @@ class _StopPage extends State<StopPage>
             rotation = 360;
           });
 
-          onSuccess(durationStatic);
+          onSuccess(widget.duration);
         }
       }
     });
@@ -300,8 +300,8 @@ class _StopPage extends State<StopPage>
     return "$min : $sec";
   }
 
-  void onSuccess(seconds) {
-    timerBloc.setTimer(seconds, (success) {
+  void onSuccess(duration) {
+    timerBloc.setTimer(duration, (success) {
       showSuccessPop(context, () {
         Navigator.of(context).pop();
       });
