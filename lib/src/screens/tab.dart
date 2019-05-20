@@ -6,10 +6,10 @@ import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/drawer.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/tabs/leaderboard.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TabPage extends StatefulWidget {
   TabPage({Key key}) : super(key: key);
@@ -53,7 +53,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.90),
+      backgroundColor: Colors.white,
       appBar: getAppBar(context),
       body: SafeArea(child: getTabPage()),
       bottomNavigationBar: Container(
@@ -90,27 +90,13 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Container(height: 30.0),
-            FlatButton(
-              child: Text("Logout"),
-              onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.remove("authToken");
-
-                Navigator.pushReplacementNamed(
-                  context,
-                  routeList.intro,
-                  arguments: {
-                    "shouldPop": true,
-                  },
-                );
-              },
-            )
-          ],
-        ),
+      drawer: BlocBuilder(
+        bloc: userBloc,
+        builder: (context, UserState state) {
+          return Drawer(
+            child: DrawerPage(user: state.user),
+          );
+        },
       ),
     );
   }
@@ -118,7 +104,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
   AppBar getAppBar(BuildContext context) {
     return AppBar(
       elevation: 0.5,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.red,
       textTheme: TextTheme(
         title: TextStyle(
           fontWeight: FontWeight.bold,
@@ -127,12 +113,14 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
           fontFamily: Fonts.titilliumWebRegular,
         ),
       ),
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
       title: Text(
         "Pauzr",
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 20.0,
           fontFamily: Fonts.titilliumWebRegular,
         ),

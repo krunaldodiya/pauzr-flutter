@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -13,14 +15,22 @@ class TimerPage extends StatefulWidget {
 
 class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   int currentQuote = 0;
+  var timer;
 
   @override
   void initState() {
     super.initState();
+
+    timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      setState(() {
+        currentQuote = currentQuote == 13 ? 0 : currentQuote + 1;
+      });
+    });
   }
 
   @override
   void dispose() {
+    timer.cancel();
     super.dispose();
   }
 

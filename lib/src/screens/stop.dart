@@ -35,6 +35,7 @@ class _StopPage extends State<StopPage>
   int notificationId = 1;
 
   int pauseTime;
+  var timer;
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _StopPage extends State<StopPage>
 
     double tick = waterHeight / durationStatic;
 
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (started == true) {
         if (durationDynamic > 0) {
           setState(() {
@@ -74,6 +75,8 @@ class _StopPage extends State<StopPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+
+    timer.cancel();
     super.dispose();
   }
 

@@ -241,11 +241,20 @@ class _LeaderboardPage extends State<LeaderboardPage>
 
   getList(user, body) {
     List<Widget> list = [];
-
     List rankings = body['rankings'];
+    List rankingsFiltered = [];
+    Map authUserRanking;
 
-    Map authUserRanking =
-        rankings.where((timer) => timer['user']['id'] == user.id).first;
+    rankings
+      ..sort((a, b) => b['duration'].compareTo(a['duration']))
+      ..asMap().forEach((index, ranking) {
+        ranking['rank'] = index + 1;
+        rankingsFiltered.add(ranking);
+
+        if (ranking['user']['id'] == user.id) {
+          authUserRanking = ranking;
+        }
+      });
 
     list.add(getRankCard(authUserRanking));
 
