@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           backgroundColor: Colors.red,
           onPressed: () {
-            //
+            Navigator.pushNamed(context, routeList.create_group);
           },
           child: Icon(
             Icons.add,

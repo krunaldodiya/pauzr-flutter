@@ -13,3 +13,4 @@ const String profession = "/profession";
 const String levels = "/levels";
 const String points = "/points";
 const String minutes = "/minutes";
+const String create_group = "/create_group";

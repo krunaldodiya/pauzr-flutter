@@ -33,7 +33,14 @@ class _ViewProfilePage extends State<ViewProfilePage> {
       backgroundColor: Colors.red,
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text("Krunal Dodiya"),
+        title: Text(
+          "Krunal Dodiya",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontFamily: Fonts.titilliumWebRegular,
+          ),
+        ),
         actions: <Widget>[
           Container(
             child: IconButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/group/create.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
@@ -102,6 +103,12 @@ class RouteGenerator {
       case routeList.gender:
         return MaterialPageRoute(builder: (context) {
           return ChooseGender();
+        });
+        break;
+
+      case routeList.create_group:
+        return MaterialPageRoute(builder: (context) {
+          return CreateGroupPage();
         });
         break;
 
