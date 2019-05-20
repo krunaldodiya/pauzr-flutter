@@ -53,7 +53,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       appBar: getAppBar(context),
       body: SafeArea(child: getTabPage()),
       bottomNavigationBar: Container(

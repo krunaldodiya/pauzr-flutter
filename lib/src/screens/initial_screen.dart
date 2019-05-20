@@ -5,7 +5,6 @@ import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/initial_screen/state.dart';
 import 'package:pauzr/src/helpers/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
-import 'package:pauzr/src/screens/manage_theme.dart';
 import 'package:pauzr/src/screens/no_network.dart';
 
 class InitialScreen extends StatefulWidget {
@@ -57,23 +56,15 @@ class _InitialScreenState extends State<InitialScreen> {
       return IntroPage();
     }
 
-    return GestureDetector(
-      onLongPress: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ManageTheme()),
-        );
-      },
-      child: BlocBuilder(
-        bloc: initialScreenBloc,
-        builder: (context, InitialScreenState state) {
-          if (state.loaded == false) {
-            return Center(child: CircularProgressIndicator());
-          }
+    return BlocBuilder(
+      bloc: initialScreenBloc,
+      builder: (context, InitialScreenState state) {
+        if (state.loaded == false) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          return getInitialScreen(state.user);
-        },
-      ),
+        return getInitialScreen(state.user);
+      },
     );
   }
 }

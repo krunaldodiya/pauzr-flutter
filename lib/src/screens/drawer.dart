@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -19,17 +20,17 @@ class DrawerPage extends StatelessWidget {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              user.name,
+              user.name.toUpperCase(),
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebSemiBold,
               ),
             ),
             accountEmail: Text(
               user.email,
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             currentAccountPicture: Container(
@@ -53,7 +54,7 @@ class DrawerPage extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             trailing: Icon(
@@ -73,7 +74,7 @@ class DrawerPage extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             trailing: Icon(
@@ -90,7 +91,7 @@ class DrawerPage extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             trailing: Icon(
@@ -109,7 +110,7 @@ class DrawerPage extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
-                fontFamily: "TitilliumWeb-Regular",
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             trailing: Icon(

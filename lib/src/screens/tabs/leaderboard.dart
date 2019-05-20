@@ -41,98 +41,101 @@ class _LeaderboardPage extends State<LeaderboardPage>
 
   @override
   Widget build(BuildContext context) {
-    return SwipeDetector(
-      swipeConfiguration: SwipeConfiguration(
-        verticalSwipeMinVelocity: 100.0,
-        verticalSwipeMinDisplacement: 50.0,
-        verticalSwipeMaxWidthThreshold: 100.0,
-        horizontalSwipeMaxHeightThreshold: 50.0,
-        horizontalSwipeMinDisplacement: 50.0,
-        horizontalSwipeMinVelocity: 200.0,
-      ),
-      onSwipeLeft: () {
-        if (period == "Today") {
-          setState(() {
-            period = "This Week";
-          });
-        } else if (period == "This Week") {
-          setState(() {
-            period = "This Month";
-          });
-        }
-      },
-      onSwipeRight: () {
-        if (period == "This Month") {
-          setState(() {
-            period = "This Week";
-          });
-        } else if (period == "This Week") {
-          setState(() {
-            period = "Today";
-          });
-        }
-      },
-      child: FutureBuilder(
-        future: ApiProvider().getRankings(period),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      body: SwipeDetector(
+        swipeConfiguration: SwipeConfiguration(
+          verticalSwipeMinVelocity: 100.0,
+          verticalSwipeMinDisplacement: 50.0,
+          verticalSwipeMaxWidthThreshold: 100.0,
+          horizontalSwipeMaxHeightThreshold: 50.0,
+          horizontalSwipeMinDisplacement: 50.0,
+          horizontalSwipeMinVelocity: 200.0,
+        ),
+        onSwipeLeft: () {
+          if (period == "Today") {
+            setState(() {
+              period = "This Week";
+            });
+          } else if (period == "This Week") {
+            setState(() {
+              period = "This Month";
+            });
           }
-
-          if (snapshot.hasError) {
-            return new Text('Error: ${snapshot.error}');
+        },
+        onSwipeRight: () {
+          if (period == "This Month") {
+            setState(() {
+              period = "This Week";
+            });
+          } else if (period == "This Week") {
+            setState(() {
+              period = "Today";
+            });
           }
+        },
+        child: FutureBuilder(
+          future: ApiProvider().getRankings(period),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          Response data = snapshot.data;
-          Map body = json.decode(data.body);
+            if (snapshot.hasError) {
+              return new Text('Error: ${snapshot.error}');
+            }
 
-          return BlocBuilder(
-            bloc: userBloc,
-            builder: (context, UserState state) {
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        getSwitch(
-                          items: ["Today", "This Week", "This Month"],
-                          selected: period,
-                          onSelect: (index, value) {
-                            setState(() {
-                              period = value;
-                            });
-                          },
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(5.0),
-                          child: getCards(body),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            "City: ${state.user.location.city}",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 22.0,
-                              fontFamily: Fonts.titilliumWebRegular,
+            Response data = snapshot.data;
+            Map body = json.decode(data.body);
+
+            return BlocBuilder(
+              bloc: userBloc,
+              builder: (context, UserState state) {
+                return CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          getSwitch(
+                            items: ["Today", "This Week", "This Month"],
+                            selected: period,
+                            onSelect: (index, value) {
+                              setState(() {
+                                period = value;
+                              });
+                            },
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(5.0),
+                            child: getCards(body),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Text(
+                              "City: ${state.user.location.city}",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22.0,
+                                fontFamily: Fonts.titilliumWebRegular,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      getList(state.user, body),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        getList(state.user, body),
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -36,79 +36,82 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Card(
-          margin: EdgeInsets.all(20.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      body: Stack(
+        children: [
+          Card(
+            margin: EdgeInsets.all(20.0),
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
-              color: Colors.black,
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2),
-                  BlendMode.dstATop,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.black,
+                image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.2),
+                    BlendMode.dstATop,
+                  ),
+                  image: AssetImage(
+                    quotes[currentQuote]['image'],
+                  ),
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
                 ),
-                image: AssetImage(
-                  quotes[currentQuote]['image'],
-                ),
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                    width: double.infinity,
+                    child: Text(
+                      quotes[currentQuote]['title'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: Fonts.titilliumWebRegular,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(top: 20.0, right: 20.0),
+                    child: Text(
+                      "- ${quotes[currentQuote]['author'].toUpperCase()}",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.lime,
+                        fontWeight: FontWeight.normal,
+                        fontFamily: Fonts.titilliumWebSemiBold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                  width: double.infinity,
-                  child: Text(
-                    quotes[currentQuote]['title'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(top: 20.0, right: 20.0),
-                  child: Text(
-                    "- ${quotes[currentQuote]['author'].toUpperCase()}",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.lime,
-                      fontWeight: FontWeight.normal,
-                      fontFamily: Fonts.titilliumWebSemiBold,
-                    ),
-                  ),
-                ),
-              ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 50.0),
+              child: Row(
+                children: <Widget>[
+                  getTimerCard(20),
+                  getTimerCard(40),
+                  getTimerCard(60),
+                ],
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            margin: EdgeInsets.only(bottom: 50.0),
-            child: Row(
-              children: <Widget>[
-                getTimerCard(20),
-                getTimerCard(40),
-                getTimerCard(60),
-              ],
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
