@@ -10,6 +10,10 @@ class ApiProvider {
     return sendRequest(Api.me);
   }
 
+  Future getGroups() async {
+    return sendRequest(Api.getGroups);
+  }
+
   Future getEarnedPoints() async {
     return sendRequest(Api.getEarnedPoints);
   }
@@ -87,4 +91,5 @@ class Api {
   static String getRankings = "$baseUrl/api/timer/rankings";
   static String setTimer = "$baseUrl/api/timer/set";
   static String createGroup = "$baseUrl/api/groups/create";
+  static String getGroups = "$baseUrl/api/groups/get";
 }

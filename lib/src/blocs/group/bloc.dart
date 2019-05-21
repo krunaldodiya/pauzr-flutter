@@ -19,26 +19,26 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
   @override
   Stream<GroupState> mapEventToState(GroupEvent event) async* {
     if (event is CreateGroup) {
-      yield currentState.copyWith(loaded: false, loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response = await _apiProvider.createGroup(event.name);
         final results = response.data;
 
-        if (results['group'] != null) {
-          event.callback(true);
-        } else {
-          event.callback(false);
-        }
-
         yield currentState.copyWith(
-          error: results['errors'],
           loaded: true,
           loading: false,
+          error: null,
         );
-      } catch (e) {
+
+        event.callback(results);
+      } catch (error) {
         yield currentState.copyWith(
-          error: {"errors": "Error, Something bad happened."},
+          error: error.response.data['errors'],
           loaded: true,
           loading: false,
         );

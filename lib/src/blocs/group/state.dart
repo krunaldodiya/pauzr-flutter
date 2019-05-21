@@ -1,17 +1,18 @@
 import 'package:meta/meta.dart';
+import 'package:pauzr/src/models/group.dart';
 
 @immutable
 class GroupState {
   final bool loading;
   final bool loaded;
   final Map error;
-  final String name;
+  final List<Group> groups;
 
   GroupState({
     @required this.loading,
     @required this.loaded,
     @required this.error,
-    @required this.name,
+    @required this.groups,
   });
 
   factory GroupState.initial() {
@@ -19,7 +20,7 @@ class GroupState {
       loading: false,
       loaded: false,
       error: null,
-      name: null,
+      groups: List<Group>(),
     );
   }
 
@@ -27,13 +28,13 @@ class GroupState {
     bool loading,
     bool loaded,
     Map error,
-    int name,
+    List groups,
   }) {
     return GroupState(
       loading: loading ?? this.loading,
       loaded: loaded ?? this.loaded,
       error: error ?? this.error,
-      name: name ?? this.name,
+      groups: groups ?? this.groups,
     );
   }
 }

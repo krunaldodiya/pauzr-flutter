@@ -155,9 +155,7 @@ class _MinutesPage extends State<MinutesPage>
             itemCount: history.length,
             itemBuilder: (context, int index) {
               final item = history[index];
-
               return getRankCard(item);
-              // return getMainCard(level, state.user);
             },
           ),
         ),

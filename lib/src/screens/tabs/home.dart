@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class HomePage extends StatefulWidget {
@@ -27,10 +30,60 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(10.0),
-        child: Text("Groups"),
+      body: SafeArea(
+        child: FutureBuilder(
+          future: ApiProvider().getGroups(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+
+            return createListView(context, snapshot);
+          },
+        ),
       ),
+    );
+  }
+
+  Widget createListView(context, snapshot) {
+    final Response response = snapshot.data;
+    final results = response.data;
+    final List groups = results['groups'];
+
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return Divider(
+          color: Colors.grey,
+          height: 0,
+          indent: 0,
+        );
+      },
+      itemCount: groups.length,
+      itemBuilder: (context, int index) {
+        final group = groups[index]['group'];
+        final subscribers = groups[index]['group']['subscribers'].length;
+
+        return ListTile(
+          isThreeLine: false,
+          leading: CircleAvatar(
+            radius: 20.0,
+            backgroundImage: NetworkImage(
+              "$baseUrl/users/${group['photo']}",
+            ),
+          ),
+          title: Text(group['name']),
+          subtitle: Text(
+            "${subscribers.toString()} participants.",
+          ),
+          trailing: Icon(Icons.more_vert),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/group/create.dart';
+import 'package:pauzr/src/screens/group/participants.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
@@ -114,7 +115,7 @@ class RouteGenerator {
 
       case routeList.add_group_participants:
         return MaterialPageRoute(builder: (context) {
-          return CreateGroupPage();
+          return AddGroupParticipantsPage(group: args['group']);
         });
         break;
 

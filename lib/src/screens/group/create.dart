@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
+import 'package:pauzr/src/blocs/group/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -57,14 +58,19 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       ),
       body: Column(
         children: <Widget>[
-          EditableFormField(
-            maxLength: 50,
-            textColor: Colors.black,
-            borderColor: Colors.black,
-            labelColor: Colors.black,
-            controller: nameController,
-            labelText: "Group Name",
-            errorText: getErrorText(null, 'name'),
+          BlocBuilder(
+            bloc: groupBloc,
+            builder: (context, GroupState state) {
+              return EditableFormField(
+                maxLength: 50,
+                textColor: Colors.black,
+                borderColor: Colors.black,
+                labelColor: Colors.black,
+                controller: nameController,
+                labelText: "Group Name",
+                errorText: getErrorText(state.error, 'name'),
+              );
+            },
           ),
         ],
       ),
@@ -74,13 +80,14 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   void createGroup() {
     XsProgressHud.show(context);
 
-    groupBloc.createGroup(nameController.text, (success) {
+    groupBloc.createGroup(nameController.text, (group) {
       XsProgressHud.hide();
 
-      if (success == true) {
+      if (group != false) {
         return Navigator.pushReplacementNamed(
           context,
           routeList.add_group_participants,
+          arguments: {"group": group},
         );
       }
     });

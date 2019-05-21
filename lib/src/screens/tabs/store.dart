@@ -2,14 +2,14 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+class StorePage extends StatefulWidget {
+  StorePage({Key key}) : super(key: key);
 
   @override
-  _HomePage createState() => _HomePage();
+  _StorePage createState() => _StorePage();
 }
 
-class _HomePage extends State<HomePage> with SingleTickerProviderStateMixin {
+class _StorePage extends State<StorePage> with SingleTickerProviderStateMixin {
   TabController tabController;
 
   @override
