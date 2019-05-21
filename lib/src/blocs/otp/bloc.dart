@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -44,28 +44,27 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       yield currentState.copyWith(loading: true);
 
       try {
-        final response = await _apiProvider.requestOtp(currentState.mobile);
+        final Response response =
+            await _apiProvider.requestOtp(currentState.mobile);
 
-        if (response.body != null) {
-          final results = json.decode(response.body);
+        final results = response.data;
 
-          if (results['otp'] != null) {
-            yield currentState.copyWith(
-              loaded: true,
-              loading: false,
-              serverOtp: results['otp'],
-            );
+        if (results['otp'] != null) {
+          yield currentState.copyWith(
+            loaded: true,
+            loading: false,
+            error: null,
+            serverOtp: results['otp'],
+          );
 
-            event.callback(true);
-          } else {
-            yield currentState.copyWith(
-              loaded: true,
-              loading: false,
-              error: results['errors'],
-            );
-
-            event.callback(false);
-          }
+          event.callback(true);
+        } else {
+          yield currentState.copyWith(
+            loaded: true,
+            loading: false,
+            error: results['errors'],
+          );
+          event.callback(false);
         }
       } catch (e) {
         yield currentState.copyWith(
@@ -82,31 +81,29 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       yield currentState.copyWith(loading: true);
 
       try {
-        final response = await _apiProvider.verifyOtp(
+        final Response response = await _apiProvider.verifyOtp(
           currentState.mobile,
           currentState.clientOtp,
         );
 
-        if (response.body != null) {
-          final results = json.decode(response.body);
+        final results = response.data;
 
-          if (results['user'] != null) {
-            yield currentState.copyWith(
-              loaded: true,
-              loading: false,
-              error: null,
-            );
+        if (results['user'] != null) {
+          yield currentState.copyWith(
+            loaded: true,
+            loading: false,
+            error: null,
+          );
 
-            event.callback(results);
-          } else {
-            yield currentState.copyWith(
-              loaded: true,
-              loading: false,
-              error: results['errors'],
-            );
+          event.callback(results);
+        } else {
+          yield currentState.copyWith(
+            loaded: true,
+            loading: false,
+            error: results['errors'],
+          );
 
-            event.callback(false);
-          }
+          event.callback(false);
         }
       } catch (e) {
         yield currentState.copyWith(
