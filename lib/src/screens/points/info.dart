@@ -56,7 +56,7 @@ class _PointsPage extends State<PointsPage>
             }
 
             if (snapshot.hasError) {
-              return new Text('Error: ${snapshot.error}');
+              return Text('Error: ${snapshot.error}');
             }
 
             return createListView(context, snapshot);

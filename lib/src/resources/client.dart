@@ -1,25 +1,18 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
-Future sendRequest(api, [body, type = "POST"]) async {
+Future sendRequest(api, [body, method = "POST"]) async {
+  final Dio dio = Dio();
   final headers = await getHeaders();
 
-  if (type == "GET") {
-    return http.get(
-      Uri.encodeFull(api),
+  return dio.request(
+    Uri.encodeFull(api),
+    data: body,
+    options: Options(
+      method: method,
       headers: headers,
-    );
-  }
-
-  if (type == "POST") {
-    return http.post(
-      Uri.encodeFull(api),
-      body: json.encode(body),
-      headers: headers,
-    );
-  }
+    ),
+  );
 }
 
 getHeaders() async {

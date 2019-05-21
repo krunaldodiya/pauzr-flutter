@@ -55,7 +55,7 @@ class _MinutesPage extends State<MinutesPage>
             }
 
             if (snapshot.hasError) {
-              return new Text('Error: ${snapshot.error}');
+              return Text('Error: ${snapshot.error}');
             }
 
             return createListView(context, snapshot);

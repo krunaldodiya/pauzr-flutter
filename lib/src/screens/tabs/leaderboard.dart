@@ -84,7 +84,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
             }
 
             if (snapshot.hasError) {
-              return new Text('Error: ${snapshot.error}');
+              return Text('Error: ${snapshot.error}');
             }
 
             Response data = snapshot.data;

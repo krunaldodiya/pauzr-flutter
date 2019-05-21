@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/resources/client.dart';
-import 'package:multipart_request/multipart_request.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 class ApiProvider {
   Future getAuthUser() async {
@@ -64,17 +63,10 @@ class ApiProvider {
     return sendRequest(Api.getProfessions);
   }
 
-  Future uploadAvatar(file) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String token = pref.getString("authToken");
-
-    var request = MultipartRequest();
-
-    request.setUrl(Api.uploadAvatar);
-    request.addHeader("Authorization", "Bearer $token");
-    request.addFile("image", file.path);
-
-    return request.send();
+  Future uploadAvatar(FormData image) async {
+    return sendRequest(Api.uploadAvatar, {
+      "image": image,
+    });
   }
 }
 

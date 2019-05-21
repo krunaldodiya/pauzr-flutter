@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:multipart_request/multipart_request.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/event.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
@@ -276,25 +276,22 @@ class _EditProfilePage extends State<EditProfilePage> {
       loading = true;
     });
 
-    final Response response = await apiProvider.uploadAvatar(file);
+    FormData formdata = FormData();
+    formdata.add("image", UploadFileInfo(file, file.path));
 
-    response.onError = () {
-      setState(() {
-        loading = false;
-      });
-    };
-
-    response.onComplete = (response) {
-      setState(() {
-        loading = false;
-      });
+    try {
+      final response = await apiProvider.uploadAvatar(formdata);
 
       Map data = json.decode(response);
       userBloc.setAuthUser(data['user']);
-    };
 
-    response.progress.listen((int progress) {
-      print("progress from response object " + progress.toString());
-    });
+      setState(() {
+        loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+    }
   }
 }
