@@ -11,6 +11,7 @@ Future sendRequest(api, [body, method = "POST"]) async {
     options: Options(
       method: method,
       headers: headers,
+      responseType: ResponseType.json,
     ),
   );
 }

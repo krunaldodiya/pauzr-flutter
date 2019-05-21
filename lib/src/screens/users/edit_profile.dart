@@ -276,8 +276,9 @@ class _EditProfilePage extends State<EditProfilePage> {
       loading = true;
     });
 
-    FormData formdata = FormData();
-    formdata.add("image", UploadFileInfo(file, file.path));
+    FormData formdata = FormData.from({
+      "image": UploadFileInfo(file, file.path),
+    });
 
     try {
       final response = await apiProvider.uploadAvatar(formdata);

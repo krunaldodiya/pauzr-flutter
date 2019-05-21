@@ -64,9 +64,7 @@ class ApiProvider {
   }
 
   Future uploadAvatar(FormData image) async {
-    return sendRequest(Api.uploadAvatar, {
-      "image": image,
-    });
+    return sendRequest(Api.uploadAvatar, image);
   }
 }
 
