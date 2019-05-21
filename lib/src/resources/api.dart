@@ -43,6 +43,12 @@ class ApiProvider {
     });
   }
 
+  Future createGroup(String name) async {
+    return sendRequest(Api.createGroup, {
+      "name": name,
+    });
+  }
+
   Future updateProfile(User user) async {
     return sendRequest(Api.updateProfile, {
       "id": user.id.toString(),
@@ -80,4 +86,5 @@ class Api {
   static String getSavedMinutes = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";
   static String setTimer = "$baseUrl/api/timer/set";
+  static String createGroup = "$baseUrl/api/groups/create";
 }

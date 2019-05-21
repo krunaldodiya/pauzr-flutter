@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
+import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class CreateGroupPage extends StatefulWidget {
   CreateGroupPage({Key key}) : super(key: key);
@@ -12,7 +14,7 @@ class CreateGroupPage extends StatefulWidget {
 }
 
 class _CreateGroupPageState extends State<CreateGroupPage> {
-  UserBloc userBloc;
+  GroupBloc groupBloc;
 
   TextEditingController nameController = TextEditingController();
 
@@ -21,7 +23,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
     super.initState();
 
     setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
+      groupBloc = BlocProvider.of<GroupBloc>(context);
     });
   }
 
@@ -41,9 +43,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         ),
         actions: <Widget>[
           FlatButton(
-            onPressed: () {
-              print(nameController.text);
-            },
+            onPressed: createGroup,
             child: Text(
               "Create".toUpperCase(),
               style: TextStyle(
@@ -69,5 +69,17 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         ],
       ),
     );
+  }
+
+  void createGroup() {
+    XsProgressHud.show(context);
+
+    groupBloc.createGroup(nameController.text, (success) {
+      XsProgressHud.hide();
+
+      if (success == true) {
+        return Navigator.pushReplacementNamed(context, routeList.verify_otp);
+      }
+    });
   }
 }

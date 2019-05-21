@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/location/bloc.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
@@ -18,6 +19,7 @@ class ProviderList {
       BlocProvider<LocationBloc>(bloc: LocationBloc()),
       BlocProvider<ProfessionBloc>(bloc: ProfessionBloc()),
       BlocProvider<TimerBloc>(bloc: TimerBloc()),
+      BlocProvider<GroupBloc>(bloc: GroupBloc()),
     ];
   }
 }
