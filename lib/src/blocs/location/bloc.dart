@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/blocs/location/event.dart';
 import 'package:pauzr/src/blocs/location/state.dart';
 import 'package:pauzr/src/models/location.dart';
@@ -23,8 +23,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       yield currentState.copyWith(loading: true);
 
       try {
-        final response = await _apiProvider.getLocations();
-        final results = json.decode(response.body);
+        final Response response = await _apiProvider.getLocations();
+        final results = response.data;
         final List locations = results['locations'];
 
         if (locations.isNotEmpty) {

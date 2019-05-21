@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/blocs/timer/event.dart';
 import 'package:pauzr/src/blocs/timer/state.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -22,8 +22,8 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
       yield currentState.copyWith(loaded: false, loading: true);
 
       try {
-        final response = await _apiProvider.setTimer(event.duration);
-        final results = json.decode(response.body);
+        final Response response = await _apiProvider.setTimer(event.duration);
+        final results = response.data;
 
         if (results['success'] == true) {
           event.callback(true);

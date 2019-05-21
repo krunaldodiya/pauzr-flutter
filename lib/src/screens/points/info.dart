@@ -1,9 +1,7 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:http/http.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -140,9 +138,9 @@ class _PointsPage extends State<PointsPage>
   }
 
   createListView(context, snapshot) {
-    Response data = snapshot.data;
-    Map body = json.decode(data.body);
-    List history = body['history'];
+    final Response response = snapshot.data;
+    final results = response.data;
+    final List history = results['history'];
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +148,7 @@ class _PointsPage extends State<PointsPage>
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(5.0),
-          child: getCards(body),
+          child: getCards(results),
         ),
         Expanded(
           child: ListView.builder(

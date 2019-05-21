@@ -1,8 +1,6 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -87,8 +85,8 @@ class _LeaderboardPage extends State<LeaderboardPage>
               return Text('Error: ${snapshot.error}');
             }
 
-            Response data = snapshot.data;
-            Map body = json.decode(data.body);
+            final Response response = snapshot.data;
+            final results = response.data;
 
             return BlocBuilder(
               bloc: userBloc,
@@ -109,7 +107,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
                           ),
                           Container(
                             margin: EdgeInsets.all(5.0),
-                            child: getCards(body),
+                            child: getCards(results),
                           ),
                           Container(
                             margin: EdgeInsets.all(10.0),
@@ -127,7 +125,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
                     ),
                     SliverList(
                       delegate: SliverChildListDelegate(
-                        getList(state.user, body),
+                        getList(state.user, results),
                       ),
                     ),
                   ],
@@ -140,7 +138,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
     );
   }
 
-  getCards(body) {
+  getCards(results) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -152,7 +150,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
               bloc: userBloc,
               builder: (context, UserState state) {
                 return getCard(
-                  body['minutes_saved'].toString(),
+                  results['minutes_saved'].toString(),
                   "Minutes Saved",
                 );
               },
@@ -168,7 +166,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
               bloc: userBloc,
               builder: (context, UserState state) {
                 return getCard(
-                  body['points_earned'].toString(),
+                  results['points_earned'].toString(),
                   "Points Earned",
                 );
               },
@@ -242,9 +240,9 @@ class _LeaderboardPage extends State<LeaderboardPage>
     );
   }
 
-  getList(user, body) {
+  getList(user, results) {
     List<Widget> list = [];
-    List rankings = body['rankings'];
+    List rankings = results['rankings'];
     List rankingsFiltered = [];
     Map authUserRanking;
 

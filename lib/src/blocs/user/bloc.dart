@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/user/event.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
@@ -55,8 +55,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield currentState.copyWith(loaded: false, loading: true);
 
       try {
-        final response = await _apiProvider.getAuthUser();
-        final results = json.decode(response.body);
+        final Response response = await _apiProvider.getAuthUser();
+        final results = response.data;
 
         if (results['user'] != null) {
           dispatch(SetAuthUser(user: results['user']));
@@ -77,8 +77,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield currentState.copyWith(loaded: false, loading: true);
 
       try {
-        final response = await _apiProvider.updateProfile(currentState.user);
-        final results = json.decode(response.body);
+        final Response response =
+            await _apiProvider.updateProfile(currentState.user);
+        final results = response.data;
 
         if (results['user'] != null) {
           dispatch(SetAuthUser(user: results['user']));

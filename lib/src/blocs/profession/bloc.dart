@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/blocs/profession/event.dart';
 import 'package:pauzr/src/blocs/profession/state.dart';
 import 'package:pauzr/src/models/profession.dart';
@@ -23,8 +23,8 @@ class ProfessionBloc extends Bloc<ProfessionEvent, ProfessionState> {
       yield currentState.copyWith(loading: true);
 
       try {
-        final response = await _apiProvider.getProfessions();
-        final results = json.decode(response.body);
+        final Response response = await _apiProvider.getProfessions();
+        final results = response.data;
         final List professions = results['professions'];
 
         if (professions.isNotEmpty) {
