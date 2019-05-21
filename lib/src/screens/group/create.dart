@@ -78,7 +78,10 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       XsProgressHud.hide();
 
       if (success == true) {
-        return Navigator.pushReplacementNamed(context, routeList.verify_otp);
+        return Navigator.pushReplacementNamed(
+          context,
+          routeList.add_group_participants,
+        );
       }
     });
   }

@@ -25,7 +25,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         final Response response = await _apiProvider.createGroup(event.name);
         final results = response.data;
 
-        if (results['success'] == true) {
+        if (results['group'] != null) {
           event.callback(true);
         } else {
           event.callback(false);

@@ -112,6 +112,12 @@ class RouteGenerator {
         });
         break;
 
+      case routeList.add_group_participants:
+        return MaterialPageRoute(builder: (context) {
+          return CreateGroupPage();
+        });
+        break;
+
       case routeList.location:
         return MaterialPageRoute(builder: (context) {
           return ChooseLocation();
