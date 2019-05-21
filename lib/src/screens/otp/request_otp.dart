@@ -87,7 +87,7 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                           keyboardType: TextInputType.number,
                           controller: null,
                           labelText: "Mobile Number",
-                          errorText: getErrorText(state, 'mobile'),
+                          errorText: getErrorText(state.error, 'mobile'),
                           onChanged: otpBloc.onChangeMobile,
                         );
                       },

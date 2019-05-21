@@ -113,7 +113,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                   return EditableFormField(
                     controller: nameController,
                     labelText: "Full Name",
-                    errorText: getErrorText(state, 'name'),
+                    errorText: getErrorText(state.error, 'name'),
                     onChanged: (name) {
                       userBloc.updateState("name", name);
                     },
@@ -126,7 +126,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                   return EditableFormField(
                     controller: emailController,
                     labelText: "Email Address",
-                    errorText: getErrorText(state, 'email'),
+                    errorText: getErrorText(state.error, 'email'),
                     onChanged: (email) {
                       userBloc.updateState("email", email);
                     },
@@ -163,7 +163,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     return TappableFormField(
                       controller: dobController,
                       labelText: "Date of Birth",
-                      errorText: getErrorText(state, "dob"),
+                      errorText: getErrorText(state.error, "dob"),
                     );
                   },
                 ),
@@ -188,7 +188,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     return TappableFormField(
                       controller: genderController,
                       labelText: "Gender",
-                      errorText: getErrorText(state, "gender"),
+                      errorText: getErrorText(state.error, "gender"),
                     );
                   },
                 ),
@@ -214,7 +214,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                     return TappableFormField(
                       controller: locationController,
                       labelText: "Location",
-                      errorText: getErrorText(state, "location_id"),
+                      errorText: getErrorText(state.error, "location_id"),
                     );
                   },
                 ),

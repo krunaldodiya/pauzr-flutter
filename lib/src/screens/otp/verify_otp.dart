@@ -116,7 +116,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
                           keyboardType: TextInputType.number,
                           controller: null,
                           labelText: "OTP",
-                          errorText: getErrorText(state, 'otp'),
+                          errorText: getErrorText(state.error, 'otp'),
                           onChanged: otpBloc.onChangeOtp,
                         );
                       },

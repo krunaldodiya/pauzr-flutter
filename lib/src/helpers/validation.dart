@@ -1,5 +1,3 @@
-String getErrorText(state, key) {
-  return state.error != null && state.error[key] != null
-      ? state.error[key][0]
-      : null;
+String getErrorText(error, key) {
+  return error != null && error[key] != null ? error[key][0] : null;
 }

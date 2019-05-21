@@ -6,15 +6,21 @@ class EditableFormField extends StatelessWidget {
   final String labelText;
   final String errorText;
   final Function onChanged;
+  final Color borderColor;
+  final Color textColor;
+  final Color labelColor;
   final int maxLength;
   final TextInputType keyboardType;
 
   EditableFormField({
     Key key,
-    @required this.controller,
-    @required this.labelText,
-    @required this.errorText,
-    @required this.onChanged,
+    this.controller,
+    this.labelText,
+    this.errorText,
+    this.onChanged,
+    this.textColor,
+    this.labelColor,
+    this.borderColor,
     this.maxLength,
     this.keyboardType,
   });
@@ -26,9 +32,9 @@ class EditableFormField extends StatelessWidget {
       child: TextField(
         maxLength: maxLength ?? null,
         controller: controller,
-        onChanged: onChanged,
+        onChanged: (data) => onChanged(data),
         style: TextStyle(
-          color: Colors.white,
+          color: textColor ?? Colors.white,
           fontSize: 14.0,
           fontFamily: Fonts.titilliumWebRegular,
         ),
@@ -38,22 +44,22 @@ class EditableFormField extends StatelessWidget {
           contentPadding: EdgeInsets.all(15.0),
           border: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: borderColor ?? Colors.white,
             ),
           ),
           disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: borderColor ?? Colors.white,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: borderColor ?? Colors.white,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: borderColor ?? Colors.white,
             ),
           ),
           errorBorder: OutlineInputBorder(
@@ -71,7 +77,7 @@ class EditableFormField extends StatelessWidget {
           ),
           labelText: labelText,
           labelStyle: TextStyle(
-            color: Colors.white,
+            color: labelColor ?? Colors.white,
             fontSize: 14.0,
             fontFamily: Fonts.titilliumWebRegular,
           ),
