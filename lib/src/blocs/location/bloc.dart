@@ -20,23 +20,26 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   @override
   Stream<LocationState> mapEventToState(LocationEvent event) async* {
     if (event is GetLocation) {
-      yield currentState.copyWith(loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response = await _apiProvider.getLocations();
         final results = response.data;
         final List locations = results['locations'];
 
-        if (locations.isNotEmpty) {
-          yield currentState.copyWith(
-            locations: Location.fromList(locations),
-            loaded: true,
-            loading: false,
-          );
-        }
-      } catch (e) {
         yield currentState.copyWith(
-          error: "Error, Something bad happened.",
+          locations: Location.fromList(locations),
+          loaded: true,
+          loading: false,
+        );
+      } catch (error) {
+        yield currentState.copyWith(
+          error: error.response.data,
+          loaded: true,
           loading: false,
         );
       }

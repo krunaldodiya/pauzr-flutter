@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -256,10 +254,10 @@ class _EditProfilePage extends State<EditProfilePage> {
   void onSubmit() {
     XsProgressHud.show(context);
 
-    userBloc.updateProfile((success) {
+    userBloc.updateProfile((data) {
       XsProgressHud.hide();
 
-      if (success == true) {
+      if (data['user'] != null) {
         if (widget.shouldPop == true) {
           return Navigator.of(context).pop();
         }
@@ -282,9 +280,9 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     try {
       final response = await apiProvider.uploadAvatar(formdata);
+      final results = response.data;
 
-      Map data = json.decode(response);
-      userBloc.setAuthUser(data['user']);
+      userBloc.setAuthUser(results['user']);
 
       setState(() {
         loading = false;

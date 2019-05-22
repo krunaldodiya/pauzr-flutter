@@ -19,31 +19,30 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
   @override
   Stream<TimerState> mapEventToState(TimerEvent event) async* {
     if (event is SetTimer) {
-      yield currentState.copyWith(loaded: false, loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response = await _apiProvider.setTimer(event.duration);
         final results = response.data;
 
-        if (results['success'] == true) {
-          event.callback(true);
-        } else {
-          event.callback(false);
-        }
-
         yield currentState.copyWith(
-          error: results['errors'],
-          loaded: true,
-          loading: false,
-        );
-      } catch (e) {
-        yield currentState.copyWith(
-          error: {"errors": "Error, Something bad happened."},
           loaded: true,
           loading: false,
         );
 
-        event.callback(false);
+        event.callback(results);
+      } catch (error) {
+        yield currentState.copyWith(
+          error: error.response.data,
+          loaded: true,
+          loading: false,
+        );
+
+        event.callback(error);
       }
     }
   }

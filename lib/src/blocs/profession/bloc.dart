@@ -34,9 +34,10 @@ class ProfessionBloc extends Bloc<ProfessionEvent, ProfessionState> {
             loading: false,
           );
         }
-      } catch (e) {
+      } catch (error) {
         yield currentState.copyWith(
-          error: "Error, Something bad happened.",
+          error: error.response.data,
+          loaded: true,
           loading: false,
         );
       }

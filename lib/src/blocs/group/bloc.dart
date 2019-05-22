@@ -32,18 +32,17 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         yield currentState.copyWith(
           loaded: true,
           loading: false,
-          error: null,
         );
 
         event.callback(results);
       } catch (error) {
         yield currentState.copyWith(
-          error: error.response.data['errors'],
+          error: error.response.data,
           loaded: true,
           loading: false,
         );
 
-        event.callback(false);
+        event.callback(error);
       }
     }
   }

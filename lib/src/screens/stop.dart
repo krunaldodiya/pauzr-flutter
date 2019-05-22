@@ -304,7 +304,7 @@ class _StopPage extends State<StopPage>
   }
 
   void onSuccess(duration) {
-    timerBloc.setTimer(duration, (success) {
+    timerBloc.setTimer(duration, (data) {
       showSuccessPop(context, () {
         Navigator.of(context).pop();
       });

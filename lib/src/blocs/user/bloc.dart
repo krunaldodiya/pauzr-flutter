@@ -52,55 +52,51 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     if (event is GetAuthUser) {
-      yield currentState.copyWith(loaded: false, loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response = await _apiProvider.getAuthUser();
         final results = response.data;
 
-        if (results['user'] != null) {
-          dispatch(SetAuthUser(user: results['user']));
-          initialScreenBloc.setAuthUser(User.fromMap(results['user']));
-        } else {
-          dispatch(RemoveAuth());
-        }
-      } catch (e) {
+        dispatch(SetAuthUser(user: results['user']));
+        initialScreenBloc.setAuthUser(User.fromMap(results['user']));
+      } catch (error) {
         yield currentState.copyWith(
-          error: {"errors": "Error, Something bad happened."},
+          error: error.response.data,
           loaded: true,
           loading: false,
         );
+
+        dispatch(RemoveAuth());
       }
     }
 
     if (event is UpdateProfile) {
-      yield currentState.copyWith(loaded: false, loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response =
             await _apiProvider.updateProfile(currentState.user);
         final results = response.data;
 
-        if (results['user'] != null) {
-          dispatch(SetAuthUser(user: results['user']));
-          event.callback(true);
-        } else {
-          event.callback(false);
-        }
-
+        dispatch(SetAuthUser(user: results['user']));
+        event.callback(results);
+      } catch (error) {
         yield currentState.copyWith(
-          error: results['errors'],
-          loaded: true,
-          loading: false,
-        );
-      } catch (e) {
-        yield currentState.copyWith(
-          error: {"errors": "Error, Something bad happened."},
+          error: error.response.data,
           loaded: true,
           loading: false,
         );
 
-        event.callback(false);
+        event.callback(error);
       }
     }
 

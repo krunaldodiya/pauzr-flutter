@@ -130,10 +130,10 @@ class _RequestOtpPage extends State<RequestOtpPage> {
   void onSubmit() {
     XsProgressHud.show(context);
 
-    otpBloc.requestOtp((success) {
+    otpBloc.requestOtp((data) {
       XsProgressHud.hide();
 
-      if (success == true) {
+      if (data['otp'] != null) {
         return Navigator.pushReplacementNamed(context, routeList.verify_otp);
       }
     });

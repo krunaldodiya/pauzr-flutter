@@ -41,7 +41,11 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     }
 
     if (event is RequestOtp) {
-      yield currentState.copyWith(loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response =
@@ -49,36 +53,30 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
 
         final results = response.data;
 
-        if (results['otp'] != null) {
-          yield currentState.copyWith(
-            loaded: true,
-            loading: false,
-            error: null,
-            serverOtp: results['otp'],
-          );
-
-          event.callback(true);
-        } else {
-          yield currentState.copyWith(
-            loaded: true,
-            loading: false,
-            error: results['errors'],
-          );
-          event.callback(false);
-        }
-      } catch (e) {
         yield currentState.copyWith(
           loaded: true,
           loading: false,
-          error: {"error": "Error, Something bad happened."},
+          serverOtp: results['otp'],
         );
 
-        event.callback(false);
+        event.callback(results);
+      } catch (error) {
+        yield currentState.copyWith(
+          error: error.response.data,
+          loaded: true,
+          loading: false,
+        );
+
+        event.callback(error);
       }
     }
 
     if (event is VerifyOtp) {
-      yield currentState.copyWith(loading: true);
+      yield currentState.copyWith(
+        loaded: false,
+        loading: true,
+        error: null,
+      );
 
       try {
         final Response response = await _apiProvider.verifyOtp(
@@ -88,31 +86,20 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
 
         final results = response.data;
 
-        if (results['user'] != null) {
-          yield currentState.copyWith(
-            loaded: true,
-            loading: false,
-            error: null,
-          );
-
-          event.callback(results);
-        } else {
-          yield currentState.copyWith(
-            loaded: true,
-            loading: false,
-            error: results['errors'],
-          );
-
-          event.callback(false);
-        }
-      } catch (e) {
         yield currentState.copyWith(
           loaded: true,
           loading: false,
-          error: {"error": "Error, Something bad happened."},
         );
 
-        event.callback(false);
+        event.callback(results);
+      } catch (error) {
+        yield currentState.copyWith(
+          error: error.response.data,
+          loaded: true,
+          loading: false,
+        );
+
+        event.callback(error);
       }
     }
   }
