@@ -73,7 +73,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
           },
           items: <Widget>[
             Icon(
-              Icons.home,
+              Icons.group,
               color: Colors.white,
               size: 25.0,
             ),
@@ -83,7 +83,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
               size: 25.0,
             ),
             Icon(
-              Icons.people,
+              Icons.dashboard,
               color: Colors.white,
               size: 25.0,
             ),

@@ -257,7 +257,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     userBloc.updateProfile((data) {
       XsProgressHud.hide();
 
-      if (data['user'] != null) {
+      if (data.runtimeType != DioError) {
         if (widget.shouldPop == true) {
           return Navigator.of(context).pop();
         }

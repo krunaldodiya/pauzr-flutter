@@ -16,17 +16,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       floatingActionButton: SizedBox(
-        width: 45.0,
-        height: 45.0,
+        width: 50.0,
+        height: 50.0,
         child: FloatingActionButton(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.indigo,
           onPressed: () {
             Navigator.pushNamed(context, routeList.create_group);
           },
           child: Icon(
             Icons.add,
             color: Colors.white,
-            size: 24.0,
+            size: 32.0,
           ),
         ),
       ),
