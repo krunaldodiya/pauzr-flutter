@@ -1,3 +1,9 @@
 String getErrorText(error, key) {
-  return error != null && error[key] != null ? error[key][0] : null;
+  return hasErrors(error, key) ? error["errors"][key][0] : null;
+}
+
+bool hasErrors(error, key) {
+  return error != null &&
+      error["errors"] != null &&
+      error["errors"][key] != null;
 }

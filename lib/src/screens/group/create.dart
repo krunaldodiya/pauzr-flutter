@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
@@ -80,14 +81,14 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
   void createGroup() {
     XsProgressHud.show(context);
 
-    groupBloc.createGroup(nameController.text, (group) {
+    groupBloc.createGroup(nameController.text, (data) {
       XsProgressHud.hide();
 
-      if (group != false) {
+      if (data.runtimeType != DioError) {
         return Navigator.pushReplacementNamed(
           context,
           routeList.add_group_participants,
-          arguments: {"group": group},
+          arguments: {"group": data['group']},
         );
       }
     });

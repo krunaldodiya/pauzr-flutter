@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -133,7 +134,7 @@ class _RequestOtpPage extends State<RequestOtpPage> {
     otpBloc.requestOtp((data) {
       XsProgressHud.hide();
 
-      if (data['otp'] != null) {
+      if (data.runtimeType != DioError) {
         return Navigator.pushReplacementNamed(context, routeList.verify_otp);
       }
     });

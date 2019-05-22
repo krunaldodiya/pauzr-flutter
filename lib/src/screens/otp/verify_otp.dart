@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -169,14 +170,14 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
   void onVerifyOtp() {
     XsProgressHud.show(context);
 
-    otpBloc.verifyOtp((results) {
+    otpBloc.verifyOtp((data) {
       XsProgressHud.hide();
 
-      if (results != false) {
-        User user = User.fromMap(results['user']);
+      if (data.runtimeType != DioError) {
+        User user = User.fromMap(data['user']);
 
-        userBloc.setAuthToken(results['access_token']);
-        userBloc.setAuthUser(results['user']);
+        userBloc.setAuthToken(data['access_token']);
+        userBloc.setAuthUser(data['user']);
 
         if (user.status == 1) {
           return Navigator.of(context).pushReplacementNamed(
