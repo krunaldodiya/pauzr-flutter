@@ -21,8 +21,8 @@ class AddGroupParticipantsPage extends StatefulWidget {
 }
 
 class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
-  List participants = [];
-  List _contacts;
+  List _participants = [];
+  List _contacts = [];
   GroupBloc groupBloc;
   bool loading;
 
@@ -41,8 +41,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(participants);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -113,7 +111,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   void createGroup() {
-    groupBloc.addParticipants(widget.group['id'], participants, (data) {
+    groupBloc.addParticipants(widget.group['id'], _participants, (data) {
       if (data.runtimeType != DioError) {
         Navigator.pop(context);
       }
@@ -152,15 +150,15 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   exists(contact) {
-    return participants.contains(contact['id']);
+    return _participants.contains(contact['id']);
   }
 
   toggleContact(contact) {
     setState(() {
       if (exists(contact)) {
-        participants.remove(contact['id']);
+        _participants.remove(contact['id']);
       } else {
-        participants.add(contact['id']);
+        _participants.add(contact['id']);
       }
     });
   }
@@ -177,8 +175,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
           .toList();
 
       Response response = await ApiProvider().syncContacts(contactList);
-      print(response.data);
-
       var results = response.data['users'];
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -193,16 +189,18 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   Future<PermissionStatus> _getContactPermission() async {
     PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.contacts);
+
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.disabled) {
       Map<PermissionGroup, PermissionStatus> permissionStatus =
           await PermissionHandler()
               .requestPermissions([PermissionGroup.contacts]);
+
       return permissionStatus[PermissionGroup.contacts] ??
           PermissionStatus.unknown;
-    } else {
-      return permission;
     }
+
+    return permission;
   }
 
   void _handleInvalidPermissions(PermissionStatus permissionStatus) {
