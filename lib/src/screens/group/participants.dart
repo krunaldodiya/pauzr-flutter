@@ -113,8 +113,10 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   void createGroup() {
-    groupBloc.addParticipants(widget.group['id'], participants, () {
-      Navigator.pop(context);
+    groupBloc.addParticipants(widget.group['id'], participants, (data) {
+      if (data.runtimeType != DioError) {
+        Navigator.pop(context);
+      }
     });
   }
 

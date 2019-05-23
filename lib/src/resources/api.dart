@@ -29,7 +29,7 @@ class ApiProvider {
     });
   }
 
-  Future addParticipants(String groupId, List participants) async {
+  Future addParticipants(int groupId, List participants) async {
     return sendRequest(Api.addParticipants, {
       "groupId": groupId,
       "participants": participants,

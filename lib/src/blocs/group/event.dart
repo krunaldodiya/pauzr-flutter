@@ -8,7 +8,7 @@ class CreateGroup extends GroupEvent {
 }
 
 class AddParticipants extends GroupEvent {
-  String groupId;
+  int groupId;
   List participants;
   Function callback;
 
