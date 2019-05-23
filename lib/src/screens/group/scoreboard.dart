@@ -11,7 +11,8 @@ import 'package:pauzr/src/screens/tabs/switch.dart';
 import 'package:swipedetector/swipedetector.dart';
 
 class ScoreboardPage extends StatefulWidget {
-  ScoreboardPage({Key key}) : super(key: key);
+  final group;
+  ScoreboardPage({Key key, @required this.group}) : super(key: key);
 
   @override
   _ScoreboardPage createState() => _ScoreboardPage();
@@ -101,7 +102,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
           }
         },
         child: FutureBuilder(
-          future: ApiProvider().getRankings(period),
+          future: ApiProvider().getRankings(period, widget.group['id']),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(

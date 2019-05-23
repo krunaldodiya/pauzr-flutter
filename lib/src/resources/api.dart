@@ -22,9 +22,10 @@ class ApiProvider {
     return sendRequest(Api.getSavedMinutes);
   }
 
-  Future getRankings(String period) async {
+  Future getRankings(String period, [int groupId]) async {
     return sendRequest(Api.getRankings, {
       "period": period,
+      "groupId": groupId,
     });
   }
 

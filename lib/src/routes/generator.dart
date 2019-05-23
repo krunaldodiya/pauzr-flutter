@@ -44,7 +44,9 @@ class RouteGenerator {
 
       case routeList.scoreboard:
         return MaterialPageRoute(builder: (context) {
-          return ScoreboardPage();
+          return ScoreboardPage(
+            group: args['group'],
+          );
         });
         break;
 

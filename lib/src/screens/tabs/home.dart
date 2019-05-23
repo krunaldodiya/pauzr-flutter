@@ -71,7 +71,11 @@ class _HomePageState extends State<HomePage> {
 
         return ListTile(
           onTap: () {
-            Navigator.pushNamed(context, routeList.scoreboard);
+            Navigator.pushNamed(
+              context,
+              routeList.scoreboard,
+              arguments: {"group": group},
+            );
           },
           isThreeLine: false,
           leading: CircleAvatar(
