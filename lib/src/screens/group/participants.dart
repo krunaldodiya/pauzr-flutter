@@ -68,7 +68,17 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         ],
       ),
       body: loading == true
-          ? Center(child: CircularProgressIndicator())
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: Text("Please wait, fetching contacts..."),
+                )
+              ],
+            )
           : ListView.builder(
               primary: true,
               shrinkWrap: true,
