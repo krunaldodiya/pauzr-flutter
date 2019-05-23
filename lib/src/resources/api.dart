@@ -107,5 +107,5 @@ class Api {
   static String createGroup = "$baseUrl/api/groups/create";
   static String addParticipants = "$baseUrl/api/groups/add-participants";
   static String getGroups = "$baseUrl/api/groups/get";
-  static String syncContacts = "$baseUrl/api/contacts/sync";
+  static String syncContacts = "$baseUrl/api/groups/sync-contacts";
 }
