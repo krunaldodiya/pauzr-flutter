@@ -68,16 +68,23 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         ],
       ),
       body: loading == true
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Text("Please wait, fetching contacts..."),
-                )
-              ],
+          ? Center(
+              child: Column(
+                children: [
+                  CircularProgressIndicator(),
+                  Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Please wait, fetching contacts...",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontFamily: Fonts.titilliumWebSemiBold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             )
           : ListView.builder(
               primary: true,
@@ -176,7 +183,11 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   refreshContacts() async {
     PermissionStatus permissionStatus = await _getContactPermission();
 
-    if (permissionStatus == PermissionStatus.granted) {
+    if (permissionStatus != PermissionStatus.granted) {
+      return _handleInvalidPermissions(permissionStatus);
+    }
+
+    try {
       var contacts = await ContactsService.getContacts();
 
       var contactList = contacts
@@ -191,9 +202,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       prefs.setString("contacts", json.encode(results));
 
       return results;
+    } catch (error) {
+      ApiProvider().notifyError(error.response.data);
     }
-
-    return _handleInvalidPermissions(permissionStatus);
   }
 
   Future<PermissionStatus> _getContactPermission() async {

@@ -90,6 +90,12 @@ class ApiProvider {
       "contacts": contacts,
     });
   }
+
+  Future notifyError(error) async {
+    return sendRequest(Api.notifyError, {
+      "error": error,
+    });
+  }
 }
 
 class Api {
@@ -108,4 +114,5 @@ class Api {
   static String addParticipants = "$baseUrl/api/groups/add-participants";
   static String getGroups = "$baseUrl/api/groups/get";
   static String syncContacts = "$baseUrl/api/groups/sync-contacts";
+  static String notifyError = "$baseUrl/api/error/notify";
 }
