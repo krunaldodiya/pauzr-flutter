@@ -70,6 +70,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       body: loading == true
           ? Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircularProgressIndicator(),
                   Container(
