@@ -6,3 +6,11 @@ class CreateGroup extends GroupEvent {
 
   CreateGroup({this.name, this.callback});
 }
+
+class AddParticipants extends GroupEvent {
+  String groupId;
+  List participants;
+  Function callback;
+
+  AddParticipants({this.groupId, this.participants, this.callback});
+}

@@ -21,6 +21,7 @@ class AddGroupParticipantsPage extends StatefulWidget {
 }
 
 class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
+  List participants = [];
   List _contacts;
   GroupBloc groupBloc;
   bool loading;
@@ -40,6 +41,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(participants);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,24 +72,40 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       body: loading == true
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
+              primary: true,
               shrinkWrap: true,
               padding: EdgeInsets.all(0),
               itemCount: _contacts.length,
               itemBuilder: (context, index) {
                 Map contact = _contacts?.elementAt(index);
 
-                return ListTile(
-                  onTap: () {
-                    print(contact);
-                  },
-                  selected: true,
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      "$baseUrl/users/${contact['avatar']}",
+                return Container(
+                  color: exists(contact) ? Colors.grey.shade200 : Colors.white,
+                  child: ListTile(
+                    onTap: () => toggleContact(contact),
+                    leading: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        "$baseUrl/users/${contact['avatar']}",
+                      ),
+                    ),
+                    title: Text(
+                      contact['name'].toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontFamily: Fonts.titilliumWebSemiBold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      contact['mobile'],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontFamily: Fonts.titilliumWebRegular,
+                      ),
                     ),
                   ),
-                  title: Text(contact['name']),
-                  subtitle: Text(contact['mobile']),
                 );
               },
             ),
@@ -94,7 +113,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   void createGroup() {
-    Navigator.pop(context);
+    groupBloc.addParticipants(widget.group['id'], participants, () {
+      Navigator.pop(context);
+    });
   }
 
   loadContacts() async {
@@ -110,8 +131,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         _contacts = json.decode(contactsData);
         loading = false;
       });
-
-      print(contactsData);
     }
 
     if (contactsData == null) {
@@ -128,6 +147,20 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         });
       }
     }
+  }
+
+  exists(contact) {
+    return participants.contains(contact['id']);
+  }
+
+  toggleContact(contact) {
+    setState(() {
+      if (exists(contact)) {
+        participants.remove(contact['id']);
+      } else {
+        participants.add(contact['id']);
+      }
+    });
   }
 
   refreshContacts() async {

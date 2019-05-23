@@ -29,6 +29,13 @@ class ApiProvider {
     });
   }
 
+  Future addParticipants(String groupId, List participants) async {
+    return sendRequest(Api.addParticipants, {
+      "groupId": groupId,
+      "participants": participants,
+    });
+  }
+
   Future requestOtp(String mobile) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -98,6 +105,7 @@ class Api {
   static String getRankings = "$baseUrl/api/timer/rankings";
   static String setTimer = "$baseUrl/api/timer/set";
   static String createGroup = "$baseUrl/api/groups/create";
+  static String addParticipants = "$baseUrl/api/groups/add-participants";
   static String getGroups = "$baseUrl/api/groups/get";
   static String syncContacts = "$baseUrl/api/contacts/sync";
 }
