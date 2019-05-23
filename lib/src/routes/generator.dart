@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/group/create.dart';
 import 'package:pauzr/src/screens/group/participants.dart';
+import 'package:pauzr/src/screens/group/scoreboard.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
@@ -38,6 +39,12 @@ class RouteGenerator {
       case routeList.intro:
         return MaterialPageRoute(builder: (context) {
           return IntroPage();
+        });
+        break;
+
+      case routeList.scoreboard:
+        return MaterialPageRoute(builder: (context) {
+          return ScoreboardPage();
         });
         break;
 

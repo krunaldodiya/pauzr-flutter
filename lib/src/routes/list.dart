@@ -15,3 +15,4 @@ const String points = "/points";
 const String minutes = "/minutes";
 const String create_group = "/create_group";
 const String add_group_participants = "/add_group_participants";
+const String scoreboard = "/scoreboard";

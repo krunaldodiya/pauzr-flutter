@@ -1,15 +1,16 @@
+import 'dart:convert';
+
+import 'package:contacts_service/contacts_service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
-// import 'package:pauzr/src/blocs/group/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
-// import 'package:pauzr/src/helpers/validation.dart';
-// import 'package:pauzr/src/routes/list.dart' as routeList;
-// import 'package:pauzr/src/screens/users/editable.dart';
-// import 'package:xs_progress_hud/xs_progress_hud.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/resources/api.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddGroupParticipantsPage extends StatefulWidget {
   final group;
@@ -20,7 +21,7 @@ class AddGroupParticipantsPage extends StatefulWidget {
 }
 
 class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
-  Iterable<Contact> _contacts;
+  List _contacts;
   GroupBloc groupBloc;
   bool loading;
 
@@ -30,7 +31,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   void initState() {
     super.initState();
 
-    refreshContacts();
+    loadContacts();
 
     setState(() {
       groupBloc = BlocProvider.of<GroupBloc>(context);
@@ -39,8 +40,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(loading);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -70,19 +69,24 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       body: loading == true
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(0),
               itemCount: _contacts.length,
               itemBuilder: (context, index) {
-                Contact contact = _contacts?.elementAt(index);
+                Map contact = _contacts?.elementAt(index);
 
                 return ListTile(
                   onTap: () {
-                    //
+                    print(contact);
                   },
-                  leading: (contact.avatar != null && contact.avatar.length > 0)
-                      ? CircleAvatar(
-                          backgroundImage: MemoryImage(contact.avatar))
-                      : CircleAvatar(child: Text(contact.initials())),
-                  title: Text(contact.displayName ?? contact.identifier),
+                  selected: true,
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      "$baseUrl/users/${contact['avatar']}",
+                    ),
+                  ),
+                  title: Text(contact['name']),
+                  subtitle: Text(contact['mobile']),
                 );
               },
             ),
@@ -93,25 +97,62 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     Navigator.pop(context);
   }
 
-  refreshContacts() async {
+  loadContacts() async {
     setState(() {
       loading = true;
     });
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String contactsData = prefs.getString("contacts");
+
+    if (contactsData != null) {
+      setState(() {
+        _contacts = json.decode(contactsData);
+        loading = false;
+      });
+
+      print(contactsData);
+    }
+
+    if (contactsData == null) {
+      try {
+        var contacts = await refreshContacts();
+
+        setState(() {
+          _contacts = contacts;
+          loading = false;
+        });
+      } catch (e) {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
+
+  refreshContacts() async {
     PermissionStatus permissionStatus = await _getContactPermission();
+
     if (permissionStatus == PermissionStatus.granted) {
       var contacts = await ContactsService.getContacts();
 
-      setState(() {
-        _contacts = contacts;
-        loading = false;
-      });
-    } else {
-      _handleInvalidPermissions(permissionStatus);
-      setState(() {
-        loading = false;
-      });
+      var contactList = contacts
+          .where((contact) => contact.phones.length > 0)
+          .map((contact) => contact.toMap())
+          .toList();
+
+      Response response = await ApiProvider().syncContacts(contactList);
+      print(response.data);
+
+      var results = response.data['users'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("contacts", json.encode(results));
+
+      return results;
     }
+
+    return _handleInvalidPermissions(permissionStatus);
   }
 
   Future<PermissionStatus> _getContactPermission() async {
@@ -132,14 +173,16 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   void _handleInvalidPermissions(PermissionStatus permissionStatus) {
     if (permissionStatus == PermissionStatus.denied) {
       throw new PlatformException(
-          code: "PERMISSION_DENIED",
-          message: "Access to location data denied",
-          details: null);
+        code: "PERMISSION_DENIED",
+        message: "Access to location data denied",
+        details: null,
+      );
     } else if (permissionStatus == PermissionStatus.disabled) {
       throw new PlatformException(
-          code: "PERMISSION_DISABLED",
-          message: "Location data is not available on device",
-          details: null);
+        code: "PERMISSION_DISABLED",
+        message: "Location data is not available on device",
+        details: null,
+      );
     }
   }
 }

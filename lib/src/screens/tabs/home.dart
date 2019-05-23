@@ -70,6 +70,9 @@ class _HomePageState extends State<HomePage> {
         final subscribers = groups[index]['group']['subscribers'].length;
 
         return ListTile(
+          onTap: () {
+            Navigator.pushNamed(context, routeList.scoreboard);
+          },
           isThreeLine: false,
           leading: CircleAvatar(
             radius: 20.0,

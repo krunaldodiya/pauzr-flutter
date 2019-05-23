@@ -37,7 +37,7 @@ class ApiProvider {
   Future verifyOtp(String mobile, int otp) async {
     return sendRequest(Api.verifyOtp, {
       "mobile": mobile,
-      "otp": otp.toString(),
+      "otp": otp,
     });
   }
 
@@ -55,13 +55,13 @@ class ApiProvider {
 
   Future updateProfile(User user) async {
     return sendRequest(Api.updateProfile, {
-      "id": user.id.toString(),
+      "id": user.id,
       "name": user.name,
       "email": user.email,
       "dob": user.dob,
       "gender": user.gender,
-      "location_id": user.location.id.toString(),
-      "profession_id": user.profession.id.toString(),
+      "location_id": user.location.id,
+      "profession_id": user.profession.id,
     });
   }
 
@@ -75,6 +75,12 @@ class ApiProvider {
 
   Future uploadAvatar(FormData image) async {
     return sendRequest(Api.uploadAvatar, image);
+  }
+
+  Future syncContacts(contacts) async {
+    return sendRequest(Api.syncContacts, {
+      "contacts": contacts,
+    });
   }
 }
 
@@ -92,4 +98,5 @@ class Api {
   static String setTimer = "$baseUrl/api/timer/set";
   static String createGroup = "$baseUrl/api/groups/create";
   static String getGroups = "$baseUrl/api/groups/get";
+  static String syncContacts = "$baseUrl/api/contacts/sync";
 }

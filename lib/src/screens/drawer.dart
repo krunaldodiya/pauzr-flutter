@@ -120,6 +120,7 @@ class DrawerPage extends StatelessWidget {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.remove("authToken");
+              prefs.remove("contacts");
 
               Navigator.pushReplacementNamed(
                 context,
