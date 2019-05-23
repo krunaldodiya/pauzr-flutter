@@ -191,7 +191,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       var contacts = await ContactsService.getContacts();
 
       var contactList = contacts
-          .where((contact) => contact.phones.length > 0)
+          // .where((contact) => contact.phones.length > 0)
           .map((contact) => contact.toMap())
           .toList();
 
@@ -204,6 +204,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       return results;
     } catch (error) {
       ApiProvider().notifyError(error.response.data);
+      return [];
     }
   }
 
