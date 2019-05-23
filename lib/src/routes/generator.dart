@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/group/create.dart';
+import 'package:pauzr/src/screens/group/detail.dart';
 import 'package:pauzr/src/screens/group/participants.dart';
 import 'package:pauzr/src/screens/group/scoreboard.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
@@ -25,50 +26,74 @@ class RouteGenerator {
 
     switch (settings.name) {
       case routeList.home:
-        return MaterialPageRoute(builder: (context) {
-          return HomePage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return HomePage();
+          },
+        );
         break;
 
       case routeList.tab:
-        return MaterialPageRoute(builder: (context) {
-          return TabPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return TabPage();
+          },
+        );
         break;
 
       case routeList.intro:
-        return MaterialPageRoute(builder: (context) {
-          return IntroPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return IntroPage();
+          },
+        );
         break;
 
       case routeList.scoreboard:
-        return MaterialPageRoute(builder: (context) {
-          return ScoreboardPage(
-            group: args['group'],
-          );
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return ScoreboardPage(
+              group: args['group'],
+            );
+          },
+        );
+        break;
+
+      case routeList.group_detail:
+        return MaterialPageRoute(
+          builder: (context) {
+            return GroupDetailPage(
+              group: args['group'],
+            );
+          },
+        );
         break;
 
       case routeList.request_otp:
-        return MaterialPageRoute(builder: (context) {
-          return RequestOtpPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return RequestOtpPage();
+          },
+        );
         break;
 
       case routeList.verify_otp:
-        return MaterialPageRoute(builder: (context) {
-          return VerifyOtpPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return VerifyOtpPage();
+          },
+        );
         break;
 
       case routeList.edit_profile:
         if (args['shouldPop'] is bool) {
-          return MaterialPageRoute(builder: (context) {
-            return EditProfilePage(
-              shouldPop: args['shouldPop'],
-            );
-          });
+          return MaterialPageRoute(
+            builder: (context) {
+              return EditProfilePage(
+                shouldPop: args['shouldPop'],
+              );
+            },
+          );
         }
 
         return _errorRoute();
@@ -76,82 +101,106 @@ class RouteGenerator {
 
       case routeList.view_profile:
         if (args['shouldPop'] is bool) {
-          return MaterialPageRoute(builder: (context) {
-            return ViewProfilePage(
-              shouldPop: args['shouldPop'],
-            );
-          });
+          return MaterialPageRoute(
+            builder: (context) {
+              return ViewProfilePage(
+                shouldPop: args['shouldPop'],
+              );
+            },
+          );
         }
 
         return _errorRoute();
         break;
 
       case routeList.stop:
-        return MaterialPageRoute(builder: (context) {
-          return StopPage(duration: args['duration']);
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return StopPage(duration: args['duration']);
+          },
+        );
         break;
 
       case routeList.levels:
-        return MaterialPageRoute(builder: (context) {
-          return LevelsPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return LevelsPage();
+          },
+        );
         break;
 
       case routeList.points:
-        return MaterialPageRoute(builder: (context) {
-          return PointsPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return PointsPage();
+          },
+        );
         break;
 
       case routeList.minutes:
-        return MaterialPageRoute(builder: (context) {
-          return MinutesPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return MinutesPage();
+          },
+        );
         break;
 
       case routeList.gender:
-        return MaterialPageRoute(builder: (context) {
-          return ChooseGender();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return ChooseGender();
+          },
+        );
         break;
 
       case routeList.create_group:
-        return MaterialPageRoute(builder: (context) {
-          return CreateGroupPage();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return CreateGroupPage();
+          },
+        );
         break;
 
       case routeList.add_group_participants:
-        return MaterialPageRoute(builder: (context) {
-          return AddGroupParticipantsPage(group: args['group']);
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return AddGroupParticipantsPage(group: args['group']);
+          },
+        );
         break;
 
       case routeList.location:
-        return MaterialPageRoute(builder: (context) {
-          return ChooseLocation();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return ChooseLocation();
+          },
+        );
         break;
 
       case routeList.profession:
-        return MaterialPageRoute(builder: (context) {
-          return ChooseProfession();
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return ChooseProfession();
+          },
+        );
         break;
 
       case routeList.verify_otp:
-        return MaterialPageRoute(builder: (context) {
-          return ViewProfilePage(shouldPop: args['shouldPop']);
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return ViewProfilePage(shouldPop: args['shouldPop']);
+          },
+        );
         break;
 
       case routeList.initial_screen:
-        return MaterialPageRoute(builder: (context) {
-          return InitialScreen(
-            authToken: args['authToken'],
-          );
-        });
+        return MaterialPageRoute(
+          builder: (context) {
+            return InitialScreen(
+              authToken: args['authToken'],
+            );
+          },
+        );
         break;
 
       default:
@@ -161,7 +210,9 @@ class RouteGenerator {
 }
 
 Route<dynamic> _errorRoute() {
-  return MaterialPageRoute(builder: (BuildContext context) {
-    return Scaffold(body: Center(child: Text("Error")));
-  });
+  return MaterialPageRoute(
+    builder: (BuildContext context) {
+      return Scaffold(body: Center(child: Text("Error")));
+    },
+  );
 }

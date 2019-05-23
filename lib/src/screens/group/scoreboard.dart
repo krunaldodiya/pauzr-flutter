@@ -41,6 +41,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.red,
         title: Text(
@@ -58,9 +59,9 @@ class _ScoreboardPage extends State<ScoreboardPage>
               onPressed: () {
                 Navigator.pushNamed(
                   context,
-                  routeList.edit_profile,
+                  routeList.group_detail,
                   arguments: {
-                    "shouldPop": true,
+                    "group": widget.group,
                   },
                 );
               },
@@ -69,7 +70,6 @@ class _ScoreboardPage extends State<ScoreboardPage>
           ),
         ],
       ),
-      backgroundColor: Colors.grey.shade100,
       body: SwipeDetector(
         swipeConfiguration: SwipeConfiguration(
           verticalSwipeMinVelocity: 100.0,
