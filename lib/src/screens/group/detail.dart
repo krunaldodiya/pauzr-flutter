@@ -49,8 +49,25 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     floating: true,
                     pinned: true,
                     expandedHeight: 240.0,
-                    title: Text(widget.group['name'].toUpperCase()),
+                    title: Text(
+                      widget.group['name'].toUpperCase(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontFamily: Fonts.titilliumWebRegular,
+                      ),
+                    ),
                     flexibleSpace: FlexibleSpaceBar(
+                      title: Text(
+                        "by: ${widget.group['owner']['name']}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
+                          fontSize: 14.0,
+                          fontFamily: Fonts.titilliumWebRegular,
+                        ),
+                      ),
                       background: Container(
                         decoration: BoxDecoration(
                           color: Colors.black,
@@ -70,6 +87,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     ),
                   ),
                   SliverList(
+                    delegate: SliverChildListDelegate(exitGroup()),
+                  ),
+                  SliverList(
                     delegate: SliverChildListDelegate(
                       getParticipants(widget.group['subscribers']),
                     ),
@@ -81,6 +101,56 @@ class _GroupDetailPage extends State<GroupDetailPage> {
         },
       ),
     );
+  }
+
+  exitGroup() {
+    List<Widget> data = [];
+
+    if (userBloc.currentState.user.id == widget.group['owner_id']) {
+      data.add(
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              bottom: BorderSide(width: 0.5, color: Colors.red),
+            ),
+          ),
+          padding: EdgeInsets.all(20.0),
+          child: Text(
+            "Delete Group",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontSize: 16.0,
+              fontFamily: Fonts.titilliumWebRegular,
+            ),
+          ),
+        ),
+      );
+    }
+
+    data.add(
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(width: 0.5, color: Colors.red),
+          ),
+        ),
+        padding: EdgeInsets.all(20.0),
+        child: Text(
+          "Exit Group",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontSize: 16.0,
+            fontFamily: Fonts.titilliumWebRegular,
+          ),
+        ),
+      ),
+    );
+
+    return data;
   }
 
   List<Widget> getParticipants(List participants) {

@@ -34,10 +34,10 @@ class _ScoreboardPage extends State<ScoreboardPage>
       userBloc = BlocProvider.of<UserBloc>(context);
     });
 
-    choices.add("Group Detail");
+    choices.add("Group Info");
 
     if (userBloc.currentState.user.id == widget.group['owner_id']) {
-      choices.addAll(["Edit Group", "Delete Group"]);
+      choices.add("Edit Group");
     }
   }
 
@@ -235,6 +235,16 @@ class _ScoreboardPage extends State<ScoreboardPage>
   }
 
   choiceActions(choice) {
+    if (choice == "Group Info") {
+      Navigator.pushNamed(
+        context,
+        routeList.group_detail,
+        arguments: {
+          "group": widget.group,
+        },
+      );
+    }
+
     if (choice == "Edit Group") {
       Navigator.pushNamed(
         context,
