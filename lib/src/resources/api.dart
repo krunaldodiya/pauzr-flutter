@@ -85,6 +85,10 @@ class ApiProvider {
     return sendRequest(Api.uploadAvatar, image);
   }
 
+  Future uploadGroupImage(FormData image) async {
+    return sendRequest(Api.uploadGroupImage, image);
+  }
+
   Future syncContacts(contacts) async {
     return sendRequest(Api.syncContacts, {
       "contacts": contacts,
@@ -113,6 +117,7 @@ class Api {
   static String createGroup = "$baseUrl/api/groups/create";
   static String addParticipants = "$baseUrl/api/groups/add-participants";
   static String getGroups = "$baseUrl/api/groups/get";
+  static String uploadGroupImage = "$baseUrl/api/groups/image/upload";
   static String syncContacts = "$baseUrl/api/groups/sync-contacts";
   static String notifyError = "$baseUrl/api/error/notify";
 }

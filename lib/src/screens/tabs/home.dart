@@ -21,7 +21,11 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           backgroundColor: Colors.indigo,
           onPressed: () {
-            Navigator.pushNamed(context, routeList.create_group);
+            Navigator.pushNamed(
+              context,
+              routeList.manage_group,
+              arguments: {"group": null},
+            );
           },
           child: Icon(
             Icons.add,

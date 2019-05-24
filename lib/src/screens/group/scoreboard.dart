@@ -24,6 +24,8 @@ class _ScoreboardPage extends State<ScoreboardPage>
 
   String period = "Today";
 
+  List choices = ["Group Detail", "Edit Group", "Delete Group"];
+
   @override
   void initState() {
     super.initState();
@@ -44,29 +46,69 @@ class _ScoreboardPage extends State<ScoreboardPage>
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text(
-          "Scoreboard",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontFamily: Fonts.titilliumWebRegular,
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        title: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              routeList.group_detail,
+              arguments: {
+                "group": widget.group,
+              },
+            );
+          },
+          child: Container(
+            alignment: Alignment.center,
+            child: ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.all(0),
+              isThreeLine: true,
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  "$baseUrl/users/${widget.group['photo']}",
+                ),
+              ),
+              title: Text(
+                widget.group['name'],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontFamily: Fonts.titilliumWebSemiBold,
+                ),
+              ),
+              subtitle: Text(
+                "Scoreboard",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.0,
+                  fontFamily: Fonts.titilliumWebRegular,
+                ),
+              ),
+            ),
           ),
         ),
         actions: <Widget>[
-          Container(
-            child: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  routeList.group_detail,
-                  arguments: {
-                    "group": widget.group,
-                  },
+          PopupMenuButton(
+            padding: EdgeInsets.all(0),
+            onSelected: choiceActions,
+            itemBuilder: (context) {
+              return choices.map((choice) {
+                return PopupMenuItem(
+                  value: choice,
+                  child: Text(
+                    choice,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
                 );
-              },
-            ),
-            margin: EdgeInsets.only(right: 10.0),
+              }).toList();
+            },
+            icon: Icon(Icons.more_vert),
           ),
         ],
       ),
@@ -184,6 +226,18 @@ class _ScoreboardPage extends State<ScoreboardPage>
     });
 
     return list;
+  }
+
+  choiceActions(choice) {
+    if (choice == "Edit Group") {
+      Navigator.pushNamed(
+        context,
+        routeList.manage_group,
+        arguments: {
+          "group": widget.group,
+        },
+      );
+    }
   }
 
   Card getRankCard(Map ranking) {

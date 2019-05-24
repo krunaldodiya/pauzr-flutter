@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
-import 'package:pauzr/src/screens/group/create.dart';
+import 'package:pauzr/src/screens/group/manage.dart';
 import 'package:pauzr/src/screens/group/detail.dart';
 import 'package:pauzr/src/screens/group/participants.dart';
 import 'package:pauzr/src/screens/group/scoreboard.dart';
@@ -100,17 +100,13 @@ class RouteGenerator {
         break;
 
       case routeList.view_profile:
-        if (args['shouldPop'] is bool) {
-          return MaterialPageRoute(
-            builder: (context) {
-              return ViewProfilePage(
-                shouldPop: args['shouldPop'],
-              );
-            },
-          );
-        }
-
-        return _errorRoute();
+        return MaterialPageRoute(
+          builder: (context) {
+            return ViewProfilePage(
+              shouldPop: args['shouldPop'],
+            );
+          },
+        );
         break;
 
       case routeList.stop:
@@ -153,10 +149,10 @@ class RouteGenerator {
         );
         break;
 
-      case routeList.create_group:
+      case routeList.manage_group:
         return MaterialPageRoute(
           builder: (context) {
-            return CreateGroupPage();
+            return ManageGroupPage(group: args['group']);
           },
         );
         break;
