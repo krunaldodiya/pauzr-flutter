@@ -25,6 +25,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   List _contacts = [];
   GroupBloc groupBloc;
   bool loading;
+  bool reloadContacts = false;
+  String keywords;
 
   TextEditingController nameController = TextEditingController();
 
@@ -41,6 +43,14 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   @override
   Widget build(BuildContext context) {
+    List filteredContact = _contacts.where((contact) {
+      if (keywords != null) {
+        return contact['name'].toLowerCase().contains(keywords.toLowerCase());
+      }
+
+      return true;
+    }).toList();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -88,43 +98,94 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                 ],
               ),
             )
-          : ListView.builder(
-              primary: true,
-              shrinkWrap: true,
-              padding: EdgeInsets.all(0),
-              itemCount: _contacts.length,
-              itemBuilder: (context, index) {
-                Map contact = _contacts?.elementAt(index);
+          : Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10.0, top: 5.0),
+                        child: TextField(
+                          onChanged: (text) {
+                            setState(() {
+                              keywords = text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.all(10.0),
+                            hintText: "Filter contacts",
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 5.0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.refresh,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            reloadContacts = true;
+                          });
 
-                return Container(
-                  color: exists(contact) ? Colors.grey.shade200 : Colors.white,
-                  child: ListTile(
-                    onTap: () => toggleContact(contact),
-                    leading: CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: NetworkImage(
-                        "$baseUrl/users/${contact['avatar']}",
+                          loadContacts();
+                        },
                       ),
                     ),
-                    title: Text(
-                      contact['name'].toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontFamily: Fonts.titilliumWebSemiBold,
+                  ],
+                ),
+                ListView.builder(
+                  primary: true,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.all(0),
+                  itemCount: filteredContact.length,
+                  itemBuilder: (context, index) {
+                    Map contact = filteredContact?.elementAt(index);
+
+                    return Container(
+                      color:
+                          exists(contact) ? Colors.grey.shade200 : Colors.white,
+                      child: ListTile(
+                        onTap: () => toggleContact(contact),
+                        leading: CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: NetworkImage(
+                            "$baseUrl/users/${contact['avatar']}",
+                          ),
+                        ),
+                        title: Text(
+                          contact['name'].toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                            fontFamily: Fonts.titilliumWebSemiBold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          contact['mobile'],
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontFamily: Fonts.titilliumWebRegular,
+                          ),
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      contact['mobile'],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14.0,
-                        fontFamily: Fonts.titilliumWebRegular,
-                      ),
-                    ),
-                  ),
-                );
-              },
+                    );
+                  },
+                ),
+              ],
             ),
     );
   }
@@ -142,27 +203,35 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       loading = true;
     });
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String contactsData = prefs.getString("contacts");
+    if (reloadContacts == false) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String contactsData = prefs.getString("contacts");
 
-    if (contactsData != null) {
-      setState(() {
-        _contacts = json.decode(contactsData);
-        loading = false;
-      });
+      if (contactsData != null) {
+        setState(() {
+          _contacts = json.decode(contactsData);
+          loading = false;
+        });
+      } else {
+        setState(() {
+          reloadContacts = true;
+        });
+      }
     }
 
-    if (contactsData == null) {
+    if (reloadContacts == true) {
       try {
         var contacts = await refreshContacts();
 
         setState(() {
           _contacts = contacts;
           loading = false;
+          reloadContacts = false;
         });
       } catch (e) {
         setState(() {
           loading = false;
+          reloadContacts = false;
         });
       }
     }
@@ -193,7 +262,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       var contacts = await ContactsService.getContacts();
 
       var contactList = contacts
-          // .where((contact) => contact.phones.length > 0)
+          .where((contact) => contact.phones.length > 0)
           .map((contact) => contact.toMap())
           .toList();
 
