@@ -36,9 +36,7 @@ class RouteGenerator {
       case routeList.tab:
         return MaterialPageRoute(
           builder: (context) {
-            return TabPage(
-              showTabIndex: args['showTabIndex'],
-            );
+            return TabPage();
           },
         );
         break;

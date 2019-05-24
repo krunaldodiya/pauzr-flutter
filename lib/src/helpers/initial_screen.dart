@@ -7,7 +7,7 @@ import 'package:pauzr/src/screens/users/edit_profile.dart';
 Widget getInitialScreen(User user) {
   if (user != null) {
     if (user.status == 1) {
-      return TabPage(showTabIndex: 1);
+      return TabPage();
     }
 
     return EditProfilePage(shouldPop: false);

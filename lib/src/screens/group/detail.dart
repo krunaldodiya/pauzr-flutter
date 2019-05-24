@@ -52,6 +52,8 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   SliverAppBar(
                     floating: true,
                     pinned: true,
+                    backgroundColor: Colors.red,
+                    centerTitle: true,
                     expandedHeight: 240.0,
                     title: Text(
                       widget.group['name'].toUpperCase(),
@@ -63,8 +65,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                       ),
                     ),
                     flexibleSpace: FlexibleSpaceBar(
+                      centerTitle: true,
                       title: Text(
-                        "by: ${widget.group['owner']['name']}",
+                        widget.group['description'],
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.white,
@@ -251,6 +254,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               fontFamily: Fonts.titilliumWebRegular,
             ),
           ),
+          trailing: participant['info']['id'] == widget.group['owner_id']
+              ? Icon(Icons.verified_user)
+              : null,
         ),
       );
     });
