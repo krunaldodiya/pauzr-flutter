@@ -10,6 +10,7 @@ class EditableFormField extends StatelessWidget {
   final Color textColor;
   final Color labelColor;
   final int maxLength;
+  final int maxLines;
   final TextInputType keyboardType;
 
   EditableFormField({
@@ -22,6 +23,7 @@ class EditableFormField extends StatelessWidget {
     this.labelColor,
     this.borderColor,
     this.maxLength,
+    this.maxLines,
     this.keyboardType,
   });
 
@@ -30,6 +32,7 @@ class EditableFormField extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: TextField(
+        maxLines: maxLines ?? 1,
         maxLength: maxLength ?? null,
         controller: controller,
         onChanged: (data) => onChanged(data),
@@ -40,6 +43,7 @@ class EditableFormField extends StatelessWidget {
         ),
         keyboardType: this.keyboardType ?? TextInputType.text,
         decoration: InputDecoration(
+          alignLabelWithHint: true,
           errorText: errorText,
           contentPadding: EdgeInsets.all(15.0),
           border: OutlineInputBorder(

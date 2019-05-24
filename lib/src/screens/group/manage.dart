@@ -25,7 +25,9 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   GroupBloc groupBloc;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController photoController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController photoController =
+      TextEditingController(text: "default.jpeg");
 
   bool loading;
 
@@ -40,11 +42,8 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     if (widget.group != null) {
       setState(() {
         nameController.text = widget.group['name'];
+        descriptionController.text = widget.group['description'];
         photoController.text = widget.group['photo'];
-      });
-    } else {
-      setState(() {
-        photoController.text = "default.jpeg";
       });
     }
   }
@@ -125,25 +124,42 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
                             ],
                           ),
                         ),
-                )
+                ),
               ],
             ),
           ),
+          Container(height: 10.0),
+          BlocBuilder(
+            bloc: groupBloc,
+            builder: (context, GroupState state) {
+              return EditableFormField(
+                maxLength: 20,
+                textColor: Colors.black,
+                borderColor: Colors.black,
+                labelColor: Colors.black,
+                controller: nameController,
+                labelText: "Group Name",
+                errorText: getErrorText(state.error, 'name'),
+              );
+            },
+          ),
+          BlocBuilder(
+            bloc: groupBloc,
+            builder: (context, GroupState state) {
+              return EditableFormField(
+                maxLength: 100,
+                maxLines: 3,
+                textColor: Colors.black,
+                borderColor: Colors.black,
+                labelColor: Colors.black,
+                controller: descriptionController,
+                labelText: "Group Description",
+                errorText: getErrorText(state.error, 'description'),
+              );
+            },
+          ),
           Expanded(
-            child: BlocBuilder(
-              bloc: groupBloc,
-              builder: (context, GroupState state) {
-                return EditableFormField(
-                  maxLength: 50,
-                  textColor: Colors.black,
-                  borderColor: Colors.black,
-                  labelColor: Colors.black,
-                  controller: nameController,
-                  labelText: "Group Name",
-                  errorText: getErrorText(state.error, 'name'),
-                );
-              },
-            ),
+            child: Container(),
           ),
         ],
       ),
@@ -179,20 +195,31 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   void createGroup() {
     XsProgressHud.show(context);
 
-    groupBloc.createGroup(nameController.text, photoController.text, (data) {
+    String name = nameController.text;
+    String description = descriptionController.text;
+    String photo = photoController.text;
+    int groupId = widget.group != null ? widget.group['id'] : null;
+
+    var callback = (data) {
       XsProgressHud.hide();
 
       if (data.runtimeType != DioError) {
         if (widget.group != null) {
-          return Navigator.pop(context);
+          Navigator.popUntil(context, (route) => route.isFirst);
+        } else {
+          Navigator.pushReplacementNamed(
+            context,
+            routeList.add_group_participants,
+            arguments: {"group": data['group']},
+          );
         }
-
-        return Navigator.pushReplacementNamed(
-          context,
-          routeList.add_group_participants,
-          arguments: {"group": data['group']},
-        );
       }
-    });
+    };
+
+    if (groupId != null) {
+      groupBloc.editGroup(groupId, name, description, photo, callback);
+    } else {
+      groupBloc.createGroup(name, description, photo, callback);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -59,6 +60,21 @@ class _HomePageState extends State<HomePage> {
     final Response response = snapshot.data;
     final results = response.data;
     final List groups = results['groups'];
+
+    if (groups.length == 0) {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        child: Text(
+          "No groups yet.",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: 18.0,
+            fontFamily: Fonts.titilliumWebSemiBold,
+          ),
+        ),
+      );
+    }
 
     return ListView.separated(
       separatorBuilder: (context, index) {

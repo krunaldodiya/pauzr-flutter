@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class GroupDetailPage extends StatefulWidget {
   final group;
@@ -19,6 +21,7 @@ class GroupDetailPage extends StatefulWidget {
 
 class _GroupDetailPage extends State<GroupDetailPage> {
   UserBloc userBloc;
+  GroupBloc groupBloc;
 
   @override
   void initState() {
@@ -26,6 +29,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
     setState(() {
       userBloc = BlocProvider.of<UserBloc>(context);
+      groupBloc = BlocProvider.of<GroupBloc>(context);
     });
   }
 
@@ -91,6 +95,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
+                      addLabel(),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
                       getParticipants(widget.group['subscribers']),
                     ),
                   ),
@@ -108,45 +117,104 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
     if (userBloc.currentState.user.id == widget.group['owner_id']) {
       data.add(
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(width: 0.5, color: Colors.red),
+        InkWell(
+          onTap: () {
+            manageGroup(widget.group['id']);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(width: 0.5, color: Colors.red),
+              ),
+            ),
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              "Delete Group",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
             ),
           ),
-          padding: EdgeInsets.all(20.0),
-          child: Text(
-            "Delete Group",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-              fontSize: 16.0,
-              fontFamily: Fonts.titilliumWebRegular,
+        ),
+      );
+    } else {
+      data.add(
+        InkWell(
+          onTap: () {
+            manageGroup(widget.group['id']);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(width: 0.5, color: Colors.red),
+              ),
+            ),
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              "Exit Group",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
             ),
           ),
         ),
       );
     }
 
+    return data;
+  }
+
+  addLabel() {
+    List<Widget> data = [];
+
     data.add(
-      Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(width: 0.5, color: Colors.red),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            child: Text(
+              "Participants (${widget.group['subscribers'].length})",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                fontSize: 18.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
           ),
-        ),
-        padding: EdgeInsets.all(20.0),
-        child: Text(
-          "Exit Group",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-            fontSize: 16.0,
-            fontFamily: Fonts.titilliumWebRegular,
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                routeList.add_group_participants,
+                arguments: {
+                  "group": widget.group,
+                },
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              child: Text(
+                "ADD",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blue,
+                  fontSize: 16.0,
+                  fontFamily: Fonts.titilliumWebSemiBold,
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
 
@@ -155,21 +223,6 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
   List<Widget> getParticipants(List participants) {
     List<Widget> data = [];
-
-    data.add(
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-        child: Text(
-          "Participants (${widget.group['subscribers'].length})",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-            fontSize: 18.0,
-            fontFamily: Fonts.titilliumWebRegular,
-          ),
-        ),
-      ),
-    );
 
     participants.forEach((participant) {
       data.add(
@@ -203,5 +256,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     });
 
     return data;
+  }
+
+  manageGroup(groupId) {
+    groupBloc.exitGroup(groupId, (data) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    });
   }
 }

@@ -12,15 +12,16 @@ import 'package:pauzr/src/screens/tabs/leaderboard.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
 
 class TabPage extends StatefulWidget {
-  TabPage({Key key}) : super(key: key);
+  final int showTabIndex;
+  TabPage({Key key, @required this.showTabIndex}) : super(key: key);
 
   @override
   _TabPage createState() => _TabPage();
 }
 
 class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
-  int showTabIndex = 1;
   UserBloc userBloc;
+  int tabIndex;
 
   @override
   void initState() {
@@ -28,11 +29,12 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
 
     setState(() {
       userBloc = BlocProvider.of<UserBloc>(context);
+      tabIndex = widget.showTabIndex;
     });
   }
 
   Widget getTabPage() {
-    switch (showTabIndex) {
+    switch (tabIndex) {
       case 0:
         return HomePage();
         break;
@@ -68,7 +70,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
           animationDuration: Duration(milliseconds: 500),
           onTap: (index) {
             setState(() {
-              showTabIndex = index;
+              tabIndex = index;
             });
           },
           items: <Widget>[

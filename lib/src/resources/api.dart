@@ -55,10 +55,27 @@ class ApiProvider {
     });
   }
 
-  Future createGroup(String name, String photo) async {
+  Future createGroup(String name, String description, String photo) async {
     return sendRequest(Api.createGroup, {
       "name": name,
+      "description": name,
       "photo": photo,
+    });
+  }
+
+  Future editGroup(
+      int groupId, String name, String description, String photo) async {
+    return sendRequest(Api.editGroup, {
+      "groupId": groupId,
+      "name": name,
+      "description": description,
+      "photo": photo,
+    });
+  }
+
+  Future exitGroup(int groupId) async {
+    return sendRequest(Api.exitGroup, {
+      "groupId": groupId,
     });
   }
 
@@ -116,6 +133,8 @@ class Api {
   static String getRankings = "$baseUrl/api/timer/rankings";
   static String setTimer = "$baseUrl/api/timer/set";
   static String createGroup = "$baseUrl/api/groups/create";
+  static String editGroup = "$baseUrl/api/groups/edit";
+  static String exitGroup = "$baseUrl/api/groups/exit";
   static String addParticipants = "$baseUrl/api/groups/add-participants";
   static String getGroups = "$baseUrl/api/groups/get";
   static String uploadGroupImage = "$baseUrl/api/groups/image/upload";
