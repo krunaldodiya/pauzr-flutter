@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
+import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 
 class GroupDetailPage extends StatefulWidget {
@@ -85,8 +86,50 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   List<Widget> getParticipants(List participants) {
     List<Widget> data = [];
 
+    data.add(
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Text(
+          "Participants (${widget.group['subscribers'].length})",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+            fontSize: 18.0,
+            fontFamily: Fonts.titilliumWebRegular,
+          ),
+        ),
+      ),
+    );
+
     participants.forEach((participant) {
-      data.add(Container(child: Text(participant['info']['name'])));
+      data.add(
+        ListTile(
+          leading: CircleAvatar(
+            radius: 20.0,
+            backgroundImage: NetworkImage(
+              "$baseUrl/users/${participant['info']['avatar']}",
+            ),
+          ),
+          title: Text(
+            participant['info']['name'].toUpperCase(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontSize: 14.0,
+              fontFamily: Fonts.titilliumWebRegular,
+            ),
+          ),
+          subtitle: Text(
+            participant['info']['location']['city'],
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
+              fontSize: 12.0,
+              fontFamily: Fonts.titilliumWebRegular,
+            ),
+          ),
+        ),
+      );
     });
 
     return data;
