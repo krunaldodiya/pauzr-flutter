@@ -40,11 +40,11 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     if (widget.group != null) {
       setState(() {
         nameController.text = widget.group['name'];
-        photoController.text = "$baseUrl/users/${widget.group['photo']}";
+        photoController.text = widget.group['photo'];
       });
     } else {
       setState(() {
-        photoController.text = "$baseUrl/users/default.jpeg";
+        photoController.text = "default.jpeg";
       });
     }
   }
@@ -82,45 +82,47 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           Expanded(
             child: Stack(
               children: <Widget>[
-                InkWell(
-                  onTap: uploadGroupImage,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5),
-                          BlendMode.dstATop,
-                        ),
-                        image: NetworkImage(photoController.text),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5),
+                        BlendMode.dstATop,
                       ),
+                      image: NetworkImage(
+                        "$baseUrl/users/${photoController.text}",
+                      ),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
                     ),
                   ),
                 ),
                 Center(
-                  child: loading
+                  child: loading == true
                       ? CircularProgressIndicator()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 24.0,
-                            ),
-                            Container(width: 5.0),
-                            Text(
-                              "Select a photo",
-                              style: TextStyle(
+                      : InkWell(
+                          onTap: uploadGroupImage,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.camera_alt,
                                 color: Colors.white,
-                                fontSize: 18.0,
-                                fontFamily: Fonts.titilliumWebRegular,
+                                size: 24.0,
                               ),
-                            ),
-                          ],
+                              Container(width: 5.0),
+                              Text(
+                                "Select a photo",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontFamily: Fonts.titilliumWebRegular,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                 )
               ],
@@ -163,7 +165,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
       final results = response.data;
 
       setState(() {
-        photoController.text = "$baseUrl/users/${results['name']}";
+        photoController.text = results['name'];
         loading = false;
       });
     } catch (e) {
