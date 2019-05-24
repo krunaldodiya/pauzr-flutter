@@ -24,7 +24,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
 
   String period = "Today";
 
-  List choices = ["Group Detail", "Edit Group", "Delete Group"];
+  List choices = [];
 
   @override
   void initState() {
@@ -33,6 +33,12 @@ class _ScoreboardPage extends State<ScoreboardPage>
     setState(() {
       userBloc = BlocProvider.of<UserBloc>(context);
     });
+
+    choices.add("Group Detail");
+
+    if (userBloc.currentState.user.id == widget.group['owner_id']) {
+      choices.addAll(["Edit Group", "Delete Group"]);
+    }
   }
 
   @override

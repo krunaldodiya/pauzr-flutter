@@ -64,17 +64,18 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           ),
         ),
         actions: <Widget>[
-          FlatButton(
-            onPressed: createGroup,
-            child: Text(
-              widget.group != null ? "Submit" : "Next",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-                fontFamily: Fonts.titilliumWebRegular,
+          if (loading != true)
+            FlatButton(
+              onPressed: createGroup,
+              child: Text(
+                widget.group != null ? "Submit" : "Next",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.0,
+                  fontFamily: Fonts.titilliumWebRegular,
+                ),
               ),
             ),
-          )
         ],
       ),
       body: Column(

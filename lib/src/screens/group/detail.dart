@@ -70,7 +70,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
-                      getTopics(),
+                      getParticipants(widget.group['subscribers']),
                     ),
                   ),
                 ],
@@ -82,10 +82,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     );
   }
 
-  List<Widget> getTopics() {
+  List<Widget> getParticipants(List participants) {
     List<Widget> data = [];
 
-    data.add(Container(child: Text("Test")));
+    participants.forEach((participant) {
+      data.add(Container(child: Text(participant['info']['name'])));
+    });
 
     return data;
   }
