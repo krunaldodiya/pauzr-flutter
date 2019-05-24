@@ -75,7 +75,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                 children: [
                   CircularProgressIndicator(),
                   Container(
-                    margin: EdgeInsets.only(top: 10.0),
+                    margin: EdgeInsets.only(top: 50.0),
                     child: Text(
                       "Please wait, fetching contacts...",
                       style: TextStyle(

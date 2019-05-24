@@ -9,8 +9,8 @@ import 'package:pauzr/src/resources/api.dart';
 class GroupBloc extends Bloc<GroupEvent, GroupState> {
   final ApiProvider _apiProvider = ApiProvider();
 
-  void createGroup(name, callback) {
-    dispatch(CreateGroup(name: name, callback: callback));
+  void createGroup(name, photo, callback) {
+    dispatch(CreateGroup(name: name, photo: photo, callback: callback));
   }
 
   void addParticipants(groupId, participants, callback) {
@@ -36,7 +36,11 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
       );
 
       try {
-        final Response response = await _apiProvider.createGroup(event.name);
+        final Response response = await _apiProvider.createGroup(
+          event.name,
+          event.photo,
+        );
+
         final results = response.data;
 
         yield currentState.copyWith(

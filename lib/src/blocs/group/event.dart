@@ -2,9 +2,10 @@ abstract class GroupEvent {}
 
 class CreateGroup extends GroupEvent {
   String name;
+  String photo;
   Function callback;
 
-  CreateGroup({this.name, this.callback});
+  CreateGroup({this.name, this.photo, this.callback});
 }
 
 class AddParticipants extends GroupEvent {

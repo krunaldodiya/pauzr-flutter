@@ -55,9 +55,10 @@ class ApiProvider {
     });
   }
 
-  Future createGroup(String name) async {
+  Future createGroup(String name, String photo) async {
     return sendRequest(Api.createGroup, {
       "name": name,
+      "photo": photo,
     });
   }
 

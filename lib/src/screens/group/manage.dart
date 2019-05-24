@@ -99,29 +99,29 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                    ),
-                    Container(width: 5.0),
-                    Center(
-                      child: Text(
-                        "Select a photo",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontFamily: Fonts.titilliumWebRegular,
+                Center(
+                  child: loading
+                      ? CircularProgressIndicator()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 24.0,
+                            ),
+                            Container(width: 5.0),
+                            Text(
+                              "Select a photo",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontFamily: Fonts.titilliumWebRegular,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
                 )
               ],
             ),
@@ -163,7 +163,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
       final results = response.data;
 
       setState(() {
-        photoController.text = results['name'];
+        photoController.text = "$baseUrl/users/${results['name']}";
         loading = false;
       });
     } catch (e) {
@@ -176,7 +176,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   void createGroup() {
     XsProgressHud.show(context);
 
-    groupBloc.createGroup(nameController.text, (data) {
+    groupBloc.createGroup(nameController.text, photoController.text, (data) {
       XsProgressHud.hide();
 
       if (data.runtimeType != DioError) {
