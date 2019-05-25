@@ -220,7 +220,11 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     );
   }
 
-  void createGroup() {
+  createGroup() {
+    if (_participants.length == 0) {
+      return Navigator.pop(context);
+    }
+
     groupBloc.addParticipants(widget.group['id'], _participants, (data) {
       if (data.runtimeType != DioError) {
         Navigator.pop(context);
@@ -230,8 +234,10 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   excludeContacts(List contacts) {
     List data = [];
+
     List subscribers = widget.group['subscribers'];
-    List subscribersIds = subscribers.map((sub) => sub['id']).toList();
+    List subscribersIds =
+        subscribers.map((sub) => sub['subscriber_id']).toList();
 
     contacts.forEach((contact) {
       if (subscribersIds.contains(contact['id']) == false) {
@@ -267,7 +273,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     if (reloadContacts == true) {
       try {
         var contacts = await refreshContacts();
-        excludeContacts(json.decode(contacts));
+
+        excludeContacts(contacts);
       } catch (error) {
         setState(() {
           loading = false;
