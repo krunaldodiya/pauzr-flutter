@@ -255,13 +255,28 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             ),
           ),
           trailing: participant['info']['id'] == widget.group['owner_id']
-              ? Icon(Icons.verified_user)
-              : null,
+              ? IconButton(
+                  icon: Icon(Icons.verified_user, color: Colors.grey),
+                  onPressed: null,
+                )
+              : userBloc.currentState.user.id == widget.group['owner_id']
+                  ? IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        removeUser(
+                            widget.group['id'], participant['info']['id']);
+                      },
+                    )
+                  : null,
         ),
       );
     });
 
     return data;
+  }
+
+  removeUser(groupId, userId) {
+    print("$groupId, $userId");
   }
 
   manageGroup(groupId) {
