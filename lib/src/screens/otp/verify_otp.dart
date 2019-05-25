@@ -162,7 +162,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
   void onResendOtp() {
     XsProgressHud.show(context);
 
-    otpBloc.requestOtp(() {
+    otpBloc.requestOtp((data) {
       XsProgressHud.hide();
     });
   }

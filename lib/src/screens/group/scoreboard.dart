@@ -85,7 +85,8 @@ class _ScoreboardPage extends State<ScoreboardPage>
                 ),
               ),
               subtitle: Text(
-                "Scoreboard",
+                widget.group['description'],
+                maxLines: 1,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13.0,

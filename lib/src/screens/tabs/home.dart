@@ -76,41 +76,61 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return ListView.separated(
-      separatorBuilder: (context, index) {
-        return Divider(
-          color: Colors.grey,
-          height: 0,
-          indent: 0,
-        );
-      },
-      itemCount: groups.length,
-      itemBuilder: (context, int index) {
-        final group = groups[index]['group'];
-        final subscribers = groups[index]['group']['subscribers'].length;
-
-        return ListTile(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              routeList.scoreboard,
-              arguments: {"group": group},
-            );
-          },
-          isThreeLine: false,
-          leading: CircleAvatar(
-            radius: 20.0,
-            backgroundImage: NetworkImage(
-              "$baseUrl/users/${group['photo']}",
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          child: Text(
+            "Groups (${groups.length})",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              fontSize: 18.0,
+              fontFamily: Fonts.titilliumWebRegular,
             ),
           ),
-          title: Text(group['name']),
-          subtitle: Text(
-            "${subscribers.toString()} participants.",
+        ),
+        Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: Colors.grey,
+                height: 0,
+                indent: 0,
+              );
+            },
+            itemCount: groups.length,
+            itemBuilder: (context, int index) {
+              final group = groups[index]['group'];
+              final subscribers = groups[index]['group']['subscribers'].length;
+
+              return ListTile(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    routeList.scoreboard,
+                    arguments: {"group": group},
+                  );
+                },
+                isThreeLine: false,
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(
+                    "$baseUrl/users/${group['photo']}",
+                  ),
+                ),
+                title: Text(group['name']),
+                subtitle: Text(
+                  "${subscribers.toString()} participants.",
+                ),
+                trailing: Icon(Icons.more_vert),
+              );
+            },
           ),
-          trailing: Icon(Icons.more_vert),
-        );
-      },
+        ),
+      ],
     );
   }
 }

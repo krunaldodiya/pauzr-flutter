@@ -32,6 +32,7 @@ class EditableFormField extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: TextField(
+        enableInteractiveSelection: true,
         maxLines: maxLines ?? 1,
         maxLength: maxLength ?? null,
         controller: controller,

@@ -45,7 +45,19 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   Widget build(BuildContext context) {
     List filteredContact = _contacts.where((contact) {
       if (keywords != null) {
-        return contact['name'].toLowerCase().contains(keywords.toLowerCase());
+        var filterByName =
+            contact['name'].toLowerCase().contains(keywords.toLowerCase());
+
+        var filterByMobile =
+            contact['mobile'].toLowerCase().contains(keywords.toLowerCase());
+
+        var filterByDisplayName = contact['displayName']
+            .toLowerCase()
+            .contains(keywords.toLowerCase());
+
+        return filterByName == true ||
+            filterByMobile == true ||
+            filterByDisplayName == true;
       }
 
       return true;
@@ -55,12 +67,28 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text(
-          "Add Participants",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontFamily: Fonts.titilliumWebRegular,
+        title: Container(
+          alignment: Alignment.center,
+          child: ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.all(0),
+            isThreeLine: true,
+            title: Text(
+              "Add Participants",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
+            subtitle: Text(
+              "${_participants.length} of ${_contacts.length} selected",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
           ),
         ),
         actions: <Widget>[
@@ -123,7 +151,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                               ),
                             ),
                             contentPadding: EdgeInsets.all(10.0),
-                            hintText: "Filter contacts",
+                            hintText: "Filter by Name or Mobile",
                           ),
                         ),
                       ),
@@ -149,14 +177,13 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                 ListView.builder(
                   primary: true,
                   shrinkWrap: true,
-                  padding: EdgeInsets.all(0),
                   itemCount: filteredContact.length,
                   itemBuilder: (context, index) {
                     Map contact = filteredContact?.elementAt(index);
 
                     return Container(
                       color:
-                          exists(contact) ? Colors.grey.shade200 : Colors.white,
+                          exists(contact) ? Colors.green.shade50 : Colors.white,
                       child: ListTile(
                         onTap: () => toggleContact(contact),
                         leading: CircleAvatar(
@@ -181,6 +208,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                             fontFamily: Fonts.titilliumWebRegular,
                           ),
                         ),
+                        trailing: exists(contact)
+                            ? Icon(Icons.check_circle, color: Colors.green)
+                            : null,
                       ),
                     );
                   },

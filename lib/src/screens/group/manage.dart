@@ -133,6 +133,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
             bloc: groupBloc,
             builder: (context, GroupState state) {
               return EditableFormField(
+                keyboardType: TextInputType.text,
                 maxLength: 20,
                 textColor: Colors.black,
                 borderColor: Colors.black,
