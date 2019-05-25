@@ -228,6 +228,24 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     });
   }
 
+  excludeContacts(List contacts) {
+    List data = [];
+    List subscribers = widget.group['subscribers'];
+    List subscribersIds = subscribers.map((sub) => sub['id']).toList();
+
+    contacts.forEach((contact) {
+      if (subscribersIds.contains(contact['id']) == false) {
+        data.add(contact);
+      }
+    });
+
+    setState(() {
+      _contacts = data;
+      loading = false;
+      reloadContacts = false;
+    });
+  }
+
   loadContacts() async {
     setState(() {
       loading = true;
@@ -238,10 +256,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       String contactsData = prefs.getString("contacts");
 
       if (contactsData != null) {
-        setState(() {
-          _contacts = json.decode(contactsData);
-          loading = false;
-        });
+        excludeContacts(json.decode(contactsData));
       } else {
         setState(() {
           reloadContacts = true;
@@ -252,13 +267,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     if (reloadContacts == true) {
       try {
         var contacts = await refreshContacts();
-
-        setState(() {
-          _contacts = contacts;
-          loading = false;
-          reloadContacts = false;
-        });
-      } catch (e) {
+        excludeContacts(json.decode(contacts));
+      } catch (error) {
         setState(() {
           loading = false;
           reloadContacts = false;
