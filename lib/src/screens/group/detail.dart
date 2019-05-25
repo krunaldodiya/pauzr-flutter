@@ -276,11 +276,15 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   }
 
   removeUser(groupId, userId) {
-    print("$groupId, $userId");
+    groupBloc.exitGroup(groupId, userId, (data) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    });
   }
 
   manageGroup(groupId) {
-    groupBloc.exitGroup(groupId, (data) {
+    var userId = userBloc.currentState.user.id;
+
+    groupBloc.exitGroup(groupId, userId, (data) {
       Navigator.popUntil(context, (route) => route.isFirst);
     });
   }

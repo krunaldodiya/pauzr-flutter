@@ -73,9 +73,10 @@ class ApiProvider {
     });
   }
 
-  Future exitGroup(int groupId) async {
+  Future exitGroup(int groupId, int userId) async {
     return sendRequest(Api.exitGroup, {
       "groupId": groupId,
+      "userId": userId,
     });
   }
 

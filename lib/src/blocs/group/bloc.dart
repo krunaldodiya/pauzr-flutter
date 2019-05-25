@@ -32,10 +32,11 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     );
   }
 
-  void exitGroup(groupId, callback) {
+  void exitGroup(groupId, userId, callback) {
     dispatch(
       ExitGroup(
         groupId: groupId,
+        userId: userId,
         callback: callback,
       ),
     );
@@ -131,7 +132,11 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
       );
 
       try {
-        final Response response = await _apiProvider.exitGroup(event.groupId);
+        final Response response = await _apiProvider.exitGroup(
+          event.groupId,
+          event.userId,
+        );
+
         final results = response.data;
 
         yield currentState.copyWith(

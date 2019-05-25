@@ -32,9 +32,10 @@ class EditGroup extends GroupEvent {
 
 class ExitGroup extends GroupEvent {
   int groupId;
+  int userId;
   Function callback;
 
-  ExitGroup({this.groupId, this.callback});
+  ExitGroup({this.groupId, this.userId, this.callback});
 }
 
 class AddParticipants extends GroupEvent {
