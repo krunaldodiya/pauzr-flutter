@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/timer/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
 
 class StopPage extends StatefulWidget {
@@ -130,9 +131,16 @@ class _StopPage extends State<StopPage>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return shouldPop(context, () {
-          Navigator.of(context).pop();
-        });
+        return showConfirmationPopup(
+          context,
+          "Are you sure want to cancel ?",
+          () {
+            setState(() {
+              started = false;
+              rotation = 360;
+            });
+          },
+        );
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -183,9 +191,16 @@ class _StopPage extends State<StopPage>
                   child: FloatingActionButton(
                     backgroundColor: Colors.red,
                     onPressed: () {
-                      return shouldPop(context, () {
-                        Navigator.of(context).pop();
-                      });
+                      return showConfirmationPopup(
+                        context,
+                        "Are you sure want to cancel ?",
+                        () {
+                          setState(() {
+                            started = false;
+                            rotation = 360;
+                          });
+                        },
+                      );
                     },
                     child: Icon(
                       Icons.cancel,
@@ -245,43 +260,6 @@ class _StopPage extends State<StopPage>
               onPressed: () {
                 setState(() {
                   started = false;
-                });
-                Navigator.of(context).pop();
-                navigateAway();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> shouldPop(BuildContext context, navigateAway) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Are you sure want to cancel ?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                "No",
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            RaisedButton(
-              color: Colors.red,
-              child: Text(
-                "Yes",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                setState(() {
-                  started = false;
-                  rotation = 360;
                 });
                 Navigator.of(context).pop();
                 navigateAway();

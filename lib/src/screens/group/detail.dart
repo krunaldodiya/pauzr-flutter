@@ -6,6 +6,7 @@ import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:share/share.dart';
 
 class GroupDetailPage extends StatefulWidget {
@@ -205,7 +206,13 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     data.add(
       InkWell(
         onTap: () {
-          manageGroup(widget.group['id']);
+          return showConfirmationPopup(
+            context,
+            "Are you sure want to delete ?",
+            () {
+              manageGroup(widget.group['id']);
+            },
+          );
         },
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 20.0),
@@ -431,8 +438,16 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     ? IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          removeUser(
-                              widget.group['id'], participant['info']['id']);
+                          return showConfirmationPopup(
+                            context,
+                            "Are you sure want to remove ?",
+                            () {
+                              removeUser(
+                                widget.group['id'],
+                                participant['info']['id'],
+                              );
+                            },
+                          );
                         },
                       )
                     : null,
