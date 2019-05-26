@@ -105,6 +105,17 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     ),
                   ),
                   SliverList(
+                    delegate: SliverChildListDelegate([
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 5, color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                  SliverList(
                     delegate: SliverChildListDelegate(addLabel()),
                   ),
                   SliverList(
@@ -116,10 +127,28 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     delegate: SliverChildListDelegate(addParticipants()),
                   ),
                   SliverList(
-                    delegate: SliverChildListDelegate(shareGroup()),
+                    delegate: SliverChildListDelegate(inviteFriends()),
                   ),
                   SliverList(
-                    delegate: SliverChildListDelegate(exitGroup()),
+                    delegate: SliverChildListDelegate([
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(width: 5, color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      groupAction(
+                        userBloc.currentState.user.id ==
+                                widget.group['owner_id']
+                            ? "Delete Group"
+                            : "Exit Group",
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -139,7 +168,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 5.0),
+            margin: EdgeInsets.only(left: 20.0, top: 10.0),
             child: Text(
               "Description",
               style: TextStyle(
@@ -151,7 +180,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
+            margin: EdgeInsets.all(20.0),
             child: Text(
               widget.group['description'],
               style: TextStyle(
@@ -169,62 +198,33 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  exitGroup() {
+  groupAction(action) {
     List<Widget> data = [];
 
-    if (userBloc.currentState.user.id == widget.group['owner_id']) {
-      data.add(
-        InkWell(
-          onTap: () {
-            manageGroup(widget.group['id']);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
-            ),
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Delete Group",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
+    data.add(
+      InkWell(
+        onTap: () {
+          manageGroup(widget.group['id']);
+        },
+        child: ListTile(
+          contentPadding: EdgeInsets.only(left: 20.0),
+          leading: Icon(
+            action == "Delete Group" ? Icons.delete : Icons.exit_to_app,
+            color: Colors.red,
+            size: 30.0,
+          ),
+          title: Text(
+            action,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontSize: 16.0,
+              fontFamily: Fonts.titilliumWebRegular,
             ),
           ),
         ),
-      );
-    } else {
-      data.add(
-        InkWell(
-          onTap: () {
-            manageGroup(widget.group['id']);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
-            ),
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Exit Group",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
 
     return data;
   }
@@ -238,40 +238,18 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           onTap: () {
             manageGroup(widget.group['id']);
           },
-          child: Container(
-            decoration: BoxDecoration(color: Colors.white),
-            padding: EdgeInsets.only(top: 20.0, left: 20.0),
-            child: Text(
+          child: ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(
+              Icons.add_circle,
+              color: Colors.blue,
+              size: 30.0,
+            ),
+            title: Text(
               "Add Participants",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-          ),
-        ),
-      );
-    } else {
-      data.add(
-        InkWell(
-          onTap: () {
-            manageGroup(widget.group['id']);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
-            ),
-            padding: EdgeInsets.only(top: 20.0, left: 20.0),
-            child: Text(
-              "Exit Group",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
                 fontSize: 16.0,
                 fontFamily: Fonts.titilliumWebRegular,
               ),
@@ -284,62 +262,33 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  shareGroup() {
+  inviteFriends() {
     List<Widget> data = [];
 
-    if (userBloc.currentState.user.id == widget.group['owner_id']) {
-      data.add(
-        InkWell(
-          onTap: () {
-            manageGroup(widget.group['id']);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
-            ),
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Invite Friends",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
+    data.add(
+      InkWell(
+        onTap: () {
+          manageGroup(widget.group['id']);
+        },
+        child: ListTile(
+          contentPadding: EdgeInsets.only(left: 20.0),
+          leading: Icon(
+            Icons.share,
+            color: Colors.blue,
+            size: 30.0,
+          ),
+          title: Text(
+            "Invite Friends",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+              fontSize: 16.0,
+              fontFamily: Fonts.titilliumWebRegular,
             ),
           ),
         ),
-      );
-    } else {
-      data.add(
-        InkWell(
-          onTap: () {
-            manageGroup(widget.group['id']);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
-            ),
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Exit Group",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
 
     return data;
   }
@@ -359,19 +308,18 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               },
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.red),
-              ),
+          child: ListTile(
+            contentPadding: EdgeInsets.only(left: 20.0),
+            leading: Icon(
+              Icons.edit,
+              color: Colors.blue,
+              size: 30.0,
             ),
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Add Group Description",
+            title: Text(
+              "Add Description",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.red,
+                color: Colors.blue,
                 fontSize: 16.0,
                 fontFamily: Fonts.titilliumWebRegular,
               ),
@@ -403,29 +351,30 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
           ),
-          InkWell(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                routeList.add_group_participants,
-                arguments: {
-                  "group": widget.group,
-                },
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Text(
-                "ADD",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  color: Colors.blue,
-                  fontSize: 16.0,
-                  fontFamily: Fonts.titilliumWebSemiBold,
+          if (userBloc.currentState.user.id == widget.group['owner_id'])
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  routeList.add_group_participants,
+                  arguments: {
+                    "group": widget.group,
+                  },
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                child: Text(
+                  "ADD",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Colors.blue,
+                    fontSize: 16.0,
+                    fontFamily: Fonts.titilliumWebSemiBold,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

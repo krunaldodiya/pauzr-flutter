@@ -125,7 +125,6 @@ class _HomePageState extends State<HomePage> {
                 subtitle: Text(
                   "${subscribers.toString()} participants.",
                 ),
-                trailing: Icon(Icons.more_vert),
               );
             },
           ),
