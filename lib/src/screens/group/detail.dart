@@ -202,13 +202,14 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
   groupAction(action) {
     List<Widget> data = [];
+    String msg = action == "Delete Group" ? "delete" : "exit";
 
     data.add(
       InkWell(
         onTap: () {
           return showConfirmationPopup(
             context,
-            "Are you sure want to delete ?",
+            "Are you sure want to $msg ?",
             () {
               manageGroup(widget.group['id']);
             },
