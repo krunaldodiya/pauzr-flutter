@@ -6,6 +6,7 @@ import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:share/share.dart';
 
 class GroupDetailPage extends StatefulWidget {
   final group;
@@ -236,7 +237,13 @@ class _GroupDetailPage extends State<GroupDetailPage> {
       data.add(
         InkWell(
           onTap: () {
-            manageGroup(widget.group['id']);
+            Navigator.pushNamed(
+              context,
+              routeList.add_group_participants,
+              arguments: {
+                "group": widget.group,
+              },
+            );
           },
           child: ListTile(
             contentPadding: EdgeInsets.only(left: 20.0),
@@ -268,7 +275,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     data.add(
       InkWell(
         onTap: () {
-          manageGroup(widget.group['id']);
+          Share.share('check out Pauzr App $appId').then((data) {
+            print("data");
+          });
         },
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 20.0),

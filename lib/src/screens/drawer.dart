@@ -6,8 +6,6 @@ import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share/share.dart';
 
-final appId = "https://play.google.com/store/apps/details?id=com.whatsapp";
-
 class DrawerPage extends StatelessWidget {
   final User user;
   const DrawerPage({Key key, @required this.user}) : super(key: key);
