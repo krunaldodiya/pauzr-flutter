@@ -8,6 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^2.0.1+1
   flutter_bloc: ^0.9.0
   carousel_pro: ^0.0.13
   intro_slider: ^1.1.9
