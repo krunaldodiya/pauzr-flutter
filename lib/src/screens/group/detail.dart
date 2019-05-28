@@ -457,6 +457,14 @@ class _GroupDetailPage extends State<GroupDetailPage> {
       },
     );
 
+    data.add(
+      Container(
+        height: 1.0,
+        color: Colors.grey.shade300,
+        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+      ),
+    );
+
     return data;
   }
 
