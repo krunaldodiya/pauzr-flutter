@@ -6,14 +6,14 @@ import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/otp/bloc.dart';
 import 'package:pauzr/src/blocs/otp/event.dart';
 import 'package:pauzr/src/blocs/otp/state.dart';
-import 'package:pauzr/src/blocs/theme/bloc.dart';
-import 'package:pauzr/src/blocs/theme/state.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
+import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class VerifyOtpPage extends StatefulWidget {
@@ -24,9 +24,6 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
-  ThemeBloc themeBloc;
-  DefaultTheme theme;
-
   OtpBloc otpBloc;
   UserBloc userBloc;
   InitialScreenBloc initialScreenBloc;
@@ -36,7 +33,6 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     super.initState();
 
     setState(() {
-      themeBloc = BlocProvider.of<ThemeBloc>(context);
       otpBloc = BlocProvider.of<OtpBloc>(context);
       userBloc = BlocProvider.of<UserBloc>(context);
       initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
@@ -45,117 +41,108 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: themeBloc,
-      builder: (context, ThemeState themeState) {
-        if (themeState.theme == null) {
-          return CircularProgressIndicator();
-        }
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
 
-        final theme = DefaultTheme.defaultTheme(themeState.theme);
-
-        return Scaffold(
-          backgroundColor: theme.verifyOtp.backgroundColor,
-          body: SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
+    return Scaffold(
+      backgroundColor: theme.verifyOtp.backgroundColor,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    "VERIFY OTP",
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
+                ),
+                BlocBuilder(
+                  bloc: otpBloc,
+                  builder: (context, state) {
+                    return Container(
                       padding: EdgeInsets.all(20.0),
                       child: Text(
-                        "VERIFY OTP",
+                        "Please enter verification code send to ${state.mobile}",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 24.0,
+                          fontSize: 18.0,
                           color: Colors.white,
                           fontFamily: Fonts.titilliumWebRegular,
                         ),
                       ),
-                    ),
-                    BlocBuilder(
-                      bloc: otpBloc,
-                      builder: (context, state) {
-                        return Container(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text(
-                            "Please enter verification code send to ${state.mobile}",
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white,
-                              fontFamily: Fonts.titilliumWebRegular,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    BlocBuilder(
-                      bloc: otpBloc,
-                      builder: (context, OtpState state) {
-                        return FlatButton(
-                          onPressed: onResendOtp,
-                          child: Text(
-                            "Resend OTP",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.red,
-                              fontFamily: Fonts.titilliumWebSemiBold,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    BlocBuilder<OtpEvent, OtpState>(
-                      bloc: otpBloc,
-                      builder: (BuildContext context, OtpState state) {
-                        return EditableFormField(
-                          maxLength: 10,
-                          keyboardType: TextInputType.number,
-                          controller: null,
-                          labelText: "OTP",
-                          errorText: getErrorText(state.error, 'otp'),
-                          onChanged: otpBloc.onChangeOtp,
-                        );
-                      },
-                    ),
-                    BlocBuilder<OtpEvent, OtpState>(
-                      bloc: otpBloc,
-                      builder: (BuildContext context, OtpState state) {
-                        return FlatButton(
-                          onPressed: onVerifyOtp,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 30.0, vertical: 10.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: Text(
-                            "VERIFY OTP",
-                            style: TextStyle(
-                              color:
-                                  state.clientOtp != null && state.error != null
-                                      ? Colors.white
-                                      : Colors.white30,
-                              fontFamily: Fonts.titilliumWebRegular,
-                            ),
-                          ),
-                          color: state.clientOtp != null && state.error != null
-                              ? Colors.red
-                              : Colors.grey,
-                        );
-                      },
-                    ),
-                    Container(height: 10.0),
-                  ],
+                    );
+                  },
                 ),
-              ),
+                BlocBuilder(
+                  bloc: otpBloc,
+                  builder: (context, OtpState state) {
+                    return FlatButton(
+                      onPressed: onResendOtp,
+                      child: Text(
+                        "Resend OTP",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.red,
+                          fontFamily: Fonts.titilliumWebSemiBold,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<OtpEvent, OtpState>(
+                  bloc: otpBloc,
+                  builder: (BuildContext context, OtpState state) {
+                    return EditableFormField(
+                      maxLength: 10,
+                      keyboardType: TextInputType.number,
+                      controller: null,
+                      labelText: "OTP",
+                      errorText: getErrorText(state.error, 'otp'),
+                      onChanged: otpBloc.onChangeOtp,
+                    );
+                  },
+                ),
+                BlocBuilder<OtpEvent, OtpState>(
+                  bloc: otpBloc,
+                  builder: (BuildContext context, OtpState state) {
+                    return FlatButton(
+                      onPressed: onVerifyOtp,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 30.0, vertical: 10.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Text(
+                        "VERIFY OTP",
+                        style: TextStyle(
+                          color: state.clientOtp != null && state.error != null
+                              ? Colors.white
+                              : Colors.white30,
+                          fontFamily: Fonts.titilliumWebRegular,
+                        ),
+                      ),
+                      color: state.clientOtp != null && state.error != null
+                          ? Colors.red
+                          : Colors.grey,
+                    );
+                  },
+                ),
+                Container(height: 10.0),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

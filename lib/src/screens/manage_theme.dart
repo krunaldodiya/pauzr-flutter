@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauzr/src/blocs/theme/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ManageTheme extends StatefulWidget {
@@ -11,19 +11,10 @@ class ManageTheme extends StatefulWidget {
 }
 
 class _ManageThemeState extends State<ManageTheme> {
-  ThemeBloc themeBloc;
-
-  @override
-  void initState() {
-    setState(() {
-      themeBloc = BlocProvider.of<ThemeBloc>(context);
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.red,
       appBar: AppBar(
@@ -47,12 +38,14 @@ class _ManageThemeState extends State<ManageTheme> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               getLable(
+                themeBloc: themeBloc,
                 text: "black",
                 borderColor: Colors.white,
                 backgroundColor: Colors.black,
                 textColor: Colors.white,
               ),
               getLable(
+                themeBloc: themeBloc,
                 text: "red",
                 borderColor: Colors.white,
                 backgroundColor: Colors.red,
@@ -65,7 +58,13 @@ class _ManageThemeState extends State<ManageTheme> {
     );
   }
 
-  InkWell getLable({text, borderColor, backgroundColor, textColor}) {
+  InkWell getLable({
+    ThemeBloc themeBloc,
+    text,
+    borderColor,
+    backgroundColor,
+    textColor,
+  }) {
     return InkWell(
       onTap: () async {
         SharedPreferences pref = await SharedPreferences.getInstance();
