@@ -7,12 +7,14 @@ import 'package:pauzr/src/atp/screens/request_otp.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/black/black.dart';
+import 'package:pauzr/src/atp/themes/blue/blue.dart';
 import 'package:pauzr/src/atp/themes/red/red.dart';
 
 class DefaultTheme {
   static Map themes = {
     "red": Red(),
     "black": Black(),
+    "blue": Blue(),
   };
 
   Intro intro;
