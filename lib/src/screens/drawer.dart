@@ -85,6 +85,23 @@ class DrawerPage extends StatelessWidget {
           ),
           ListTile(
             title: Text(
+              "Themes",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.brush,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              Navigator.pushNamed(context, routeList.manage_theme);
+            },
+          ),
+          ListTile(
+            title: Text(
               "Share",
               style: TextStyle(
                 color: Colors.white,

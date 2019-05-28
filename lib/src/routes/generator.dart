@@ -7,12 +7,13 @@ import 'package:pauzr/src/screens/group/scoreboard.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
+import 'package:pauzr/src/screens/manage_theme.dart';
 import 'package:pauzr/src/screens/minutes/info.dart';
 import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/otp/verify_otp.dart';
 import 'package:pauzr/src/screens/points/info.dart';
 import 'package:pauzr/src/screens/stop.dart';
-import 'package:pauzr/src/screens/tab.dart';
+import 'package:pauzr/src/screens/tabs.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/users/edit_profile.dart';
 import 'package:pauzr/src/screens/users/profile/gender.dart';
@@ -36,7 +37,7 @@ class RouteGenerator {
       case routeList.tab:
         return MaterialPageRoute(
           builder: (context) {
-            return TabPage();
+            return TabsPage();
           },
         );
         break;
@@ -45,6 +46,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return IntroPage();
+          },
+        );
+        break;
+
+      case routeList.manage_theme:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ManageTheme();
           },
         );
         break;

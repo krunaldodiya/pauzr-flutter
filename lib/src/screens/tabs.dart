@@ -1,24 +1,27 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/drawer.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/tabs/leaderboard.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
+import 'package:provider/provider.dart';
 
-class TabPage extends StatefulWidget {
-  TabPage({Key key}) : super(key: key);
+class TabsPage extends StatefulWidget {
+  TabsPage({Key key}) : super(key: key);
 
   @override
-  _TabPage createState() => _TabPage();
+  _TabsPage createState() => _TabsPage();
 }
 
-class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
+class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   UserBloc userBloc;
   int showTabIndex = 1;
 
@@ -31,7 +34,7 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
     });
   }
 
-  Widget getTabPage() {
+  Widget getTabsPage() {
     switch (showTabIndex) {
       case 0:
         return HomePage();
@@ -52,44 +55,16 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: getAppBar(context),
-      body: SafeArea(child: getTabPage()),
-      bottomNavigationBar: Container(
-        color: Colors.transparent,
-        height: 50.0,
-        child: CurvedNavigationBar(
-          initialIndex: 1,
-          color: Colors.red,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.red,
-          animationCurve: Curves.easeOutCubic,
-          animationDuration: Duration(milliseconds: 500),
-          onTap: (index) {
-            setState(() {
-              showTabIndex = index;
-            });
-          },
-          items: <Widget>[
-            Icon(
-              Icons.group,
-              color: Colors.white,
-              size: 25.0,
-            ),
-            Icon(
-              Icons.pause,
-              color: Colors.white,
-              size: 25.0,
-            ),
-            Icon(
-              Icons.dashboard,
-              color: Colors.white,
-              size: 25.0,
-            ),
-          ],
-        ),
+      backgroundColor: theme.tabs.backgroundColor,
+      appBar: getAppBar(context, theme),
+      body: SafeArea(
+        child: getTabsPage(),
       ),
+      bottomNavigationBar: getNavigationBar(context, theme),
       drawer: BlocBuilder(
         bloc: userBloc,
         builder: (context, UserState state) {
@@ -101,10 +76,49 @@ class _TabPage extends State<TabPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  AppBar getAppBar(BuildContext context) {
+  Container getNavigationBar(context, DefaultTheme theme) {
+    return Container(
+      color: Colors.transparent,
+      height: 50.0,
+      child: CurvedNavigationBar(
+        initialIndex: 1,
+        color: theme.tabs.navigationColor,
+        backgroundColor: Colors.transparent,
+        buttonBackgroundColor: theme.tabs.navigationButtonBackgroundColor,
+        animationCurve: Curves.easeOutCubic,
+        animationDuration: Duration(milliseconds: 500),
+        onTap: (index) {
+          setState(() {
+            showTabIndex = index;
+          });
+        },
+        items: <Widget>[
+          Icon(
+            Icons.group,
+            color: Colors.white,
+            size: 25.0,
+          ),
+          Icon(
+            Icons.pause,
+            color: Colors.white,
+            size: 25.0,
+          ),
+          Icon(
+            Icons.dashboard,
+            color: Colors.white,
+            size: 25.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar getAppBar(BuildContext context, DefaultTheme theme) {
+    print(theme.tabs.appBarBackgroundColor);
+
     return AppBar(
       elevation: 0.5,
-      backgroundColor: Colors.red,
+      backgroundColor: theme.tabs.appBarBackgroundColor,
       textTheme: TextTheme(
         title: TextStyle(
           fontWeight: FontWeight.bold,

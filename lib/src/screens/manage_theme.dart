@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,13 @@ class _ManageThemeState extends State<ManageTheme> {
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
               ),
+              getLable(
+                themeBloc: themeBloc,
+                text: "blue",
+                borderColor: Colors.white,
+                backgroundColor: Colors.blue,
+                textColor: Colors.white,
+              ),
             ],
           ),
         ),
@@ -67,10 +75,15 @@ class _ManageThemeState extends State<ManageTheme> {
   }) {
     return InkWell(
       onTap: () async {
+        Navigator.pop(context);
+
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString("defaultTheme", text);
-        themeBloc.setTheme(text);
-        Navigator.of(context).pop();
+
+        DefaultTheme defaultTheme = DefaultTheme.defaultTheme(text);
+        themeBloc.setTheme(defaultTheme);
+
+        Navigator.pop(context);
       },
       child: Container(
         padding: EdgeInsets.all(10.0),

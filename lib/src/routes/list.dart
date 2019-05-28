@@ -17,3 +17,4 @@ const String manage_group = "/manage_group";
 const String group_detail = "/group_detail";
 const String add_group_participants = "/add_group_participants";
 const String scoreboard = "/scoreboard";
+const String manage_theme = "/manage_theme";
