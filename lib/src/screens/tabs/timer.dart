@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/quotes.dart';
 import 'package:pauzr/src/screens/tabs/timer_cards.dart';
+import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
   TimerPage({Key key}) : super(key: key);
@@ -36,6 +39,9 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Stack(
@@ -48,7 +54,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
-                color: Colors.black,
+                color: theme.timer.quoteBackgroundColor,
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.2),

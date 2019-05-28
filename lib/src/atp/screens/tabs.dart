@@ -17,9 +17,9 @@ class Tabs {
   factory Tabs.initial() {
     return Tabs(
       backgroundColor: Colors.black,
-      appBarBackgroundColor: Color(0xFF000000),
-      navigationColor: Color(0xFF000000),
-      navigationButtonBackgroundColor: Color(0xFF000000),
+      appBarBackgroundColor: Colors.black,
+      navigationColor: Colors.black,
+      navigationButtonBackgroundColor: Colors.black,
     );
   }
 }

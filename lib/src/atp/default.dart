@@ -6,6 +6,7 @@ import 'package:pauzr/src/atp/screens/intro3.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
+import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/black/black.dart';
 import 'package:pauzr/src/atp/themes/blue/blue.dart';
@@ -24,6 +25,7 @@ class DefaultTheme {
   Intro3 intro3;
   Timer timer;
   Tabs tabs;
+  DrawerMenu drawerMenu;
   RequestOtp requestOtp;
   VerifyOtp verifyOtp;
 
@@ -34,6 +36,7 @@ class DefaultTheme {
     @required this.intro3,
     @required this.timer,
     @required this.tabs,
+    @required this.drawerMenu,
     @required this.requestOtp,
     @required this.verifyOtp,
   });
@@ -48,6 +51,7 @@ class DefaultTheme {
       intro3: theme.intro3,
       timer: theme.timer,
       tabs: theme.tabs,
+      drawerMenu: theme.drawerMenu,
       requestOtp: theme.requestOtp,
       verifyOtp: theme.verifyOtp,
     );

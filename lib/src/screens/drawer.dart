@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share/share.dart';
 
@@ -12,8 +15,11 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Container(
-      color: Colors.red,
+      color: theme.drawerMenu.backgroundColor,
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
@@ -43,7 +49,7 @@ class DrawerPage extends StatelessWidget {
               ),
             ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.drawerMenu.topBackgroundColor,
             ),
           ),
           ListTile(

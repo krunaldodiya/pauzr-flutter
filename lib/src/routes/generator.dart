@@ -203,6 +203,7 @@ class RouteGenerator {
           builder: (context) {
             return InitialScreen(
               authToken: args['authToken'],
+              defaultTheme: args['defaultTheme'],
             );
           },
         );

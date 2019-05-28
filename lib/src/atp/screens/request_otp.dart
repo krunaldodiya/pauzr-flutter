@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class RequestOtp {
-  var backgroundColor;
+  Color backgroundColor;
 
   RequestOtp({
     @required this.backgroundColor,

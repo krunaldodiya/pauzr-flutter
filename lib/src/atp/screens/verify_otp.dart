@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class VerifyOtp {
-  var backgroundColor;
+  Color backgroundColor;
 
   VerifyOtp({
     @required this.backgroundColor,

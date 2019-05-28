@@ -3,16 +3,16 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:meta/meta.dart';
 
 class Intro1 {
-  var backgroundColor;
+  Color backgroundColor;
   String title;
   String description;
   String pathImage;
   String titleFontFamily;
   double titleFontSize;
-  var titleFontColor;
+  Color titleFontColor;
   String descriptionFontFamily;
   double descriptionFontSize;
-  var descriptionFontColor;
+  Color descriptionFontColor;
 
   Intro1({
     @required this.backgroundColor,

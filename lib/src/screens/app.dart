@@ -9,7 +9,10 @@ class MyApp extends StatefulWidget {
   final String authToken;
   final String defaultTheme;
 
-  MyApp({this.authToken, this.defaultTheme});
+  MyApp({
+    this.authToken,
+    this.defaultTheme,
+  });
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -38,7 +41,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.iOS),
-      home: InitialScreen(authToken: widget.authToken),
+      home: InitialScreen(
+        authToken: widget.authToken,
+        defaultTheme: widget.defaultTheme,
+      ),
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

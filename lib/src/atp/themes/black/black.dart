@@ -1,4 +1,5 @@
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/intro.dart';
 import 'package:pauzr/src/atp/screens/intro1.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
@@ -7,6 +8,7 @@ import 'package:pauzr/src/atp/screens/request_otp.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
+import 'package:pauzr/src/atp/themes/black/drawer.dart';
 import 'package:pauzr/src/atp/themes/black/intro.dart';
 import 'package:pauzr/src/atp/themes/black/intro1.dart';
 import 'package:pauzr/src/atp/themes/black/intro2.dart';
@@ -33,4 +35,6 @@ class Black implements DefaultTheme {
   VerifyOtp verifyOtp = verifyOtpTheme;
   @override
   Tabs tabs = tabsTheme;
+  @override
+  DrawerMenu drawerMenu = drawerMenuTheme;
 }

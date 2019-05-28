@@ -1,16 +1,24 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/blocs/initial_screen/state.dart';
 import 'package:pauzr/src/helpers/initial_screen.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/no_network.dart';
+import 'package:provider/provider.dart';
 
 class InitialScreen extends StatefulWidget {
   final String authToken;
+  final String defaultTheme;
 
-  InitialScreen({Key key, @required this.authToken}) : super(key: key);
+  InitialScreen({
+    Key key,
+    @required this.authToken,
+    @required this.defaultTheme,
+  }) : super(key: key);
 
   @override
   _InitialScreenState createState() => _InitialScreenState();
@@ -30,6 +38,11 @@ class _InitialScreenState extends State<InitialScreen> {
     setState(() {
       initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
     });
+  }
+
+  onLoad() {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    themeBloc.setTheme(DefaultTheme.defaultTheme(widget.defaultTheme));
   }
 
   void checkConnection() {

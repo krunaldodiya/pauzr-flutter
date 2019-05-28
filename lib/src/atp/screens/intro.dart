@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class Intro {
-  var backgroundColor;
-  var colorActiveDot;
-  var colorDot;
-  var doneBtnColor;
-  var skipBtnColor;
-  var prevBtnColor;
+  Color backgroundColor;
+  Color colorActiveDot;
+  Color colorDot;
+  Color doneBtnColor;
+  Color skipBtnColor;
+  Color prevBtnColor;
 
   Intro({
     @required this.backgroundColor,
