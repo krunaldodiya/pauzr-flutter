@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/timer/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
+import 'package:provider/provider.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
 
 class StopPage extends StatefulWidget {
@@ -129,6 +133,9 @@ class _StopPage extends State<StopPage>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return WillPopScope(
       onWillPop: () async {
         return showConfirmationPopup(
@@ -143,7 +150,7 @@ class _StopPage extends State<StopPage>
         );
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.stop.backgroundColor,
         body: SafeArea(
           child: Center(
             child: Column(
@@ -160,20 +167,22 @@ class _StopPage extends State<StopPage>
                           "assets/images/hello.png",
                           height: 310.0,
                           width: 310.0,
-                          color: Colors.red,
+                          color: theme.stop.handBackgroundColor,
                         ),
                       ),
                       WaveProgressBar(
                         flowSpeed: 0.1,
                         waveDistance: 45.0,
                         waveHeight: 18.0,
-                        waterColor: Colors.blueAccent,
-                        strokeCircleColor: Colors.blue,
+                        waterColor: theme.stop.waterColor,
+                        strokeCircleColor: theme.stop.strokeCircleColor,
                         circleStrokeWidth: 2.0,
                         heightController: waterController,
                         percentage: waterHeight,
                         size: Size(220, 220),
-                        textStyle: TextStyle(fontSize: 0.0),
+                        textStyle: TextStyle(
+                          fontSize: 0.0,
+                        ),
                       ),
                       Text(
                         getTimer(),
@@ -187,7 +196,8 @@ class _StopPage extends State<StopPage>
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(20.0),
+                  margin: EdgeInsets.only(bottom: 20.0),
+                  alignment: Alignment.center,
                   child: FloatingActionButton(
                     backgroundColor: Colors.red,
                     onPressed: () {
@@ -203,9 +213,9 @@ class _StopPage extends State<StopPage>
                       );
                     },
                     child: Icon(
-                      Icons.cancel,
+                      FontAwesome.remove,
                       color: Colors.white,
-                      size: 55.0,
+                      size: 35.0,
                     ),
                   ),
                 )
