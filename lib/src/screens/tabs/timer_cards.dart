@@ -4,22 +4,16 @@ import 'package:pauzr/src/helpers/fonts.dart';
 
 getCard(String topText, String bottomText, DefaultTheme theme) {
   return Card(
+    color: Colors.transparent,
     child: Column(
       children: <Widget>[
         Container(
           height: 80.0,
           decoration: BoxDecoration(
+            color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(5.0),
               topRight: Radius.circular(5.0),
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                theme.gradientColor.color1,
-                theme.gradientColor.color2,
-              ],
             ),
           ),
           child: Center(
@@ -27,7 +21,7 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
               topText,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 36.0,
                 fontFamily: Fonts.titilliumWebBold,
               ),
@@ -35,17 +29,20 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
           ),
         ),
         Container(
-          height: 40.0,
+          height: 42.0,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.blueAccent,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(5.0),
+              bottomRight: Radius.circular(5.0),
+            ),
           ),
-          child: Container(
-            padding: EdgeInsets.all(5.0),
+          child: Center(
             child: Text(
               bottomText,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 16.0,
                 fontFamily: Fonts.titilliumWebBold,
               ),

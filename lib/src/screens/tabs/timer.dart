@@ -43,7 +43,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.timer.backgroundColor,
       body: Stack(
         children: [
           Card(

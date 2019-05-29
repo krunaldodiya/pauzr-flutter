@@ -83,7 +83,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
       child: CurvedNavigationBar(
         initialIndex: 1,
         color: theme.bottomNavigation.navigationColor,
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.tabs.backgroundColor,
         buttonBackgroundColor:
             theme.bottomNavigation.navigationButtonBackgroundColor,
         animationCurve: Curves.easeOutCubic,

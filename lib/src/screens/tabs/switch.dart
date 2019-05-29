@@ -70,8 +70,8 @@ Widget getSwitch({
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          theme.gradientColor.color1,
-          theme.gradientColor.color2,
+          theme.gradientColor.switchBackground1,
+          theme.gradientColor.switchBackground2,
         ],
       ),
     ),

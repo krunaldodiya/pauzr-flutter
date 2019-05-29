@@ -107,8 +107,8 @@ class _MinutesPage extends State<MinutesPage>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.gradientColor.color1,
-                  theme.gradientColor.color2,
+                  theme.gradientColor.minutesCardBackground1,
+                  theme.gradientColor.minutesCardBackground2,
                 ],
               ),
             ),

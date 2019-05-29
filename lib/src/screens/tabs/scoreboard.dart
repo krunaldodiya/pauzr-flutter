@@ -46,7 +46,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
-      backgroundColor: theme.minutes.backgroundColor,
+      backgroundColor: theme.mainScoreboard.backgroundColor,
       body: SwipeDetector(
         swipeConfiguration: SwipeConfiguration(
           verticalSwipeMinVelocity: 100.0,
@@ -215,8 +215,8 @@ class _ScoreboardPage extends State<ScoreboardPage>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.gradientColor.color1,
-                  theme.gradientColor.color2,
+                  theme.gradientColor.mainScoreboardCardBackground1,
+                  theme.gradientColor.mainScoreboardCardBackground2,
                 ],
               ),
             ),

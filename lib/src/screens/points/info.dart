@@ -108,8 +108,8 @@ class _PointsPage extends State<PointsPage>
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  theme.gradientColor.color1,
-                  theme.gradientColor.color2,
+                  theme.gradientColor.pointsCardBackground1,
+                  theme.gradientColor.pointsCardBackground2,
                 ],
               ),
             ),
