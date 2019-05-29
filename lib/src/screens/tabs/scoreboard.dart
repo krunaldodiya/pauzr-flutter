@@ -10,14 +10,14 @@ import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
 import 'package:swipedetector/swipedetector.dart';
 
-class LeaderboardPage extends StatefulWidget {
-  LeaderboardPage({Key key}) : super(key: key);
+class ScoreboardPage extends StatefulWidget {
+  ScoreboardPage({Key key}) : super(key: key);
 
   @override
-  _LeaderboardPage createState() => _LeaderboardPage();
+  _ScoreboardPage createState() => _ScoreboardPage();
 }
 
-class _LeaderboardPage extends State<LeaderboardPage>
+class _ScoreboardPage extends State<ScoreboardPage>
     with SingleTickerProviderStateMixin {
   UserBloc userBloc;
 
@@ -204,7 +204,7 @@ class _LeaderboardPage extends State<LeaderboardPage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.green, Colors.blue],
+                colors: [Colors.cyan, Colors.red],
               ),
             ),
             height: 90.0,

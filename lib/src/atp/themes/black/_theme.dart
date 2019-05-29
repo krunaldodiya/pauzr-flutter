@@ -2,12 +2,20 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
+import 'package:pauzr/src/atp/screens/group_detail.dart';
+import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
 import 'package:pauzr/src/atp/screens/intro.dart';
 import 'package:pauzr/src/atp/screens/intro1.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 import 'package:pauzr/src/atp/screens/intro3.dart';
+import 'package:pauzr/src/atp/screens/levels.dart';
+import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
+import 'package:pauzr/src/atp/screens/manage_group.dart';
+import 'package:pauzr/src/atp/screens/minutes.dart';
+import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
+import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
@@ -15,12 +23,20 @@ import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/black/bottom_navigation.dart';
 import 'package:pauzr/src/atp/themes/black/drawer.dart';
 import 'package:pauzr/src/atp/themes/black/edit_profile.dart';
+import 'package:pauzr/src/atp/themes/black/group_detail.dart';
+import 'package:pauzr/src/atp/themes/black/group_scoreboard.dart';
 import 'package:pauzr/src/atp/themes/black/home.dart';
 import 'package:pauzr/src/atp/themes/black/intro.dart';
 import 'package:pauzr/src/atp/themes/black/intro1.dart';
 import 'package:pauzr/src/atp/themes/black/intro2.dart';
 import 'package:pauzr/src/atp/themes/black/intro3.dart';
+import 'package:pauzr/src/atp/themes/black/levels.dart';
+import 'package:pauzr/src/atp/themes/black/main_scoreboard.dart';
+import 'package:pauzr/src/atp/themes/black/manage_group.dart';
+import 'package:pauzr/src/atp/themes/black/minutes.dart';
+import 'package:pauzr/src/atp/themes/black/points.dart';
 import 'package:pauzr/src/atp/themes/black/request_otp.dart';
+import 'package:pauzr/src/atp/themes/black/stop.dart';
 import 'package:pauzr/src/atp/themes/black/tabs.dart';
 import 'package:pauzr/src/atp/themes/black/timer.dart';
 import 'package:pauzr/src/atp/themes/black/verify_otp.dart';
@@ -53,4 +69,20 @@ class Black implements DefaultTheme {
   ViewProfile viewProfile = viewProfileTheme;
   @override
   BottomNavigation bottomNavigation = bottomNavigationTheme;
+  @override
+  MainScoreboard mainScoreboard = mainScoreboardTheme;
+  @override
+  GroupScoreboard groupScoreboard = groupScoreboardTheme;
+  @override
+  GroupDetail groupDetail = groupDetailTheme;
+  @override
+  Levels levels = levelsTheme;
+  @override
+  ManageGroup manageGroup = manageGroupTheme;
+  @override
+  Minutes minutes = minutesTheme;
+  @override
+  Points points = pointsTheme;
+  @override
+  Stop stop = stopTheme;
 }

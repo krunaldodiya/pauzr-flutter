@@ -63,7 +63,7 @@ Widget getSwitch({List<String> items, String selected, Function onSelect}) {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Colors.green, Colors.blue],
+        colors: [Colors.cyan, Colors.red],
       ),
     ),
     margin: EdgeInsets.all(10.0),

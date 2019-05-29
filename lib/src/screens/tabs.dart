@@ -10,7 +10,7 @@ import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/drawer.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
-import 'package:pauzr/src/screens/tabs/leaderboard.dart';
+import 'package:pauzr/src/screens/tabs/scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
 import 'package:provider/provider.dart';
 
@@ -45,7 +45,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
         break;
 
       case 2:
-        return LeaderboardPage();
+        return ScoreboardPage();
         break;
 
       default:

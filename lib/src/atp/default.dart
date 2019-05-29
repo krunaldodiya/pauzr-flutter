@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
+import 'package:pauzr/src/atp/screens/group_detail.dart';
+import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
 import 'package:pauzr/src/atp/screens/intro.dart';
 import 'package:pauzr/src/atp/screens/intro1.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 import 'package:pauzr/src/atp/screens/intro3.dart';
+import 'package:pauzr/src/atp/screens/levels.dart';
+import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
+import 'package:pauzr/src/atp/screens/manage_group.dart';
+import 'package:pauzr/src/atp/screens/minutes.dart';
+import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
+import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
-import 'package:pauzr/src/atp/themes/black/black.dart';
-import 'package:pauzr/src/atp/themes/blue/blue.dart';
-import 'package:pauzr/src/atp/themes/red/red.dart';
+import 'package:pauzr/src/atp/themes/black/_theme.dart';
+import 'package:pauzr/src/atp/themes/blue/_theme.dart';
+import 'package:pauzr/src/atp/themes/red/_theme.dart';
 
 class DefaultTheme {
   static Map themes = {
@@ -36,6 +44,14 @@ class DefaultTheme {
   VerifyOtp verifyOtp;
   EditProfile editProfile;
   ViewProfile viewProfile;
+  MainScoreboard mainScoreboard;
+  GroupScoreboard groupScoreboard;
+  GroupDetail groupDetail;
+  Levels levels;
+  ManageGroup manageGroup;
+  Minutes minutes;
+  Points points;
+  Stop stop;
 
   DefaultTheme({
     @required this.intro,
@@ -51,6 +67,14 @@ class DefaultTheme {
     @required this.verifyOtp,
     @required this.editProfile,
     @required this.viewProfile,
+    @required this.mainScoreboard,
+    @required this.groupScoreboard,
+    @required this.groupDetail,
+    @required this.levels,
+    @required this.manageGroup,
+    @required this.minutes,
+    @required this.points,
+    @required this.stop,
   });
 
   static DefaultTheme defaultTheme(String themeName) {
@@ -70,6 +94,14 @@ class DefaultTheme {
       verifyOtp: theme.verifyOtp,
       editProfile: theme.editProfile,
       viewProfile: theme.viewProfile,
+      mainScoreboard: theme.mainScoreboard,
+      groupScoreboard: theme.groupScoreboard,
+      groupDetail: theme.groupDetail,
+      levels: theme.levels,
+      manageGroup: theme.manageGroup,
+      minutes: theme.minutes,
+      points: theme.points,
+      stop: theme.stop,
     );
   }
 }

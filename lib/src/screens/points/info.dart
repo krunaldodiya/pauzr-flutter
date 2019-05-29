@@ -101,7 +101,7 @@ class _PointsPage extends State<PointsPage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.green, Colors.blue],
+                colors: [Colors.cyan, Colors.red],
               ),
             ),
             height: 90.0,
