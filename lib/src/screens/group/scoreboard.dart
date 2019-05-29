@@ -188,6 +188,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
                                 period = value;
                               });
                             },
+                            theme: theme,
                           ),
                         ],
                       ),

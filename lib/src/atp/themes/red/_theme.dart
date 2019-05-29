@@ -2,6 +2,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
+import 'package:pauzr/src/atp/screens/gradient_color.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
 import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
@@ -23,6 +24,7 @@ import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/red/bottom_navigation.dart';
 import 'package:pauzr/src/atp/themes/red/drawer.dart';
 import 'package:pauzr/src/atp/themes/red/edit_profile.dart';
+import 'package:pauzr/src/atp/themes/red/gradient_color.dart';
 import 'package:pauzr/src/atp/themes/red/group_detail.dart';
 import 'package:pauzr/src/atp/themes/red/group_scoreboard.dart';
 import 'package:pauzr/src/atp/themes/red/home.dart';
@@ -85,4 +87,6 @@ class Red implements DefaultTheme {
   Points points = pointsTheme;
   @override
   Stop stop = stopTheme;
+  @override
+  GradientColor gradientColor = gradientColorTheme;
 }

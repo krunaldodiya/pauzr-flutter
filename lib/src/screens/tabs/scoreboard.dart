@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
+import 'package:provider/provider.dart';
 import 'package:swipedetector/swipedetector.dart';
 
 class ScoreboardPage extends StatefulWidget {
@@ -39,8 +42,11 @@ class _ScoreboardPage extends State<ScoreboardPage>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.minutes.backgroundColor,
       body: SwipeDetector(
         swipeConfiguration: SwipeConfiguration(
           verticalSwipeMinVelocity: 100.0,
@@ -104,10 +110,11 @@ class _ScoreboardPage extends State<ScoreboardPage>
                                 period = value;
                               });
                             },
+                            theme: theme,
                           ),
                           Container(
                             margin: EdgeInsets.all(5.0),
-                            child: getCards(results),
+                            child: getCards(results, theme),
                           ),
                           Container(
                             margin: EdgeInsets.all(10.0),
@@ -138,7 +145,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
     );
   }
 
-  getCards(results) {
+  getCards(results, theme) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -152,6 +159,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
                 return getCard(
                   results['minutes_saved'].toString(),
                   "Minutes Saved",
+                  theme,
                 );
               },
             ),
@@ -168,6 +176,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
                 return getCard(
                   results['points_earned'].toString(),
                   "Points Earned",
+                  theme,
                 );
               },
             ),
@@ -181,7 +190,8 @@ class _ScoreboardPage extends State<ScoreboardPage>
             child: BlocBuilder(
               bloc: userBloc,
               builder: (context, UserState state) {
-                return getCard("${state.user.level}/10", "Levels Cleared");
+                return getCard(
+                    "${state.user.level}/10", "Levels Cleared", theme);
               },
             ),
           ),
@@ -190,7 +200,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
     );
   }
 
-  Card getCard(String title, String msg) {
+  Card getCard(String title, String msg, DefaultTheme theme) {
     return Card(
       child: Column(
         children: <Widget>[
@@ -204,7 +214,10 @@ class _ScoreboardPage extends State<ScoreboardPage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan, Colors.red],
+                colors: [
+                  theme.gradientColor.color1,
+                  theme.gradientColor.color2,
+                ],
               ),
             ),
             height: 90.0,

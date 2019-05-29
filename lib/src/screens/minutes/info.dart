@@ -62,21 +62,21 @@ class _MinutesPage extends State<MinutesPage>
               return Text('Error: ${snapshot.error}');
             }
 
-            return createListView(context, snapshot);
+            return createListView(context, snapshot, theme);
           },
         ),
       ),
     );
   }
 
-  getCards(body) {
+  getCards(body, theme) {
     return Row(
       children: <Widget>[
         Expanded(
           child: BlocBuilder(
             bloc: userBloc,
             builder: (context, UserState state) {
-              return getCard(body['sum'].toString(), "All Time Saving");
+              return getCard(body['sum'].toString(), "All Time Saving", theme);
             },
           ),
         ),
@@ -84,7 +84,7 @@ class _MinutesPage extends State<MinutesPage>
           child: BlocBuilder(
             bloc: userBloc,
             builder: (context, UserState state) {
-              return getCard(body['avg'].toString(), "Average per day");
+              return getCard(body['avg'].toString(), "Average per day", theme);
             },
           ),
         ),
@@ -92,7 +92,7 @@ class _MinutesPage extends State<MinutesPage>
     );
   }
 
-  Card getCard(String title, String msg) {
+  Card getCard(String title, String msg, DefaultTheme theme) {
     return Card(
       child: Column(
         children: <Widget>[
@@ -106,7 +106,10 @@ class _MinutesPage extends State<MinutesPage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan, Colors.red],
+                colors: [
+                  theme.gradientColor.color1,
+                  theme.gradientColor.color2,
+                ],
               ),
             ),
             height: 90.0,
@@ -142,7 +145,7 @@ class _MinutesPage extends State<MinutesPage>
     );
   }
 
-  createListView(context, snapshot) {
+  createListView(context, snapshot, DefaultTheme theme) {
     final Response response = snapshot.data;
     final results = response.data;
     final List history = results['history'];
@@ -153,7 +156,7 @@ class _MinutesPage extends State<MinutesPage>
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(5.0),
-          child: getCards(results),
+          child: getCards(results, theme),
         ),
         Expanded(
           child: ListView.builder(

@@ -63,21 +63,21 @@ class _PointsPage extends State<PointsPage>
               return Text('Error: ${snapshot.error}');
             }
 
-            return createListView(context, snapshot);
+            return createListView(context, snapshot, theme);
           },
         ),
       ),
     );
   }
 
-  getCards(body) {
+  getCards(body, theme) {
     return Row(
       children: <Widget>[
         Expanded(
           child: BlocBuilder(
             bloc: userBloc,
             builder: (context, UserState state) {
-              return getCard(body['sum'].toString(), "All Time Saving");
+              return getCard(body['sum'].toString(), "All Time Saving", theme);
             },
           ),
         ),
@@ -85,7 +85,7 @@ class _PointsPage extends State<PointsPage>
           child: BlocBuilder(
             bloc: userBloc,
             builder: (context, UserState state) {
-              return getCard(body['avg'].toString(), "Average per day");
+              return getCard(body['avg'].toString(), "Average per day", theme);
             },
           ),
         ),
@@ -93,7 +93,7 @@ class _PointsPage extends State<PointsPage>
     );
   }
 
-  Card getCard(String title, String msg) {
+  Card getCard(String title, String msg, DefaultTheme theme) {
     return Card(
       child: Column(
         children: <Widget>[
@@ -107,7 +107,10 @@ class _PointsPage extends State<PointsPage>
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.cyan, Colors.red],
+                colors: [
+                  theme.gradientColor.color1,
+                  theme.gradientColor.color2,
+                ],
               ),
             ),
             height: 90.0,
@@ -143,7 +146,7 @@ class _PointsPage extends State<PointsPage>
     );
   }
 
-  createListView(context, snapshot) {
+  createListView(context, snapshot, theme) {
     final Response response = snapshot.data;
     final results = response.data;
     final List history = results['history'];
@@ -154,7 +157,7 @@ class _PointsPage extends State<PointsPage>
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(5.0),
-          child: getCards(results),
+          child: getCards(results, theme),
         ),
         Expanded(
           child: ListView.builder(
@@ -162,9 +165,7 @@ class _PointsPage extends State<PointsPage>
             itemCount: history.length,
             itemBuilder: (context, int index) {
               final item = history[index];
-
               return getRankCard(item);
-              // return getMainCard(level, state.user);
             },
           ),
         ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 
-getCard(topText, bottomText) {
+getCard(String topText, String bottomText, DefaultTheme theme) {
   return Card(
     child: Column(
       children: <Widget>[
@@ -15,7 +16,10 @@ getCard(topText, bottomText) {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.cyan, Colors.red],
+              colors: [
+                theme.gradientColor.color1,
+                theme.gradientColor.color2,
+              ],
             ),
           ),
           child: Center(

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 
-Widget getSwitch({List<String> items, String selected, Function onSelect}) {
+Widget getSwitch({
+  List<String> items,
+  String selected,
+  Function onSelect,
+  DefaultTheme theme,
+}) {
   List<Widget> switchList = [];
 
   items.asMap().forEach((index, value) {
@@ -63,7 +69,10 @@ Widget getSwitch({List<String> items, String selected, Function onSelect}) {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Colors.cyan, Colors.red],
+        colors: [
+          theme.gradientColor.color1,
+          theme.gradientColor.color2,
+        ],
       ),
     ),
     margin: EdgeInsets.all(10.0),

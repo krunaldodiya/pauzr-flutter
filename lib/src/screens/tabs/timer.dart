@@ -109,9 +109,9 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
               margin: EdgeInsets.only(bottom: 50.0),
               child: Row(
                 children: <Widget>[
-                  getTimerCard(20),
-                  getTimerCard(40),
-                  getTimerCard(60),
+                  getTimerCard(20, theme),
+                  getTimerCard(40, theme),
+                  getTimerCard(60, theme),
                 ],
               ),
             ),
@@ -121,7 +121,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  getTimerCard(time) {
+  getTimerCard(time, theme) {
     // int duration = time * 60;
     int duration = time * 1;
 
@@ -135,7 +135,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
             "duration": duration,
           });
         },
-        child: getCard(time.toString(), "Minutes"),
+        child: getCard(time.toString(), "Minutes", theme),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
+import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
+import 'package:pauzr/src/atp/screens/gradient_color.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
 import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
@@ -15,9 +17,8 @@ import 'package:pauzr/src/atp/screens/minutes.dart';
 import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
-import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
-import 'package:pauzr/src/atp/screens/drawer_menu.dart';
+import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/black/_theme.dart';
@@ -52,6 +53,7 @@ class DefaultTheme {
   Minutes minutes;
   Points points;
   Stop stop;
+  GradientColor gradientColor;
 
   DefaultTheme({
     @required this.intro,
@@ -75,6 +77,7 @@ class DefaultTheme {
     @required this.minutes,
     @required this.points,
     @required this.stop,
+    @required this.gradientColor,
   });
 
   static DefaultTheme defaultTheme(String themeName) {
@@ -102,6 +105,7 @@ class DefaultTheme {
       minutes: theme.minutes,
       points: theme.points,
       stop: theme.stop,
+      gradientColor: theme.gradientColor,
     );
   }
 }
