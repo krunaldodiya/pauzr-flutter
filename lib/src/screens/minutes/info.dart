@@ -103,14 +103,7 @@ class _MinutesPage extends State<MinutesPage>
                 topLeft: Radius.circular(5.0),
                 topRight: Radius.circular(5.0),
               ),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.gradientColor.minutesCardBackground1,
-                  theme.gradientColor.minutesCardBackground2,
-                ],
-              ),
+              color: theme.minutes.backgroundColor,
             ),
             height: 90.0,
             child: Center(

@@ -211,14 +211,7 @@ class _ScoreboardPage extends State<ScoreboardPage>
                 topLeft: Radius.circular(5.0),
                 topRight: Radius.circular(5.0),
               ),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.gradientColor.mainScoreboardCardBackground1,
-                  theme.gradientColor.mainScoreboardCardBackground2,
-                ],
-              ),
+              color: theme.mainScoreboard.cardBackground,
             ),
             height: 90.0,
             child: Center(

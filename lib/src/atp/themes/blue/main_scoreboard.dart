@@ -6,4 +6,5 @@ MainScoreboard mainScoreboardTheme = MainScoreboard(
   navigationBackgroundColor: Colors.grey.shade100,
   navigationButtonBackgroundColor: Colors.indigo,
   navigationColor: Colors.indigo,
+  cardBackground: Colors.indigo,
 );

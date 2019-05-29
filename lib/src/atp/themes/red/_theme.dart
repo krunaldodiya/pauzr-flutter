@@ -1,7 +1,6 @@
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
-import 'package:pauzr/src/atp/screens/gradient_color.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
 import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
@@ -15,6 +14,7 @@ import 'package:pauzr/src/atp/screens/manage_group.dart';
 import 'package:pauzr/src/atp/screens/minutes.dart';
 import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
+import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
@@ -22,12 +22,11 @@ import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/red/drawer.dart';
 import 'package:pauzr/src/atp/themes/red/edit_profile.dart';
-import 'package:pauzr/src/atp/themes/red/gradient_color.dart';
 import 'package:pauzr/src/atp/themes/red/group_detail.dart';
 import 'package:pauzr/src/atp/themes/red/group_scoreboard.dart';
 import 'package:pauzr/src/atp/themes/red/home.dart';
-import 'package:pauzr/src/atp/themes/red/intro1.dart';
 import 'package:pauzr/src/atp/themes/red/intro.dart';
+import 'package:pauzr/src/atp/themes/red/intro1.dart';
 import 'package:pauzr/src/atp/themes/red/intro2.dart';
 import 'package:pauzr/src/atp/themes/red/intro3.dart';
 import 'package:pauzr/src/atp/themes/red/levels.dart';
@@ -36,6 +35,7 @@ import 'package:pauzr/src/atp/themes/red/manage_group.dart';
 import 'package:pauzr/src/atp/themes/red/minutes.dart';
 import 'package:pauzr/src/atp/themes/red/points.dart';
 import 'package:pauzr/src/atp/themes/red/request_otp.dart';
+import 'package:pauzr/src/atp/themes/red/segment_bar.dart';
 import 'package:pauzr/src/atp/themes/red/stop.dart';
 import 'package:pauzr/src/atp/themes/red/tabs.dart';
 import 'package:pauzr/src/atp/themes/red/timer.dart';
@@ -84,5 +84,5 @@ class Red implements DefaultTheme {
   @override
   Stop stop = stopTheme;
   @override
-  GradientColor gradientColor = gradientColorTheme;
+  SegmentBar segmentBar = segmentBarTheme;
 }

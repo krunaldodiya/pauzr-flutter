@@ -104,14 +104,7 @@ class _PointsPage extends State<PointsPage>
                 topLeft: Radius.circular(5.0),
                 topRight: Radius.circular(5.0),
               ),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  theme.gradientColor.pointsCardBackground1,
-                  theme.gradientColor.pointsCardBackground2,
-                ],
-              ),
+              color: theme.points.backgroundColor,
             ),
             height: 90.0,
             child: Center(

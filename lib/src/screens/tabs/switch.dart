@@ -8,6 +8,22 @@ Widget getSwitch({
   Function onSelect,
   DefaultTheme theme,
 }) {
+  List<Widget> switchList = getList(items, selected, onSelect);
+
+  return Container(
+    padding: EdgeInsets.all(0.5),
+    decoration: BoxDecoration(
+      color: theme.segmentBar.backgroundColor,
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    margin: EdgeInsets.all(10.0),
+    child: Row(
+      children: switchList,
+    ),
+  );
+}
+
+List<Widget> getList(List<String> items, String selected, onSelect) {
   List<Widget> switchList = [];
 
   items.asMap().forEach((index, value) {
@@ -62,20 +78,5 @@ Widget getSwitch({
     );
   });
 
-  return Container(
-    padding: EdgeInsets.all(0.5),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10.0),
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          theme.gradientColor.switchBackground1,
-          theme.gradientColor.switchBackground2,
-        ],
-      ),
-    ),
-    margin: EdgeInsets.all(10.0),
-    child: Row(children: switchList),
-  );
+  return switchList;
 }

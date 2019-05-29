@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
-import 'package:pauzr/src/atp/screens/gradient_color.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
 import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
@@ -15,6 +14,7 @@ import 'package:pauzr/src/atp/screens/manage_group.dart';
 import 'package:pauzr/src/atp/screens/minutes.dart';
 import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
+import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
@@ -51,7 +51,7 @@ class DefaultTheme {
   Minutes minutes;
   Points points;
   Stop stop;
-  GradientColor gradientColor;
+  SegmentBar segmentBar;
 
   DefaultTheme({
     @required this.intro,
@@ -74,7 +74,7 @@ class DefaultTheme {
     @required this.minutes,
     @required this.points,
     @required this.stop,
-    @required this.gradientColor,
+    @required this.segmentBar,
   });
 
   static DefaultTheme defaultTheme(String themeName) {
@@ -101,7 +101,7 @@ class DefaultTheme {
       minutes: theme.minutes,
       points: theme.points,
       stop: theme.stop,
-      gradientColor: theme.gradientColor,
+      segmentBar: theme.segmentBar,
     );
   }
 }

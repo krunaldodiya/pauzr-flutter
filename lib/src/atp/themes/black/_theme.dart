@@ -1,7 +1,6 @@
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
-import 'package:pauzr/src/atp/screens/gradient_color.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
 import 'package:pauzr/src/atp/screens/group_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
@@ -15,6 +14,7 @@ import 'package:pauzr/src/atp/screens/manage_group.dart';
 import 'package:pauzr/src/atp/screens/minutes.dart';
 import 'package:pauzr/src/atp/screens/points.dart';
 import 'package:pauzr/src/atp/screens/request_otp.dart';
+import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
@@ -22,7 +22,6 @@ import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/black/drawer.dart';
 import 'package:pauzr/src/atp/themes/black/edit_profile.dart';
-import 'package:pauzr/src/atp/themes/black/gradient_color.dart';
 import 'package:pauzr/src/atp/themes/black/group_detail.dart';
 import 'package:pauzr/src/atp/themes/black/group_scoreboard.dart';
 import 'package:pauzr/src/atp/themes/black/home.dart';
@@ -36,6 +35,7 @@ import 'package:pauzr/src/atp/themes/black/manage_group.dart';
 import 'package:pauzr/src/atp/themes/black/minutes.dart';
 import 'package:pauzr/src/atp/themes/black/points.dart';
 import 'package:pauzr/src/atp/themes/black/request_otp.dart';
+import 'package:pauzr/src/atp/themes/black/segment_bar.dart';
 import 'package:pauzr/src/atp/themes/black/stop.dart';
 import 'package:pauzr/src/atp/themes/black/tabs.dart';
 import 'package:pauzr/src/atp/themes/black/timer.dart';
@@ -84,5 +84,5 @@ class Black implements DefaultTheme {
   @override
   Stop stop = stopTheme;
   @override
-  GradientColor gradientColor = gradientColorTheme;
+  SegmentBar segmentBar = segmentBarTheme;
 }
