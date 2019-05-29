@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
+import 'package:provider/provider.dart';
 
 class MinutesPage extends StatefulWidget {
   MinutesPage({Key key}) : super(key: key);
@@ -28,10 +31,13 @@ class _MinutesPage extends State<MinutesPage>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: theme.minutes.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: theme.minutes.appBackgroundColor,
         title: Text(
           "Minutes".toUpperCase(),
           style: TextStyle(

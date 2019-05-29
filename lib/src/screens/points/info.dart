@@ -2,10 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
+import 'package:provider/provider.dart';
 
 class PointsPage extends StatefulWidget {
   PointsPage({Key key}) : super(key: key);
@@ -29,10 +32,13 @@ class _PointsPage extends State<PointsPage>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: theme.points.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: theme.points.appBackgroundColor,
         title: Text(
           "Points".toUpperCase(),
           style: TextStyle(

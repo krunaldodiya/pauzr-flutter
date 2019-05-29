@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/switch.dart';
+import 'package:provider/provider.dart';
 import 'package:swipedetector/swipedetector.dart';
 
 class ScoreboardPage extends StatefulWidget {
@@ -48,10 +51,13 @@ class _ScoreboardPage extends State<ScoreboardPage>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: theme.groupScoreboard.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: theme.groupScoreboard.appBackgroundColor,
         iconTheme: IconThemeData(
           color: Colors.white,
         ),

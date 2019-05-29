@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
-import 'package:pauzr/src/screens/group/manage.dart';
+import 'package:pauzr/src/screens/group/manage_group.dart';
 import 'package:pauzr/src/screens/group/detail.dart';
 import 'package:pauzr/src/screens/group/participants.dart';
 import 'package:pauzr/src/screens/group/scoreboard.dart';
