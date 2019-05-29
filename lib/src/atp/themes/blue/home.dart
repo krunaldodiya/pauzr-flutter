@@ -3,4 +3,7 @@ import 'package:pauzr/src/atp/screens/home.dart';
 
 Home homeTheme = Home(
   backgroundColor: Colors.grey.shade100,
+  navigationBackgroundColor: Colors.grey.shade100,
+  navigationButtonBackgroundColor: Colors.indigo,
+  navigationColor: Colors.indigo,
 );

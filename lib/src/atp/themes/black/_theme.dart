@@ -1,5 +1,4 @@
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
 import 'package:pauzr/src/atp/screens/gradient_color.dart';
@@ -21,7 +20,6 @@ import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
-import 'package:pauzr/src/atp/themes/black/bottom_navigation.dart';
 import 'package:pauzr/src/atp/themes/black/drawer.dart';
 import 'package:pauzr/src/atp/themes/black/edit_profile.dart';
 import 'package:pauzr/src/atp/themes/black/gradient_color.dart';
@@ -69,8 +67,6 @@ class Black implements DefaultTheme {
   EditProfile editProfile = editProfileTheme;
   @override
   ViewProfile viewProfile = viewProfileTheme;
-  @override
-  BottomNavigation bottomNavigation = bottomNavigationTheme;
   @override
   MainScoreboard mainScoreboard = mainScoreboardTheme;
   @override

@@ -3,5 +3,8 @@ import 'package:pauzr/src/atp/screens/timer.dart';
 
 Timer timerTheme = Timer(
   backgroundColor: Colors.black,
-  quoteBackgroundColor: Color(0xffB22222),
+  quoteBackgroundColor: Colors.black,
+  navigationBackgroundColor: Colors.blue,
+  navigationButtonBackgroundColor: Colors.blue,
+  navigationColor: Colors.blue,
 );

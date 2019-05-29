@@ -2,6 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/atp/screens/home.dart';
+import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
+import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -53,6 +56,29 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
     }
   }
 
+  getTabsTheme(DefaultTheme theme) {
+    Home home = theme.home;
+    Timer timer = theme.timer;
+    MainScoreboard mainScoreboard = theme.mainScoreboard;
+
+    switch (showTabIndex) {
+      case 0:
+        return home;
+        break;
+
+      case 1:
+        return timer;
+        break;
+
+      case 2:
+        return mainScoreboard;
+        break;
+
+      default:
+        return timer;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -77,15 +103,16 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   }
 
   Container getNavigationBar(context, DefaultTheme theme) {
+    var data = getTabsTheme(theme);
+
     return Container(
       color: Colors.transparent,
       height: 50.0,
       child: CurvedNavigationBar(
         initialIndex: 1,
-        color: theme.bottomNavigation.navigationColor,
-        backgroundColor: theme.tabs.backgroundColor,
-        buttonBackgroundColor:
-            theme.bottomNavigation.navigationButtonBackgroundColor,
+        color: data.navigationColor,
+        backgroundColor: data.navigationBackgroundColor,
+        buttonBackgroundColor: data.navigationButtonBackgroundColor,
         animationCurve: Curves.easeOutCubic,
         animationDuration: Duration(milliseconds: 500),
         onTap: (index) {

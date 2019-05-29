@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/atp/screens/bottom_navigation.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
 import 'package:pauzr/src/atp/screens/gradient_color.dart';
@@ -40,7 +39,6 @@ class DefaultTheme {
   Timer timer;
   Tabs tabs;
   DrawerMenu drawerMenu;
-  BottomNavigation bottomNavigation;
   RequestOtp requestOtp;
   VerifyOtp verifyOtp;
   EditProfile editProfile;
@@ -64,7 +62,6 @@ class DefaultTheme {
     @required this.timer,
     @required this.tabs,
     @required this.drawerMenu,
-    @required this.bottomNavigation,
     @required this.requestOtp,
     @required this.verifyOtp,
     @required this.editProfile,
@@ -92,7 +89,6 @@ class DefaultTheme {
       timer: theme.timer,
       tabs: theme.tabs,
       drawerMenu: theme.drawerMenu,
-      bottomNavigation: theme.bottomNavigation,
       requestOtp: theme.requestOtp,
       verifyOtp: theme.verifyOtp,
       editProfile: theme.editProfile,
