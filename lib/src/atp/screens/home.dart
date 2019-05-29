@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-class Tabs {
+class Home {
   Color backgroundColor;
-  Color appBarBackgroundColor;
 
-  Tabs({
+  Home({
     @required this.backgroundColor,
-    @required this.appBarBackgroundColor,
   });
 
-  factory Tabs.initial() {
-    return Tabs(
+  factory Home.initial() {
+    return Home(
       backgroundColor: Colors.black,
-      appBarBackgroundColor: Colors.black,
     );
   }
 }

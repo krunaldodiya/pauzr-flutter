@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-class Tabs {
+class ViewProfile {
   Color backgroundColor;
-  Color appBarBackgroundColor;
 
-  Tabs({
+  ViewProfile({
     @required this.backgroundColor,
-    @required this.appBarBackgroundColor,
   });
 
-  factory Tabs.initial() {
-    return Tabs(
+  factory ViewProfile.initial() {
+    return ViewProfile(
       backgroundColor: Colors.black,
-      appBarBackgroundColor: Colors.black,
     );
   }
 }
