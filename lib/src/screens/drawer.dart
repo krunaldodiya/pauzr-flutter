@@ -9,13 +9,26 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share/share.dart';
 
-class DrawerPage extends StatelessWidget {
+class DrawerPage extends StatefulWidget {
   final User user;
   const DrawerPage({Key key, @required this.user}) : super(key: key);
 
   @override
+  _DrawerPageState createState() => _DrawerPageState();
+}
+
+class _DrawerPageState extends State<DrawerPage> {
+  ThemeBloc themeBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    themeBloc = Provider.of<ThemeBloc>(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final DefaultTheme theme = themeBloc.theme;
 
     return Container(
@@ -24,14 +37,14 @@ class DrawerPage extends StatelessWidget {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              user.name.toUpperCase(),
+              widget.user.name.toUpperCase(),
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: Fonts.titilliumWebSemiBold,
               ),
             ),
             accountEmail: Text(
-              user.email,
+              widget.user.email,
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: Fonts.titilliumWebRegular,
@@ -40,7 +53,7 @@ class DrawerPage extends StatelessWidget {
             currentAccountPicture: Container(
               child: ClipOval(
                 child: Image.network(
-                  "$baseUrl/users/${user.avatar}",
+                  "$baseUrl/users/${widget.user.avatar}",
                   width: 60.0,
                   height: 60.0,
                   fit: BoxFit.cover,

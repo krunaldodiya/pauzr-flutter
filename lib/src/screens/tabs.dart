@@ -2,19 +2,14 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/atp/screens/home.dart';
-import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
-import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/tabs.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/drawer.dart';
-import 'package:pauzr/src/screens/tabs/home.dart';
-import 'package:pauzr/src/screens/tabs/scoreboard.dart';
-import 'package:pauzr/src/screens/tabs/timer.dart';
 import 'package:provider/provider.dart';
 
 class TabsPage extends StatefulWidget {
@@ -37,48 +32,6 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
     });
   }
 
-  Widget getTabsPage() {
-    switch (showTabIndex) {
-      case 0:
-        return HomePage();
-        break;
-
-      case 1:
-        return TimerPage();
-        break;
-
-      case 2:
-        return ScoreboardPage();
-        break;
-
-      default:
-        return TimerPage();
-    }
-  }
-
-  getTabsTheme(DefaultTheme theme) {
-    Home home = theme.home;
-    Timer timer = theme.timer;
-    MainScoreboard mainScoreboard = theme.mainScoreboard;
-
-    switch (showTabIndex) {
-      case 0:
-        return home;
-        break;
-
-      case 1:
-        return timer;
-        break;
-
-      case 2:
-        return mainScoreboard;
-        break;
-
-      default:
-        return timer;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -88,7 +41,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
       backgroundColor: theme.tabs.backgroundColor,
       appBar: getAppBar(context, theme),
       body: SafeArea(
-        child: getTabsPage(),
+        child: getTabsPage(showTabIndex),
       ),
       bottomNavigationBar: getNavigationBar(context, theme),
       drawer: BlocBuilder(
@@ -103,7 +56,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   }
 
   Container getNavigationBar(context, DefaultTheme theme) {
-    var data = getTabsTheme(theme);
+    var data = getTabsTheme(showTabIndex, theme);
 
     return Container(
       color: Colors.transparent,
@@ -142,8 +95,6 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   }
 
   AppBar getAppBar(BuildContext context, DefaultTheme theme) {
-    print(theme.tabs.appBarBackgroundColor);
-
     return AppBar(
       elevation: 0.5,
       backgroundColor: theme.tabs.appBarBackgroundColor,

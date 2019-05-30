@@ -15,9 +15,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ThemeBloc themeBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      themeBloc = Provider.of<ThemeBloc>(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(

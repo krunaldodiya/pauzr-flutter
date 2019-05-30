@@ -25,6 +25,7 @@ class GroupDetailPage extends StatefulWidget {
 }
 
 class _GroupDetailPage extends State<GroupDetailPage> {
+  ThemeBloc themeBloc;
   UserBloc userBloc;
   GroupBloc groupBloc;
 
@@ -35,12 +36,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     setState(() {
       userBloc = BlocProvider.of<UserBloc>(context);
       groupBloc = BlocProvider.of<GroupBloc>(context);
+      themeBloc = Provider.of<ThemeBloc>(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(

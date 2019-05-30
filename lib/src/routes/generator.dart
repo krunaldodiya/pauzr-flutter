@@ -3,7 +3,7 @@ import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/group/manage_group.dart';
 import 'package:pauzr/src/screens/group/detail.dart';
 import 'package:pauzr/src/screens/group/participants.dart';
-import 'package:pauzr/src/screens/group/scoreboard.dart';
+import 'package:pauzr/src/screens/group/group_scoreboard.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/levels/info.dart';
@@ -61,7 +61,7 @@ class RouteGenerator {
       case routeList.scoreboard:
         return MaterialPageRoute(
           builder: (context) {
-            return ScoreboardPage(
+            return GroupScoreboardPage(
               group: args['group'],
             );
           },
