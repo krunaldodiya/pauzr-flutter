@@ -1,12 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/otp/bloc.dart';
-import 'package:pauzr/src/blocs/otp/event.dart';
-import 'package:pauzr/src/blocs/otp/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
+import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
@@ -21,20 +17,26 @@ class RequestOtpPage extends StatefulWidget {
 }
 
 class _RequestOtpPage extends State<RequestOtpPage> {
-  OtpBloc otpBloc;
-
   @override
-  void initState() {
-    setState(() {
-      otpBloc = BlocProvider.of<OtpBloc>(context);
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    super.initState();
+    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
+
+    if (otpBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (otpBloc.loading == false) {
+      XsProgressHud.hide();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -71,43 +73,31 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                     ),
                   ),
                 ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return EditableFormField(
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      controller: null,
-                      labelText: "Mobile Number",
-                      errorText: getErrorText(state.error, 'mobile'),
-                      onChanged: otpBloc.onChangeMobile,
-                    );
-                  },
+                EditableFormField(
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  labelText: "Mobile Number",
+                  errorText: getErrorText(otpBloc.error, 'mobile'),
+                  onChanged: otpBloc.onChangeMobile,
                 ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return FlatButton(
-                      onPressed: onSubmit,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Text(
-                        "SEND OTP",
-                        style: TextStyle(
-                          color: state.mobile != null && state.error != null
-                              ? Colors.white
-                              : Colors.white30,
-                          fontFamily: Fonts.titilliumWebRegular,
-                        ),
-                      ),
-                      color: state.mobile != null && state.error != null
-                          ? Colors.red
-                          : Colors.grey,
-                    );
+                FlatButton(
+                  onPressed: () {
+                    if (otpBloc.isValidMobile == true) onRequestOtp(otpBloc);
                   },
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Text(
+                    "SEND OTP",
+                    style: TextStyle(
+                      color:
+                          otpBloc.isValidMobile ? Colors.white : Colors.white30,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
+                  color: otpBloc.isValidMobile ? Colors.red : Colors.grey,
                 ),
               ],
             ),
@@ -117,15 +107,11 @@ class _RequestOtpPage extends State<RequestOtpPage> {
     );
   }
 
-  void onSubmit() {
-    XsProgressHud.show(context);
+  onRequestOtp(OtpBloc otpBloc) async {
+    await otpBloc.requestOtp();
 
-    otpBloc.requestOtp((data) {
-      XsProgressHud.hide();
-
-      if (data.runtimeType != DioError) {
-        return Navigator.pushReplacementNamed(context, routeList.verify_otp);
-      }
-    });
+    if (otpBloc.serverOtp != null) {
+      return Navigator.pushReplacementNamed(context, routeList.verify_otp);
+    }
   }
 }

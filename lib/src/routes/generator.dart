@@ -202,8 +202,8 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return InitialScreen(
+              authUser: args['authUser'],
               authToken: args['authToken'],
-              defaultTheme: args['defaultTheme'],
             );
           },
         );

@@ -1,16 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
-import 'package:pauzr/src/blocs/otp/bloc.dart';
-import 'package:pauzr/src/blocs/otp/event.dart';
-import 'package:pauzr/src/blocs/otp/state.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
-import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
 import 'package:provider/provider.dart';
@@ -24,24 +18,27 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
-  OtpBloc otpBloc;
-  UserBloc userBloc;
-  InitialScreenBloc initialScreenBloc;
-
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    setState(() {
-      otpBloc = BlocProvider.of<OtpBloc>(context);
-      userBloc = BlocProvider.of<UserBloc>(context);
-      initialScreenBloc = BlocProvider.of<InitialScreenBloc>(context);
-    });
+    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
+
+    if (otpBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (otpBloc.loading == false) {
+      XsProgressHud.hide();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -65,77 +62,56 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
                     ),
                   ),
                 ),
-                BlocBuilder(
-                  bloc: otpBloc,
-                  builder: (context, state) {
-                    return Container(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text(
-                        "Please enter verification code send to ${state.mobile}",
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontFamily: Fonts.titilliumWebRegular,
-                        ),
-                      ),
-                    );
-                  },
+                Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    "Please enter verification code send to ${otpBloc.mobile}",
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.white,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
                 ),
-                BlocBuilder(
-                  bloc: otpBloc,
-                  builder: (context, OtpState state) {
-                    return FlatButton(
-                      onPressed: onResendOtp,
-                      child: Text(
-                        "Resend OTP",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.red,
-                          fontFamily: Fonts.titilliumWebSemiBold,
-                        ),
-                      ),
-                    );
-                  },
+                FlatButton(
+                  onPressed: otpBloc.requestOtp,
+                  child: Text(
+                    "Resend OTP",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.red,
+                      fontFamily: Fonts.titilliumWebSemiBold,
+                    ),
+                  ),
                 ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return EditableFormField(
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      controller: null,
-                      labelText: "OTP",
-                      errorText: getErrorText(state.error, 'otp'),
-                      onChanged: otpBloc.onChangeOtp,
-                    );
-                  },
+                EditableFormField(
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  controller: null,
+                  labelText: "OTP",
+                  errorText: getErrorText(otpBloc.error, 'otp'),
+                  onChanged: otpBloc.onChangeClientOtp,
                 ),
-                BlocBuilder<OtpEvent, OtpState>(
-                  bloc: otpBloc,
-                  builder: (BuildContext context, OtpState state) {
-                    return FlatButton(
-                      onPressed: onVerifyOtp,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0, vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Text(
-                        "VERIFY OTP",
-                        style: TextStyle(
-                          color: state.clientOtp != null && state.error != null
-                              ? Colors.white
-                              : Colors.white30,
-                          fontFamily: Fonts.titilliumWebRegular,
-                        ),
-                      ),
-                      color: state.clientOtp != null && state.error != null
-                          ? Colors.red
-                          : Colors.grey,
-                    );
+                FlatButton(
+                  onPressed: () {
+                    if (otpBloc.isValidMobile == true)
+                      onVerifyOtp(otpBloc, userBloc);
                   },
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: Text(
+                    "VERIFY OTP",
+                    style: TextStyle(
+                      color: otpBloc.isValidOtp ? Colors.white : Colors.white30,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
+                  color: otpBloc.isValidOtp ? Colors.red : Colors.grey,
                 ),
                 Container(height: 10.0),
               ],
@@ -146,40 +122,23 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     );
   }
 
-  void onResendOtp() {
-    XsProgressHud.show(context);
+  void onVerifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
+    await otpBloc.verifyOtp(userBloc);
 
-    otpBloc.requestOtp((data) {
-      XsProgressHud.hide();
-    });
-  }
-
-  void onVerifyOtp() {
-    XsProgressHud.show(context);
-
-    otpBloc.verifyOtp((data) {
-      XsProgressHud.hide();
-
-      if (data.runtimeType != DioError) {
-        User user = User.fromMap(data['user']);
-
-        userBloc.setAuthToken(data['access_token']);
-        userBloc.setAuthUser(data['user']);
-
-        if (user.status == 1) {
-          return Navigator.of(context).pushReplacementNamed(
-            routeList.tab,
-            arguments: null,
-          );
-        }
-
-        if (user.status == 0) {
-          return Navigator.of(context).pushReplacementNamed(
-            routeList.edit_profile,
-            arguments: {"shouldPop": false},
-          );
-        }
+    if (userBloc.user != null) {
+      if (userBloc.user.status == 1) {
+        Navigator.of(context).pushReplacementNamed(
+          routeList.tab,
+          arguments: null,
+        );
       }
-    });
+
+      if (userBloc.user.status == 0) {
+        Navigator.of(context).pushReplacementNamed(
+          routeList.edit_profile,
+          arguments: {"shouldPop": false},
+        );
+      }
+    }
   }
 }
