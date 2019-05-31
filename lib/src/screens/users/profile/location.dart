@@ -100,6 +100,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
                             userBloc.onChangeData(
                               "location",
                               location.city,
+                              userBloc.user,
                             );
                             Navigator.of(context).pop(location);
                           },

@@ -12,8 +12,8 @@ class UserBloc extends ChangeNotifier {
   Map error;
   User user;
 
-  onChangeData(String key, String value) {
-    value = key.length > 0 ? key : null;
+  onChangeData(String key, String value, User userData) {
+    user = userData.copyWith({key: key.length > 0 ? key : null});
     error = null;
 
     notifyListeners();

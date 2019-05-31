@@ -47,7 +47,13 @@ class _ChooseGenderState extends State<ChooseGender> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => userBloc.onChangeData("gender", "Male"),
+                    onTap: () {
+                      userBloc.onChangeData(
+                        "gender",
+                        "Male",
+                        userBloc.user,
+                      );
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(20.0),
@@ -62,7 +68,13 @@ class _ChooseGenderState extends State<ChooseGender> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => userBloc.onChangeData("gender", "Female"),
+                    onTap: () {
+                      userBloc.onChangeData(
+                        "gender",
+                        "Female",
+                        userBloc.user,
+                      );
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(20.0),

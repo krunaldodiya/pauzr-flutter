@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,14 +46,16 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   getInitialData() {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    Future.delayed(Duration(seconds: 1), () {
+      final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-    nameController.text = userBloc.user.name;
-    emailController.text = userBloc.user.email;
-    dobController.text = userBloc.user.dob;
-    genderController.text = userBloc.user.gender;
-    locationController.text = userBloc.user.location.city;
-    professionController.text = userBloc.user.profession.name;
+      nameController.text = userBloc.user.name;
+      emailController.text = userBloc.user.email;
+      dobController.text = userBloc.user.dob;
+      genderController.text = userBloc.user.gender;
+      locationController.text = userBloc.user.location.city;
+      professionController.text = userBloc.user.profession.name;
+    });
   }
 
   Widget getLeadingIcon() {
@@ -117,7 +121,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                 labelText: "Full Name",
                 errorText: getErrorText(userBloc.error, 'name'),
                 onChanged: (name) {
-                  userBloc.onChangeData("name", name);
+                  userBloc.onChangeData("name", name, userBloc.user);
                 },
               ),
               EditableFormField(
@@ -125,7 +129,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                 labelText: "Email Address",
                 errorText: getErrorText(userBloc.error, 'email'),
                 onChanged: (email) {
-                  userBloc.onChangeData("email", email);
+                  userBloc.onChangeData("email", email, userBloc.user);
                 },
               ),
               GestureDetector(
@@ -149,7 +153,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                   if (dob != null) {
                     String formattedDob = DateFormat('dd-MM-yyyy').format(dob);
                     setState(() => dobController.text = formattedDob);
-                    userBloc.onChangeData("dob", formattedDob);
+                    userBloc.onChangeData("dob", formattedDob, userBloc.user);
                   }
                 },
                 child: TappableFormField(

@@ -36,11 +36,13 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
   }
 
   getInitialData() {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    Future.delayed(Duration(seconds: 1), () {
+      final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-    if (userBloc.user.id == widget.group['owner_id']) {
-      choices.add("Edit Group");
-    }
+      if (userBloc.user.id == widget.group['owner_id']) {
+        choices.add("Edit Group");
+      }
+    });
   }
 
   @override

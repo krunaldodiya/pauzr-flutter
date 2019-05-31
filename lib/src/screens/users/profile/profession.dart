@@ -100,6 +100,7 @@ class _ChooseProfessionState extends State<ChooseProfession> {
                             userBloc.onChangeData(
                               "profession",
                               profession.name,
+                              userBloc.user,
                             );
                             Navigator.of(context).pop(profession);
                           },
