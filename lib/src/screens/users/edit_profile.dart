@@ -1,17 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/event.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/location.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
@@ -32,8 +29,6 @@ class _EditProfilePage extends State<EditProfilePage> {
   ApiProvider apiProvider = ApiProvider();
   bool loading = false;
 
-  UserBloc userBloc;
-
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -45,16 +40,18 @@ class _EditProfilePage extends State<EditProfilePage> {
   void initState() {
     super.initState();
 
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
+    getInitialData();
+  }
 
-    nameController.text = userBloc.currentState.user.name;
-    emailController.text = userBloc.currentState.user.email;
-    dobController.text = userBloc.currentState.user.dob;
-    genderController.text = userBloc.currentState.user.gender;
-    locationController.text = userBloc.currentState.user.location.city;
-    professionController.text = userBloc.currentState.user.profession.name;
+  getInitialData() {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
+    nameController.text = userBloc.user.name;
+    emailController.text = userBloc.user.email;
+    dobController.text = userBloc.user.dob;
+    genderController.text = userBloc.user.gender;
+    locationController.text = userBloc.user.location.city;
+    professionController.text = userBloc.user.profession.name;
   }
 
   Widget getLeadingIcon() {
@@ -73,6 +70,8 @@ class _EditProfilePage extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -91,7 +90,9 @@ class _EditProfilePage extends State<EditProfilePage> {
         leading: getLeadingIcon(),
         actions: <Widget>[
           FlatButton(
-            onPressed: onSubmit,
+            onPressed: () {
+              onSubmit(userBloc);
+            },
             child: Text(
               "SUBMIT",
               style: TextStyle(
@@ -110,36 +111,26 @@ class _EditProfilePage extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(height: 20.0),
-              if (widget.shouldPop == true) photoUpload(),
-              BlocBuilder(
-                bloc: userBloc,
-                builder: (context, state) {
-                  return EditableFormField(
-                    controller: nameController,
-                    labelText: "Full Name",
-                    errorText: getErrorText(state.error, 'name'),
-                    onChanged: (name) {
-                      userBloc.updateState("name", name);
-                    },
-                  );
+              if (widget.shouldPop == true) photoUpload(userBloc),
+              EditableFormField(
+                controller: nameController,
+                labelText: "Full Name",
+                errorText: getErrorText(userBloc.error, 'name'),
+                onChanged: (name) {
+                  userBloc.onChangeData("name", name);
                 },
               ),
-              BlocBuilder(
-                bloc: userBloc,
-                builder: (context, state) {
-                  return EditableFormField(
-                    controller: emailController,
-                    labelText: "Email Address",
-                    errorText: getErrorText(state.error, 'email'),
-                    onChanged: (email) {
-                      userBloc.updateState("email", email);
-                    },
-                  );
+              EditableFormField(
+                controller: emailController,
+                labelText: "Email Address",
+                errorText: getErrorText(userBloc.error, 'email'),
+                onChanged: (email) {
+                  userBloc.onChangeData("email", email);
                 },
               ),
               GestureDetector(
                 onTap: () async {
-                  final String userDob = userBloc.currentState.user.dob;
+                  final String userDob = userBloc.user.dob;
                   List dateList = userDob.split("-");
                   DateTime intialDob = DateTime(
                     int.parse(dateList[2]),
@@ -158,18 +149,13 @@ class _EditProfilePage extends State<EditProfilePage> {
                   if (dob != null) {
                     String formattedDob = DateFormat('dd-MM-yyyy').format(dob);
                     setState(() => dobController.text = formattedDob);
-                    userBloc.updateState("dob", formattedDob);
+                    userBloc.onChangeData("dob", formattedDob);
                   }
                 },
-                child: BlocBuilder(
-                  bloc: userBloc,
-                  builder: (context, state) {
-                    return TappableFormField(
-                      controller: dobController,
-                      labelText: "Date of Birth",
-                      errorText: getErrorText(state.error, "dob"),
-                    );
-                  },
+                child: TappableFormField(
+                  controller: dobController,
+                  labelText: "Date of Birth",
+                  errorText: getErrorText(userBloc.error, "dob"),
                 ),
               ),
               GestureDetector(
@@ -186,15 +172,10 @@ class _EditProfilePage extends State<EditProfilePage> {
                     print(onError);
                   });
                 },
-                child: BlocBuilder(
-                  bloc: userBloc,
-                  builder: (context, state) {
-                    return TappableFormField(
-                      controller: genderController,
-                      labelText: "Gender",
-                      errorText: getErrorText(state.error, "gender"),
-                    );
-                  },
+                child: TappableFormField(
+                  controller: genderController,
+                  labelText: "Gender",
+                  errorText: getErrorText(userBloc.error, "gender"),
                 ),
               ),
               GestureDetector(
@@ -212,15 +193,10 @@ class _EditProfilePage extends State<EditProfilePage> {
                     print(onError);
                   });
                 },
-                child: BlocBuilder(
-                  bloc: userBloc,
-                  builder: (context, state) {
-                    return TappableFormField(
-                      controller: locationController,
-                      labelText: "Location",
-                      errorText: getErrorText(state.error, "location_id"),
-                    );
-                  },
+                child: TappableFormField(
+                  controller: locationController,
+                  labelText: "Location",
+                  errorText: getErrorText(userBloc.error, "location_id"),
                 ),
               ),
             ],
@@ -230,34 +206,31 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
   }
 
-  BlocBuilder<UserEvent, UserState> photoUpload() {
-    return BlocBuilder(
-      bloc: userBloc,
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: uploadImage,
-          child: Container(
-            height: 120.0,
-            width: 120.0,
-            margin: EdgeInsets.only(bottom: 20.0),
-            child: ClipOval(
-              child: loading == false
-                  ? Image.network(
-                      "$baseUrl/users/${state.user.avatar}",
-                      width: 120.0,
-                      height: 120.0,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                    )
-                  : CircularProgressIndicator(),
-            ),
-          ),
-        );
+  photoUpload(userBloc) {
+    return GestureDetector(
+      onTap: () {
+        uploadImage(userBloc);
       },
+      child: Container(
+        height: 120.0,
+        width: 120.0,
+        margin: EdgeInsets.only(bottom: 20.0),
+        child: ClipOval(
+          child: loading == false
+              ? Image.network(
+                  "$baseUrl/users/${userBloc.user.avatar}",
+                  width: 120.0,
+                  height: 120.0,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                )
+              : CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 
-  void onSubmit() {
+  void onSubmit(userBloc) {
     XsProgressHud.show(context);
 
     userBloc.updateProfile((data) {
@@ -273,7 +246,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     });
   }
 
-  void uploadImage() async {
+  void uploadImage(userBloc) async {
     final file = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {

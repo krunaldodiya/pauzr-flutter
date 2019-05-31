@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/location/bloc.dart';
 import 'package:pauzr/src/blocs/location/state.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/models/location.dart';
+import 'package:pauzr/src/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class ChooseLocation extends StatefulWidget {
   @override
@@ -13,7 +14,6 @@ class ChooseLocation extends StatefulWidget {
 
 class _ChooseLocationState extends State<ChooseLocation> {
   LocationBloc _locationBloc;
-  UserBloc _userBloc;
   String keywords;
 
   @override
@@ -22,7 +22,6 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
     setState(() {
       _locationBloc = BlocProvider.of<LocationBloc>(context);
-      _userBloc = BlocProvider.of<UserBloc>(context);
     });
 
     if (_locationBloc.currentState.loaded == false) {
@@ -32,6 +31,8 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.black87,
       body: SafeArea(
@@ -96,7 +97,10 @@ class _ChooseLocationState extends State<ChooseLocation> {
                         final Location location = locations[index];
                         return GestureDetector(
                           onTap: () {
-                            _userBloc.updateState("location", location);
+                            userBloc.onChangeData(
+                              "location",
+                              location.city,
+                            );
                             Navigator.of(context).pop(location);
                           },
                           child: Container(

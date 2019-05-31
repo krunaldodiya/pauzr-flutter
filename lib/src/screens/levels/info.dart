@@ -1,12 +1,10 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/levels/info_card.dart';
 import 'package:pauzr/src/screens/levels/levels.dart';
 import 'package:pauzr/src/screens/levels/main_card.dart';
@@ -21,20 +19,11 @@ class LevelsPage extends StatefulWidget {
 
 class _LevelsPage extends State<LevelsPage>
     with SingleTickerProviderStateMixin {
-  UserBloc userBloc;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -63,19 +52,14 @@ class _LevelsPage extends State<LevelsPage>
             itemBuilder: (context, int index) {
               final level = levels[index];
 
-              return BlocBuilder(
-                bloc: userBloc,
-                builder: (context, UserState state) {
-                  return FlipCard(
-                    direction: FlipDirection.VERTICAL,
-                    front: Container(
-                      child: getMainCard(level, state.user),
-                    ),
-                    back: Container(
-                      child: getInfoCard(level, state.user),
-                    ),
-                  );
-                },
+              return FlipCard(
+                direction: FlipDirection.VERTICAL,
+                front: Container(
+                  child: getMainCard(level, userBloc.user),
+                ),
+                back: Container(
+                  child: getInfoCard(level, userBloc.user),
+                ),
               );
             },
           ),

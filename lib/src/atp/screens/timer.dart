@@ -4,6 +4,8 @@ import 'package:meta/meta.dart';
 class Timer {
   Color backgroundColor;
   Color quoteBackgroundColor;
+  Color cardTopBackgroundColor;
+  Color cardBottomBackgroundColor;
   Color navigationBackgroundColor;
   Color navigationColor;
   Color navigationButtonBackgroundColor;
@@ -11,6 +13,8 @@ class Timer {
   Timer({
     @required this.backgroundColor,
     @required this.quoteBackgroundColor,
+    @required this.cardTopBackgroundColor,
+    @required this.cardBottomBackgroundColor,
     @required this.navigationBackgroundColor,
     @required this.navigationColor,
     @required this.navigationButtonBackgroundColor,
@@ -20,6 +24,8 @@ class Timer {
     return Timer(
       backgroundColor: Colors.black,
       quoteBackgroundColor: Colors.black,
+      cardTopBackgroundColor: Colors.black,
+      cardBottomBackgroundColor: Colors.black,
       navigationBackgroundColor: Colors.black,
       navigationColor: Colors.black,
       navigationButtonBackgroundColor: Colors.black,

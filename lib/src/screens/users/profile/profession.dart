@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/profession/bloc.dart';
 import 'package:pauzr/src/blocs/profession/state.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/models/profession.dart';
+import 'package:pauzr/src/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class ChooseProfession extends StatefulWidget {
   @override
@@ -13,7 +14,6 @@ class ChooseProfession extends StatefulWidget {
 
 class _ChooseProfessionState extends State<ChooseProfession> {
   ProfessionBloc _professionBloc;
-  UserBloc _userBloc;
   String keywords;
 
   @override
@@ -22,7 +22,6 @@ class _ChooseProfessionState extends State<ChooseProfession> {
 
     setState(() {
       _professionBloc = BlocProvider.of<ProfessionBloc>(context);
-      _userBloc = BlocProvider.of<UserBloc>(context);
     });
 
     if (_professionBloc.currentState.loaded == false) {
@@ -32,6 +31,8 @@ class _ChooseProfessionState extends State<ChooseProfession> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.black87,
       body: SafeArea(
@@ -96,7 +97,10 @@ class _ChooseProfessionState extends State<ChooseProfession> {
                         final Profession profession = professions[index];
                         return GestureDetector(
                           onTap: () {
-                            _userBloc.updateState("profession", profession);
+                            userBloc.onChangeData(
+                              "profession",
+                              profession.name,
+                            );
                             Navigator.of(context).pop(profession);
                           },
                           child: Container(

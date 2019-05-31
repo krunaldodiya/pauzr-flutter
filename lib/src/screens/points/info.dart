@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -19,17 +16,6 @@ class PointsPage extends StatefulWidget {
 
 class _PointsPage extends State<PointsPage>
     with SingleTickerProviderStateMixin {
-  UserBloc userBloc;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -74,20 +60,10 @@ class _PointsPage extends State<PointsPage>
     return Row(
       children: <Widget>[
         Expanded(
-          child: BlocBuilder(
-            bloc: userBloc,
-            builder: (context, UserState state) {
-              return getCard(body['sum'].toString(), "All Time Saving", theme);
-            },
-          ),
+          child: getCard(body['sum'].toString(), "All Time Saving", theme),
         ),
         Expanded(
-          child: BlocBuilder(
-            bloc: userBloc,
-            builder: (context, UserState state) {
-              return getCard(body['avg'].toString(), "Average per day", theme);
-            },
-          ),
+          child: getCard(body['avg'].toString(), "Average per day", theme),
         ),
       ],
     );

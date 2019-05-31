@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class ChooseGender extends StatefulWidget {
   @override
@@ -10,19 +9,10 @@ class ChooseGender extends StatefulWidget {
 }
 
 class _ChooseGenderState extends State<ChooseGender> {
-  UserBloc _userBloc;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      _userBloc = BlocProvider.of<UserBloc>(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     return Scaffold(
         backgroundColor: Colors.black87,
         body: SafeArea(
@@ -53,45 +43,40 @@ class _ChooseGenderState extends State<ChooseGender> {
                 ),
               ),
               Container(height: 50.0),
-              BlocBuilder(
-                bloc: _userBloc,
-                builder: (context, UserState state) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () => _userBloc.updateState("gender", "Male"),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(20.0),
-                          child: Opacity(
-                            opacity: state.user.gender == "Male" ? 1 : 0.4,
-                            child: Image.asset(
-                              "assets/images/man.png",
-                              width: 120.0,
-                              height: 120.0,
-                            ),
-                          ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => userBloc.onChangeData("gender", "Male"),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(20.0),
+                      child: Opacity(
+                        opacity: userBloc.user.gender == "Male" ? 1 : 0.4,
+                        child: Image.asset(
+                          "assets/images/man.png",
+                          width: 120.0,
+                          height: 120.0,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => _userBloc.updateState("gender", "Female"),
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(20.0),
-                          child: Opacity(
-                            opacity: state.user.gender == "Female" ? 1 : 0.4,
-                            child: Image.asset(
-                              "assets/images/woman.png",
-                              width: 120.0,
-                              height: 120.0,
-                            ),
-                          ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => userBloc.onChangeData("gender", "Female"),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(20.0),
+                      child: Opacity(
+                        opacity: userBloc.user.gender == "Female" ? 1 : 0.4,
+                        child: Image.asset(
+                          "assets/images/woman.png",
+                          width: 120.0,
+                          height: 120.0,
                         ),
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               ),
               Container(height: 50.0),
               Container(
@@ -112,9 +97,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop(
-                      _userBloc.currentState.user.gender,
-                    );
+                    Navigator.of(context).pop(userBloc.user.gender);
                   },
                 ),
               ),
@@ -131,9 +114,7 @@ class _ChooseGenderState extends State<ChooseGender> {
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop(
-                      _userBloc.currentState.user.gender,
-                    );
+                    Navigator.of(context).pop(userBloc.user.gender);
                   },
                 ),
               ),

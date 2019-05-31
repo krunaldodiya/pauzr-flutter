@@ -1,13 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
-import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/components/rankings.dart';
+import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
@@ -22,18 +20,7 @@ class MainScoreboardPage extends StatefulWidget {
 
 class _MainScoreboardPage extends State<MainScoreboardPage>
     with SingleTickerProviderStateMixin {
-  UserBloc userBloc;
-
   String period = "Today";
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
-  }
 
   @override
   void dispose() {
@@ -43,6 +30,8 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -94,50 +83,45 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             final Response response = snapshot.data;
             final results = response.data;
 
-            return BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          getSwitch(
-                            items: ["Today", "This Week", "This Month"],
-                            selected: period,
-                            onSelect: (index, value) {
-                              setState(() {
-                                period = value;
-                              });
-                            },
-                            theme: theme,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(5.0),
-                            child: getCards(results, theme),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: Text(
-                              "City: ${state.user.location.city}",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22.0,
-                                fontFamily: Fonts.titilliumWebRegular,
-                              ),
-                            ),
-                          ),
-                        ],
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      getSwitch(
+                        items: ["Today", "This Week", "This Month"],
+                        selected: period,
+                        onSelect: (index, value) {
+                          setState(() {
+                            period = value;
+                          });
+                        },
+                        theme: theme,
                       ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        Ranking(user: state.user, results: results).getList(),
+                      Container(
+                        margin: EdgeInsets.all(5.0),
+                        child: getCards(results, userBloc, theme),
                       ),
-                    ),
-                  ],
-                );
-              },
+                      Container(
+                        margin: EdgeInsets.all(10.0),
+                        child: Text(
+                          "City: ${userBloc.user.location.city}",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22.0,
+                            fontFamily: Fonts.titilliumWebRegular,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    Ranking(user: userBloc.user, results: results).getList(),
+                  ),
+                ),
+              ],
             );
           },
         ),
@@ -145,7 +129,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
     );
   }
 
-  getCards(results, theme) {
+  getCards(results, UserBloc userBloc, theme) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -153,15 +137,10 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             onTap: () {
               Navigator.pushNamed(context, routeList.minutes);
             },
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return getCard(
-                  results['minutes_saved'].toString(),
-                  "Minutes Saved",
-                  theme,
-                );
-              },
+            child: getCard(
+              results['minutes_saved'].toString(),
+              "Minutes Saved",
+              theme,
             ),
           ),
         ),
@@ -170,15 +149,10 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             onTap: () {
               Navigator.pushNamed(context, routeList.points);
             },
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return getCard(
-                  results['points_earned'].toString(),
-                  "Points Earned",
-                  theme,
-                );
-              },
+            child: getCard(
+              results['points_earned'].toString(),
+              "Points Earned",
+              theme,
             ),
           ),
         ),
@@ -187,12 +161,10 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             onTap: () {
               Navigator.pushNamed(context, routeList.levels);
             },
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return getCard(
-                    "${state.user.level}/10", "Levels Cleared", theme);
-              },
+            child: getCard(
+              "${userBloc.user.level}/10",
+              "Levels Cleared",
+              theme,
             ),
           ),
         ),

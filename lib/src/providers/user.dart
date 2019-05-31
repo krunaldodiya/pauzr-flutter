@@ -12,6 +12,13 @@ class UserBloc extends ChangeNotifier {
   Map error;
   User user;
 
+  onChangeData(String key, String value) {
+    value = key.length > 0 ? key : null;
+    error = null;
+
+    notifyListeners();
+  }
+
   updateProfile() async {
     loading = true;
 

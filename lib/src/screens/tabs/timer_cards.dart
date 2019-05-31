@@ -10,7 +10,7 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
         Container(
           height: 80.0,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.timer.cardTopBackgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(5.0),
               topRight: Radius.circular(5.0),
@@ -31,7 +31,7 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
         Container(
           height: 42.0,
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
+            color: theme.timer.cardBottomBackgroundColor,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(5.0),
               bottomRight: Radius.circular(5.0),

@@ -1,14 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/components/rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
@@ -24,8 +22,6 @@ class GroupScoreboardPage extends StatefulWidget {
 
 class _GroupScoreboardPage extends State<GroupScoreboardPage>
     with SingleTickerProviderStateMixin {
-  UserBloc userBloc;
-
   String period = "Today";
 
   List choices = [];
@@ -34,13 +30,15 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
   void initState() {
     super.initState();
 
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
-
     choices.add("Group Info");
 
-    if (userBloc.currentState.user.id == widget.group['owner_id']) {
+    getInitialData();
+  }
+
+  getInitialData() {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
+    if (userBloc.user.id == widget.group['owner_id']) {
       choices.add("Edit Group");
     }
   }
@@ -53,6 +51,8 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -173,35 +173,30 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
             final Response response = snapshot.data;
             final results = response.data;
 
-            return BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          getSwitch(
-                            items: ["Today", "This Week", "This Month"],
-                            selected: period,
-                            onSelect: (index, value) {
-                              setState(() {
-                                period = value;
-                              });
-                            },
-                            theme: theme,
-                          ),
-                        ],
+            return CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      getSwitch(
+                        items: ["Today", "This Week", "This Month"],
+                        selected: period,
+                        onSelect: (index, value) {
+                          setState(() {
+                            period = value;
+                          });
+                        },
+                        theme: theme,
                       ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        Ranking(user: state.user, results: results).getList(),
-                      ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    Ranking(user: userBloc.user, results: results).getList(),
+                  ),
+                ),
+              ],
             );
           },
         ),
