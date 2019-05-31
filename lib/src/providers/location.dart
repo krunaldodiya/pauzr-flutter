@@ -9,7 +9,7 @@ class LocationBloc extends ChangeNotifier {
   bool loading;
   bool loaded;
   Map error;
-  List<Location> locations;
+  List<Location> locations = [];
 
   getLocations() async {
     loading = true;
@@ -18,7 +18,7 @@ class LocationBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getLocations();
       final results = response.data;
 
-      locations = results['locations'];
+      locations = Location.fromList(results['locations']);
     } catch (e) {
       error = e.response.data;
     }

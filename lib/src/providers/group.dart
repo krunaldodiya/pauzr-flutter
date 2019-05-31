@@ -1,24 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/models/profession.dart';
+import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/resources/api.dart';
 
-class ProfessionBloc extends ChangeNotifier {
+class LocationBloc extends ChangeNotifier {
   final ApiProvider _apiProvider = ApiProvider();
 
   bool loading;
   bool loaded;
   Map error;
-  List<Profession> professions;
+  List<Group> groups = [];
 
-  getProfessions() async {
+  getGroups() async {
     loading = true;
 
     try {
-      final Response response = await _apiProvider.getProfessions();
+      final Response response = await _apiProvider.getGroups();
       final results = response.data;
 
-      professions = results['professions'];
+      groups = Group.fromList(results['groups']);
     } catch (e) {
       error = e.response.data;
     }

@@ -24,7 +24,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
     Future.delayed(Duration(seconds: 1), () {
       final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
 
-      if (locationBloc.loaded == false) {
+      if (locationBloc.locations.length == 0) {
         locationBloc.getLocations();
       }
     });
@@ -36,6 +36,10 @@ class _ChooseLocationState extends State<ChooseLocation> {
     final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
 
     List locations = locationBloc.locations;
+
+    if (locationBloc.loading == true) {
+      return Center(child: CircularProgressIndicator());
+    }
 
     if (keywords != null) {
       locations = locationBloc.locations.where((location) {

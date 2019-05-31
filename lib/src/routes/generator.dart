@@ -18,7 +18,6 @@ import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/users/edit_profile.dart';
 import 'package:pauzr/src/screens/users/profile/gender.dart';
 import 'package:pauzr/src/screens/users/profile/location.dart';
-import 'package:pauzr/src/screens/users/profile/profession.dart';
 import 'package:pauzr/src/screens/users/view_profile.dart';
 
 class RouteGenerator {
@@ -178,14 +177,6 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return ChooseLocation();
-          },
-        );
-        break;
-
-      case routeList.profession:
-        return MaterialPageRoute(
-          builder: (context) {
-            return ChooseProfession();
           },
         );
         break;
