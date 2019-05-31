@@ -1,15 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
-import 'package:pauzr/src/blocs/location/bloc.dart';
-import 'package:pauzr/src/blocs/profession/bloc.dart';
 import 'package:pauzr/src/blocs/timer/bloc.dart';
 
 class ProviderList {
   static List<BlocProvider<Bloc>> getBlocProviders() {
     return [
-      BlocProvider<LocationBloc>(bloc: LocationBloc()),
-      BlocProvider<ProfessionBloc>(bloc: ProfessionBloc()),
       BlocProvider<TimerBloc>(bloc: TimerBloc()),
       BlocProvider<GroupBloc>(bloc: GroupBloc()),
     ];
