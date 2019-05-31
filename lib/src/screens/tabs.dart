@@ -1,13 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/tabs.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/drawer.dart';
 import 'package:provider/provider.dart';
@@ -20,37 +18,24 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
-  UserBloc userBloc;
   int showTabIndex = 1;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
       backgroundColor: theme.tabs.backgroundColor,
-      appBar: getAppBar(context, theme),
+      appBar: getAppBar(context, userBloc, theme),
       body: SafeArea(
         child: getTabsPage(showTabIndex),
       ),
       bottomNavigationBar: getNavigationBar(context, theme),
-      drawer: BlocBuilder(
-        bloc: userBloc,
-        builder: (context, UserState state) {
-          return Drawer(
-            child: DrawerPage(user: state.user),
-          );
-        },
+      drawer: Drawer(
+        child: DrawerPage(userBloc: userBloc, themeBloc: themeBloc),
       ),
     );
   }
@@ -94,7 +79,11 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  AppBar getAppBar(BuildContext context, DefaultTheme theme) {
+  AppBar getAppBar(
+    BuildContext context,
+    UserBloc userBloc,
+    DefaultTheme theme,
+  ) {
     return AppBar(
       elevation: 0.5,
       backgroundColor: theme.tabs.appBarBackgroundColor,
@@ -131,22 +120,17 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
           },
           child: Hero(
             tag: "profile-image",
-            child: BlocBuilder(
-              bloc: userBloc,
-              builder: (context, UserState state) {
-                return Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: ClipOval(
-                    child: Image.network(
-                      "$baseUrl/users/${state.user.avatar}",
-                      width: 36.0,
-                      height: 36.0,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                );
-              },
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              child: ClipOval(
+                child: Image.network(
+                  "$baseUrl/users/${userBloc.user.avatar}",
+                  width: 36.0,
+                  height: 36.0,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              ),
             ),
           ),
         ),

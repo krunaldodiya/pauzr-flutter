@@ -45,12 +45,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.iOS),
-      home: themeBloc.theme == null
-          ? Center(child: CircularProgressIndicator())
-          : InitialScreen(
-              authUser: userBloc.user,
-              authToken: widget.authToken,
-            ),
+      home: InitialScreen(
+        authToken: widget.authToken,
+        userBloc: userBloc,
+        themeBloc: themeBloc,
+      ),
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

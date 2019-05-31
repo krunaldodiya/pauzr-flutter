@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
-import 'package:pauzr/src/blocs/user/bloc.dart';
-import 'package:pauzr/src/blocs/user/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
@@ -25,8 +24,6 @@ class GroupDetailPage extends StatefulWidget {
 }
 
 class _GroupDetailPage extends State<GroupDetailPage> {
-  ThemeBloc themeBloc;
-  UserBloc userBloc;
   GroupBloc groupBloc;
 
   @override
@@ -34,136 +31,123 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     super.initState();
 
     setState(() {
-      userBloc = BlocProvider.of<UserBloc>(context);
       groupBloc = BlocProvider.of<GroupBloc>(context);
-      themeBloc = Provider.of<ThemeBloc>(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
       backgroundColor: theme.groupDetail.backgroundColor,
-      body: BlocBuilder(
-        bloc: userBloc,
-        builder: (context, UserState state) {
-          if (state.loaded == false) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          return SafeArea(
-            child: Container(
-              color: Colors.white,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    floating: true,
-                    pinned: true,
-                    backgroundColor: theme.groupDetail.appBackgroundColor,
-                    centerTitle: true,
-                    expandedHeight: 240.0,
-                    title: Text(
-                      widget.group['name'].toUpperCase(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontFamily: Fonts.titilliumWebRegular,
-                      ),
-                    ),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.5),
-                              BlendMode.dstATop,
-                            ),
-                            image: NetworkImage(
-                              "$baseUrl/users/${widget.group['photo']}",
-                            ),
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                          ),
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                floating: true,
+                pinned: true,
+                backgroundColor: theme.groupDetail.appBackgroundColor,
+                centerTitle: true,
+                expandedHeight: 240.0,
+                title: Text(
+                  widget.group['name'].toUpperCase(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontFamily: Fonts.titilliumWebRegular,
+                  ),
+                ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      image: DecorationImage(
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.5),
+                          BlendMode.dstATop,
                         ),
+                        image: NetworkImage(
+                          "$baseUrl/users/${widget.group['photo']}",
+                        ),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
                       ),
                     ),
-                    actions: <Widget>[
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            routeList.manage_group,
-                            arguments: {
-                              "group": widget.group,
-                            },
-                          );
+                  ),
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        routeList.manage_group,
+                        arguments: {
+                          "group": widget.group,
                         },
-                        icon: Icon(Icons.edit),
-                      )
-                    ],
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      widget.group['description'] != null
-                          ? showGroupDescription()
-                          : addGroupDescription(),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(width: 5, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(addLabel()),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      getParticipants(widget.group['subscribers']),
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(addParticipants()),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(inviteFriends()),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(width: 5, color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      groupAction(
-                        userBloc.currentState.user.id ==
-                                widget.group['owner_id']
-                            ? "Delete Group"
-                            : "Exit Group",
-                      ),
-                    ),
-                  ),
+                      );
+                    },
+                    icon: Icon(Icons.edit),
+                  )
                 ],
               ),
-            ),
-          );
-        },
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  widget.group['description'] != null
+                      ? showGroupDescription()
+                      : addGroupDescription(userBloc),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(width: 5, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(addLabel(userBloc)),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  getParticipants(widget.group['subscribers'], userBloc),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(addParticipants(userBloc)),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(inviteFriends()),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(width: 5, color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  groupAction(userBloc),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -207,9 +191,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  groupAction(action) {
+  groupAction(userBloc) {
     List<Widget> data = [];
-    String msg = action == "Delete Group" ? "delete" : "exit";
+
+    String msg =
+        userBloc.user.id == widget.group['owner_id'] ? "delete" : "exit";
 
     data.add(
       InkWell(
@@ -218,19 +204,19 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             context,
             "Are you sure want to $msg ?",
             () {
-              manageGroup(widget.group['id']);
+              manageGroup(widget.group['id'], userBloc);
             },
           );
         },
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 20.0),
           leading: Icon(
-            action == "Delete Group" ? Icons.delete : Icons.exit_to_app,
+            msg == "delete" ? Icons.delete : Icons.exit_to_app,
             color: Colors.red,
             size: 30.0,
           ),
           title: Text(
-            action,
+            msg.toUpperCase(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
@@ -245,10 +231,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addParticipants() {
+  addParticipants(userBloc) {
     List<Widget> data = [];
 
-    if (userBloc.currentState.user.id == widget.group['owner_id']) {
+    if (userBloc.user.id == widget.group['owner_id']) {
       data.add(
         InkWell(
           onTap: () {
@@ -317,10 +303,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addGroupDescription() {
+  addGroupDescription(userBloc) {
     List<Widget> data = [];
 
-    if (userBloc.currentState.user.id == widget.group['owner_id']) {
+    if (userBloc.user.id == widget.group['owner_id']) {
       data.add(
         InkWell(
           onTap: () {
@@ -356,7 +342,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addLabel() {
+  addLabel(userBloc) {
     List<Widget> data = [];
 
     data.add(
@@ -375,7 +361,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
           ),
-          if (userBloc.currentState.user.id == widget.group['owner_id'])
+          if (userBloc.user.id == widget.group['owner_id'])
             InkWell(
               onTap: () {
                 Navigator.pushNamed(
@@ -406,7 +392,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  List<Widget> getParticipants(List participants) {
+  List<Widget> getParticipants(List participants, UserBloc userBloc) {
     List<Widget> data = [];
 
     participants.forEach(
@@ -442,7 +428,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     icon: Icon(Icons.verified_user, color: Colors.grey),
                     onPressed: null,
                   )
-                : userBloc.currentState.user.id == widget.group['owner_id']
+                : userBloc.user.id == widget.group['owner_id']
                     ? IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
@@ -481,8 +467,8 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     });
   }
 
-  manageGroup(groupId) {
-    var userId = userBloc.currentState.user.id;
+  manageGroup(groupId, userBloc) {
+    var userId = userBloc.user.id;
 
     groupBloc.exitGroup(groupId, userId, (data) {
       Navigator.popUntil(context, (route) => route.isFirst);

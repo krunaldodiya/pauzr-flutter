@@ -50,8 +50,12 @@ class UserBloc extends ChangeNotifier {
   }
 
   setAuthToken(String token) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("authToken", token);
+    print("token $token");
+
+    if (token != null) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString("authToken", token);
+    }
   }
 
   setAuthUser(Map userData) {

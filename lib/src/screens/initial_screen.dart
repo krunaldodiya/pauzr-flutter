@@ -1,19 +1,21 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/blocs/initial_screen/bloc.dart';
 import 'package:pauzr/src/helpers/initial_screen.dart';
-import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/no_network.dart';
 
 class InitialScreen extends StatefulWidget {
-  final User authUser;
   final String authToken;
+  final UserBloc userBloc;
+  final ThemeBloc themeBloc;
 
   InitialScreen({
     Key key,
-    @required this.authUser,
     @required this.authToken,
+    @required this.userBloc,
+    @required this.themeBloc,
   }) : super(key: key);
 
   @override
@@ -21,7 +23,6 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
-  InitialScreenBloc initialScreenBloc;
   ConnectivityResult connectivityResult;
   var subscription;
 
@@ -48,10 +49,14 @@ class _InitialScreenState extends State<InitialScreen> {
       return NoNetwork();
     }
 
+    if (widget.userBloc.loading == true || widget.themeBloc.theme == null) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     if (widget.authToken == null) {
       return IntroPage();
     }
 
-    return getInitialScreen(widget.authUser);
+    return getInitialScreen(widget.userBloc.user);
   }
 }

@@ -4,32 +4,30 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerPage extends StatefulWidget {
-  final User user;
-  const DrawerPage({Key key, @required this.user}) : super(key: key);
+  final UserBloc userBloc;
+  final ThemeBloc themeBloc;
+
+  const DrawerPage({
+    Key key,
+    @required this.userBloc,
+    @required this.themeBloc,
+  }) : super(key: key);
 
   @override
   _DrawerPageState createState() => _DrawerPageState();
 }
 
 class _DrawerPageState extends State<DrawerPage> {
-  ThemeBloc themeBloc;
-
-  @override
-  void initState() {
-    super.initState();
-
-    themeBloc = Provider.of<ThemeBloc>(context);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final DefaultTheme theme = themeBloc.theme;
+    final DefaultTheme theme = widget.themeBloc.theme;
+    final User user = widget.userBloc.user;
 
     return Container(
       color: theme.drawerMenu.backgroundColor,
@@ -37,14 +35,14 @@ class _DrawerPageState extends State<DrawerPage> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text(
-              widget.user.name.toUpperCase(),
+              user.name.toUpperCase(),
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: Fonts.titilliumWebSemiBold,
               ),
             ),
             accountEmail: Text(
-              widget.user.email,
+              user.email,
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: Fonts.titilliumWebRegular,
@@ -53,7 +51,7 @@ class _DrawerPageState extends State<DrawerPage> {
             currentAccountPicture: Container(
               child: ClipOval(
                 child: Image.network(
-                  "$baseUrl/users/${widget.user.avatar}",
+                  "$baseUrl/users/${user.avatar}",
                   width: 60.0,
                   height: 60.0,
                   fit: BoxFit.cover,
