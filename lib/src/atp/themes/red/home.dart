@@ -6,4 +6,6 @@ Home homeTheme = Home(
   navigationBackgroundColor: Colors.grey.shade100,
   navigationButtonBackgroundColor: Colors.red,
   navigationColor: Colors.red,
+  fabBackgroundColor: Colors.red,
+  fabIconColor: Colors.white,
 );

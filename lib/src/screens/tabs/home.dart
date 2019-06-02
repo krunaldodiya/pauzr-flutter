@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
         width: 50.0,
         height: 50.0,
         child: FloatingActionButton(
-          backgroundColor: Colors.indigo,
+          backgroundColor: theme.home.fabBackgroundColor,
           onPressed: () {
             Navigator.pushNamed(
               context,
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
           },
           child: Icon(
             Icons.add,
-            color: Colors.white,
+            color: theme.home.fabIconColor,
             size: 32.0,
           ),
         ),
