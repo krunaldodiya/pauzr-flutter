@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/resources/api.dart';
 
-class LocationBloc extends ChangeNotifier {
+class GroupBloc extends ChangeNotifier {
   final ApiProvider _apiProvider = ApiProvider();
 
   bool loading;

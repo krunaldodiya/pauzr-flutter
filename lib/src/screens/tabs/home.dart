@@ -1,10 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/group.dart';
+import 'package:pauzr/src/models/group_subscription.dart';
+import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
-import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
 
@@ -16,8 +17,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+
+    getInitialData();
+  }
+
+  getInitialData() {
+    Future.delayed(Duration(seconds: 1), () {
+      final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+      groupBloc.getGroups();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -43,31 +59,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SafeArea(
-        child: FutureBuilder(
-          future: ApiProvider().getGroups(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-
-            return createListView(context, snapshot);
-          },
-        ),
+        child: groupBloc.loading == true
+            ? Center(child: CircularProgressIndicator())
+            : createListView(context, groupBloc.groups),
       ),
     );
   }
 
-  Widget createListView(context, snapshot) {
-    final Response response = snapshot.data;
-    final results = response.data;
-    final List groups = results['groups'];
-
+  Widget createListView(context, groups) {
     if (groups.length == 0) {
       return Container(
         margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -110,8 +109,8 @@ class _HomePageState extends State<HomePage> {
             },
             itemCount: groups.length,
             itemBuilder: (context, int index) {
-              final group = groups[index]['group'];
-              final subscribers = groups[index]['group']['subscribers'].length;
+              final Group group = groups[index];
+              final List<GroupSubscription> subscriptions = group.subscriptions;
 
               return ListTile(
                 onTap: () {
@@ -125,12 +124,12 @@ class _HomePageState extends State<HomePage> {
                 leading: CircleAvatar(
                   radius: 20.0,
                   backgroundImage: NetworkImage(
-                    "$baseUrl/users/${group['photo']}",
+                    "$baseUrl/users/${group.photo}",
                   ),
                 ),
-                title: Text(group['name']),
+                title: Text(group.name),
                 subtitle: Text(
-                  "${subscribers.toString()} participants.",
+                  "${subscriptions.length.toString()} participants.",
                 ),
               );
             },

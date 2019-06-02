@@ -13,7 +13,7 @@ class UserBloc extends ChangeNotifier {
   User user;
 
   onChangeData(String key, String value, User userData) {
-    user = userData.copyWith({key: key.length > 0 ? key : null});
+    user = userData.copyWith({key: value.length > 0 ? value : null});
     error = null;
 
     notifyListeners();
@@ -57,8 +57,6 @@ class UserBloc extends ChangeNotifier {
   }
 
   setAuthToken(String token) async {
-    print("token $token");
-
     if (token != null) {
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString("authToken", token);

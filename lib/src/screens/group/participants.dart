@@ -4,16 +4,17 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddGroupParticipantsPage extends StatefulWidget {
   final group;
+
   AddGroupParticipantsPage({Key key, this.group}) : super(key: key);
 
   _AddGroupParticipantsPageState createState() =>
@@ -23,7 +24,6 @@ class AddGroupParticipantsPage extends StatefulWidget {
 class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   List _participants = [];
   List _contacts = [];
-  GroupBloc groupBloc;
   bool loading;
   bool reloadContacts = false;
   String keywords;
@@ -35,14 +35,43 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     super.initState();
 
     loadContacts();
+  }
 
+  loadContacts() async {
     setState(() {
-      groupBloc = BlocProvider.of<GroupBloc>(context);
+      loading = true;
     });
+
+    if (reloadContacts == false) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String contactsData = prefs.getString("contacts");
+
+      if (contactsData != null) {
+        excludeContacts(json.decode(contactsData));
+      } else {
+        setState(() {
+          reloadContacts = true;
+        });
+      }
+    }
+
+    if (reloadContacts == true) {
+      try {
+        var contacts = await refreshContacts();
+        excludeContacts(contacts);
+      } catch (error) {
+        setState(() {
+          loading = false;
+          reloadContacts = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+
     List filteredContact = _contacts.where((contact) {
       if (keywords != null) {
         var filterByName =
@@ -93,7 +122,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         ),
         actions: <Widget>[
           FlatButton(
-            onPressed: createGroup,
+            onPressed: () {
+              addParticipants(groupBloc);
+            },
             child: Text(
               "Submit".toUpperCase(),
               style: TextStyle(
@@ -106,141 +137,148 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         ],
       ),
       body: loading == true
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  Container(
-                    margin: EdgeInsets.only(top: 50.0),
-                    child: Text(
-                      "Please wait, fetching contacts...",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontFamily: Fonts.titilliumWebSemiBold,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          : Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10.0, top: 5.0),
-                        child: TextField(
-                          onChanged: (text) {
-                            setState(() {
-                              keywords = text;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            contentPadding: EdgeInsets.all(10.0),
-                            hintText: "Filter by Name or Mobile",
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5.0),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.refresh,
-                          size: 30.0,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            reloadContacts = true;
-                          });
-
-                          loadContacts();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                  primary: true,
-                  shrinkWrap: true,
-                  itemCount: filteredContact.length,
-                  itemBuilder: (context, index) {
-                    Map contact = filteredContact?.elementAt(index);
-
-                    return Container(
-                      color:
-                          exists(contact) ? Colors.green.shade50 : Colors.white,
-                      child: ListTile(
-                        onTap: () => toggleContact(contact),
-                        leading: CircleAvatar(
-                          radius: 20.0,
-                          backgroundImage: NetworkImage(
-                            "$baseUrl/users/${contact['avatar']}",
-                          ),
-                        ),
-                        title: Text(
-                          contact['name'].toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontFamily: Fonts.titilliumWebSemiBold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          contact['mobile'],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14.0,
-                            fontFamily: Fonts.titilliumWebRegular,
-                          ),
-                        ),
-                        trailing: exists(contact)
-                            ? Icon(Icons.check_circle, color: Colors.green)
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+          ? showLoadingMessage()
+          : showContacts(filteredContact),
     );
   }
 
-  createGroup() {
+  Column showContacts(List filteredContact) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, top: 5.0),
+                child: TextField(
+                  onChanged: (text) {
+                    setState(() {
+                      keywords = text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(10.0),
+                    hintText: "Filter by Name or Mobile",
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.refresh,
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  setState(() {
+                    reloadContacts = true;
+                  });
+
+                  loadContacts();
+                },
+              ),
+            ),
+          ],
+        ),
+        ListView.builder(
+          primary: true,
+          shrinkWrap: true,
+          itemCount: filteredContact.length,
+          itemBuilder: (context, index) {
+            Map contact = filteredContact?.elementAt(index);
+
+            return Container(
+              color: exists(contact) ? Colors.green.shade50 : Colors.white,
+              child: ListTile(
+                onTap: () => toggleContact(contact),
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(
+                    "$baseUrl/users/${contact['avatar']}",
+                  ),
+                ),
+                title: Text(
+                  contact['name'].toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontFamily: Fonts.titilliumWebSemiBold,
+                  ),
+                ),
+                subtitle: Text(
+                  contact['mobile'],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14.0,
+                    fontFamily: Fonts.titilliumWebRegular,
+                  ),
+                ),
+                trailing: exists(contact)
+                    ? Icon(Icons.check_circle, color: Colors.green)
+                    : null,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Center showLoadingMessage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          Container(
+            margin: EdgeInsets.only(top: 50.0),
+            child: Text(
+              "Please wait, fetching contacts...",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  addParticipants(groupBloc) {
     if (_participants.length == 0) {
       return Navigator.pop(context);
     }
 
-    groupBloc.addParticipants(widget.group['id'], _participants, (data) {
+    groupBloc.addParticipants(widget.group.id, _participants, (data) {
       if (data.runtimeType != DioError) {
         Navigator.pop(context);
       }
     });
   }
 
-  excludeContacts(List contacts) {
+  excludeContacts(contacts) {
     List data = [];
-
-    List subscribers = widget.group['subscribers'];
-    List subscribersIds =
-        subscribers.map((sub) => sub['subscriber_id']).toList();
+    List subscriptions = widget.group['subscriptions'];
+    List subscriptionsIds = subscriptions.map((subscriber) {
+      return subscriber['subscriber_id'];
+    }).toList();
 
     contacts.forEach((contact) {
-      if (subscribersIds.contains(contact['id']) == false) {
+      if (subscriptionsIds.contains(contact['id']) == false) {
         data.add(contact);
       }
     });
@@ -250,38 +288,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       loading = false;
       reloadContacts = false;
     });
-  }
-
-  loadContacts() async {
-    setState(() {
-      loading = true;
-    });
-
-    if (reloadContacts == false) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String contactsData = prefs.getString("contacts");
-
-      if (contactsData != null) {
-        excludeContacts(json.decode(contactsData));
-      } else {
-        setState(() {
-          reloadContacts = true;
-        });
-      }
-    }
-
-    if (reloadContacts == true) {
-      try {
-        var contacts = await refreshContacts();
-
-        excludeContacts(contacts);
-      } catch (error) {
-        setState(() {
-          loading = false;
-          reloadContacts = false;
-        });
-      }
-    }
   }
 
   exists(contact) {
@@ -299,6 +305,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   refreshContacts() async {
+    var remoteContacts = [];
+
     PermissionStatus permissionStatus = await _getContactPermission();
 
     if (permissionStatus != PermissionStatus.granted) {
@@ -319,11 +327,12 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("contacts", json.encode(results));
 
-      return results;
+      remoteContacts = results;
     } catch (error) {
-      ApiProvider().notifyError(error.response.data);
-      return [];
+      print(error);
     }
+
+    return remoteContacts;
   }
 
   Future<PermissionStatus> _getContactPermission() async {

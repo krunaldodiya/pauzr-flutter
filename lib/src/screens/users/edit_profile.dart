@@ -72,6 +72,21 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
+    if (userBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (userBloc.loading == false) {
+      XsProgressHud.hide();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
@@ -234,20 +249,16 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
   }
 
-  void onSubmit(userBloc) {
-    XsProgressHud.show(context);
+  onSubmit(UserBloc userBloc) async {
+    await userBloc.updateProfile();
 
-    userBloc.updateProfile((data) {
-      XsProgressHud.hide();
-
-      if (data.runtimeType != DioError) {
-        if (widget.shouldPop == true) {
-          return Navigator.of(context).pop();
-        }
-
-        return Navigator.pushReplacementNamed(context, routeList.tab);
+    if (userBloc.loaded == true) {
+      if (widget.shouldPop == true) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.pushReplacementNamed(context, routeList.tab);
       }
-    });
+    }
   }
 
   void uploadImage(userBloc) async {
