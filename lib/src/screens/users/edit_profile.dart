@@ -46,7 +46,7 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   getInitialData() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(microseconds: 1), () {
       final UserBloc userBloc = Provider.of<UserBloc>(context);
 
       nameController.text = userBloc.user.name;

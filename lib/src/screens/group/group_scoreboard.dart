@@ -37,7 +37,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
   }
 
   getInitialData() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(microseconds: 1), () {
       final UserBloc userBloc = Provider.of<UserBloc>(context);
 
       if (userBloc.user.id == widget.group.ownerId) {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/models/group_subscription.dart';
+import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -26,21 +26,11 @@ class GroupDetailPage extends StatefulWidget {
 }
 
 class _GroupDetailPage extends State<GroupDetailPage> {
-  GroupBloc groupBloc;
-
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      groupBloc = BlocProvider.of<GroupBloc>(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -122,7 +112,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
-                  getParticipants(widget.group.subscriptions, userBloc),
+                  getParticipants(
+                    widget.group.subscriptions,
+                    groupBloc,
+                    userBloc,
+                  ),
                 ),
               ),
               SliverList(
@@ -144,7 +138,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
-                  groupAction(userBloc),
+                  groupAction(groupBloc, userBloc),
                 ),
               ),
             ],
@@ -193,7 +187,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  groupAction(userBloc) {
+  groupAction(groupBloc, userBloc) {
     List<Widget> data = [];
 
     String msg = userBloc.user.id == widget.group.ownerId ? "delete" : "exit";
@@ -203,9 +197,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
         onTap: () {
           return showConfirmationPopup(
             context,
-            "Are you sure want to $msg ?",
+            "Are you sure want to $msg group ?",
             () {
-              manageGroup(widget.group.id, userBloc);
+              manageGroup(groupBloc, widget.group, userBloc.user, msg);
             },
           );
         },
@@ -395,6 +389,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
   List<Widget> getParticipants(
     List<GroupSubscription> participants,
+    GroupBloc groupBloc,
     UserBloc userBloc,
   ) {
     List<Widget> data = [];
@@ -432,23 +427,25 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                     icon: Icon(Icons.verified_user, color: Colors.grey),
                     onPressed: null,
                   )
-                : userBloc.user.id == widget.group.ownerId
-                    ? IconButton(
+                : userBloc.user.id != widget.group.ownerId
+                    ? null
+                    : IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           return showConfirmationPopup(
                             context,
                             "Are you sure want to remove ?",
                             () {
-                              removeUser(
-                                widget.group.id,
-                                participant.subscriberId,
+                              manageGroup(
+                                groupBloc,
+                                widget.group,
+                                participant.subscriber,
+                                "remove",
                               );
                             },
                           );
                         },
-                      )
-                    : null,
+                      ),
           ),
         );
       },
@@ -465,17 +462,24 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  removeUser(groupId, userId) {
-    groupBloc.exitGroup(groupId, userId, (data) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-    });
-  }
+  manageGroup(GroupBloc groupBloc, Group group, User user, String type) async {
+    await groupBloc.exitGroup(group.id, user.id);
 
-  manageGroup(groupId, userBloc) {
-    var userId = userBloc.user.id;
+    switch (type) {
+      case "exit":
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
 
-    groupBloc.exitGroup(groupId, userId, (data) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-    });
+      case "delete":
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+
+      case "remove":
+        Navigator.popUntil(context, (route) => route.isFirst);
+        break;
+
+      default:
+        Navigator.popUntil(context, (route) => route.isFirst);
+    }
   }
 }

@@ -1,15 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/group/bloc.dart';
-import 'package:pauzr/src/blocs/group/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
+import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -26,7 +24,6 @@ class ManageGroupPage extends StatefulWidget {
 
 class _ManageGroupPageState extends State<ManageGroupPage> {
   ApiProvider apiProvider = ApiProvider();
-  GroupBloc groupBloc;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -38,10 +35,6 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      groupBloc = BlocProvider.of<GroupBloc>(context);
-    });
 
     if (widget.group != null) {
       setState(() {
@@ -55,6 +48,8 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -72,7 +67,9 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
         actions: <Widget>[
           if (loading != true)
             FlatButton(
-              onPressed: createGroup,
+              onPressed: () {
+                manageGroup(groupBloc);
+              },
               child: Text(
                 widget.group != null ? "Submit" : "Next",
                 style: TextStyle(
@@ -136,35 +133,25 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
             ),
           ),
           Container(height: 10.0),
-          BlocBuilder(
-            bloc: groupBloc,
-            builder: (context, GroupState state) {
-              return EditableFormField(
-                keyboardType: TextInputType.text,
-                maxLength: 20,
-                textColor: Colors.black,
-                borderColor: Colors.black,
-                labelColor: Colors.black,
-                controller: nameController,
-                labelText: "Group Name",
-                errorText: getErrorText(state.error, 'name'),
-              );
-            },
+          EditableFormField(
+            keyboardType: TextInputType.text,
+            maxLength: 20,
+            textColor: Colors.black,
+            borderColor: Colors.black,
+            labelColor: Colors.black,
+            controller: nameController,
+            labelText: "Group Name",
+            errorText: getErrorText(groupBloc.error, 'name'),
           ),
-          BlocBuilder(
-            bloc: groupBloc,
-            builder: (context, GroupState state) {
-              return EditableFormField(
-                maxLength: 100,
-                maxLines: 3,
-                textColor: Colors.black,
-                borderColor: Colors.black,
-                labelColor: Colors.black,
-                controller: descriptionController,
-                labelText: "Group Description",
-                errorText: getErrorText(state.error, 'description'),
-              );
-            },
+          EditableFormField(
+            maxLength: 100,
+            maxLines: 3,
+            textColor: Colors.black,
+            borderColor: Colors.black,
+            labelColor: Colors.black,
+            controller: descriptionController,
+            labelText: "Group Description",
+            errorText: getErrorText(groupBloc.error, 'description'),
           ),
           Expanded(
             child: Container(),
@@ -200,7 +187,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     }
   }
 
-  void createGroup() {
+  void manageGroup(groupBloc) {
     XsProgressHud.show(context);
 
     String name = nameController.text;

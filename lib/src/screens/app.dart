@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getInitialData() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(microseconds: 1), () {
       final UserBloc userBloc = Provider.of<UserBloc>(context);
       final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
 

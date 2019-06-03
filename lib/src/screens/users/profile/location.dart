@@ -21,7 +21,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
   }
 
   void getInitialData() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(microseconds: 1), () {
       final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
 
       if (locationBloc.locations.length == 0) {

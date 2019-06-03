@@ -45,4 +45,92 @@ class GroupBloc extends ChangeNotifier {
       );
     }
   }
+
+  addParticipants(groupId, participants) async {
+    setState(loading: true);
+
+    try {
+      final Response response =
+          await _apiProvider.addParticipants(groupId, participants);
+
+      final results = response.data;
+
+      setState(
+        groups: Group.fromList(results['group']),
+        loading: false,
+        loaded: true,
+      );
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
+
+  createGroup(name, description, photo) async {
+    setState(loading: true);
+
+    try {
+      final Response response =
+          await _apiProvider.createGroup(name, description, photo);
+
+      final results = response.data;
+
+      setState(
+        groups: Group.fromList(results['groups']),
+        loading: false,
+        loaded: true,
+      );
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
+
+  editGroup(groupId, name, description, photo) async {
+    setState(loading: true);
+
+    try {
+      final Response response =
+          await _apiProvider.editGroup(groupId, name, description, photo);
+
+      final results = response.data;
+
+      setState(
+        groups: Group.fromList(results['groups']),
+        loading: false,
+        loaded: true,
+      );
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
+
+  exitGroup(groupId, userId) async {
+    setState(loading: true);
+
+    try {
+      await _apiProvider.exitGroup(groupId, userId);
+
+      setState(
+        loading: false,
+        loaded: true,
+      );
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
 }
