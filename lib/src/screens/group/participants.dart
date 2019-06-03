@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/group.dart';
+import 'package:pauzr/src/models/group_subscription.dart';
 import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddGroupParticipantsPage extends StatefulWidget {
-  final group;
+  final Group group;
 
   AddGroupParticipantsPage({Key key, this.group}) : super(key: key);
 
@@ -272,13 +274,13 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   excludeContacts(contacts) {
     List data = [];
-    List subscriptions = widget.group['subscriptions'];
-    List subscriptionsIds = subscriptions.map((subscriber) {
-      return subscriber['subscriber_id'];
+    List<GroupSubscription> subscriptions = widget.group.subscriptions;
+    List subscriberIds = subscriptions.map((subscriber) {
+      return subscriber.subscriberId;
     }).toList();
 
     contacts.forEach((contact) {
-      if (subscriptionsIds.contains(contact['id']) == false) {
+      if (subscriberIds.contains(contact['id']) == false) {
         data.add(contact);
       }
     });

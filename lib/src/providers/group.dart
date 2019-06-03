@@ -11,21 +11,38 @@ class GroupBloc extends ChangeNotifier {
   Map error;
   List<Group> groups = [];
 
+  setState({
+    bool loading,
+    bool loaded,
+    Map error,
+    List<Group> groups,
+  }) {
+    this.loading = loading ?? this.loading;
+    this.loaded = loaded ?? this.loaded;
+    this.error = error ?? this.error;
+    this.groups = groups ?? this.groups;
+
+    notifyListeners();
+  }
+
   getGroups() async {
-    loading = true;
+    setState(loading: true);
 
     try {
       final Response response = await _apiProvider.getGroups();
       final results = response.data;
 
-      groups = Group.fromList(results['groups']);
+      setState(
+        groups: Group.fromList(results['groups']),
+        loading: false,
+        loaded: true,
+      );
     } catch (e) {
-      error = e.response.data;
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 }

@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getInitialData() {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(microseconds: 1), () {
       final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
       groupBloc.getGroups();
     });
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: SafeArea(
-        child: groupBloc.loading == true
+        child: groupBloc.loading != false
             ? Center(child: CircularProgressIndicator())
             : createListView(context, groupBloc.groups),
       ),

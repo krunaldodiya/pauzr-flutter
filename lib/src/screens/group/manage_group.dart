@@ -9,6 +9,7 @@ import 'package:pauzr/src/blocs/group/state.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -17,7 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class ManageGroupPage extends StatefulWidget {
-  final group;
+  final Group group;
   ManageGroupPage({Key key, this.group}) : super(key: key);
 
   _ManageGroupPageState createState() => _ManageGroupPageState();
@@ -44,9 +45,9 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
 
     if (widget.group != null) {
       setState(() {
-        nameController.text = widget.group['name'];
-        descriptionController.text = widget.group['description'];
-        photoController.text = widget.group['photo'];
+        nameController.text = widget.group.name;
+        descriptionController.text = widget.group.description;
+        photoController.text = widget.group.photo;
       });
     }
   }
@@ -205,7 +206,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     String name = nameController.text;
     String description = descriptionController.text;
     String photo = photoController.text;
-    int groupId = widget.group != null ? widget.group['id'] : null;
+    int groupId = widget.group != null ? widget.group.id : null;
 
     var callback = (data) {
       XsProgressHud.hide();
@@ -217,7 +218,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           Navigator.pushReplacementNamed(
             context,
             routeList.add_group_participants,
-            arguments: {"group": data['group']},
+            arguments: {"group": Group.fromMap(data['group'])},
           );
         }
       }

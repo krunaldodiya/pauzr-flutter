@@ -5,6 +5,7 @@ import 'package:pauzr/src/components/rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -13,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:swipedetector/swipedetector.dart';
 
 class GroupScoreboardPage extends StatefulWidget {
-  final group;
+  final Group group;
   GroupScoreboardPage({Key key, @required this.group}) : super(key: key);
 
   @override
@@ -39,7 +40,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
     Future.delayed(Duration(seconds: 1), () {
       final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-      if (userBloc.user.id == widget.group['owner_id']) {
+      if (userBloc.user.id == widget.group.ownerId) {
         choices.add("Edit Group");
       }
     });
@@ -82,11 +83,11 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               isThreeLine: true,
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(
-                  "$baseUrl/users/${widget.group['photo']}",
+                  "$baseUrl/users/${widget.group.photo}",
                 ),
               ),
               title: Text(
-                widget.group['name'],
+                widget.group.name,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
@@ -94,7 +95,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
                 ),
               ),
               subtitle: Text(
-                widget.group['description'] ?? "No description",
+                widget.group.description ?? "No description",
                 maxLines: 1,
                 style: TextStyle(
                   color: Colors.white,
@@ -160,7 +161,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
           }
         },
         child: FutureBuilder(
-          future: ApiProvider().getRankings(period, widget.group['id']),
+          future: ApiProvider().getRankings(period, widget.group.id),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return Center(

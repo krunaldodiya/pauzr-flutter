@@ -4,6 +4,8 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/blocs/group/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/group.dart';
+import 'package:pauzr/src/models/group_subscription.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -12,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class GroupDetailPage extends StatefulWidget {
-  final group;
+  final Group group;
 
   GroupDetailPage({
     Key key,
@@ -56,7 +58,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                 centerTitle: true,
                 expandedHeight: 240.0,
                 title: Text(
-                  widget.group['name'].toUpperCase(),
+                  widget.group.name.toUpperCase(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -74,7 +76,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                           BlendMode.dstATop,
                         ),
                         image: NetworkImage(
-                          "$baseUrl/users/${widget.group['photo']}",
+                          "$baseUrl/users/${widget.group.photo}",
                         ),
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
@@ -99,7 +101,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
-                  widget.group['description'] != null
+                  widget.group.description != null
                       ? showGroupDescription()
                       : addGroupDescription(userBloc),
                 ),
@@ -120,7 +122,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
-                  getParticipants(widget.group['subscribers'], userBloc),
+                  getParticipants(widget.group.subscriptions, userBloc),
                 ),
               ),
               SliverList(
@@ -175,7 +177,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           Container(
             margin: EdgeInsets.all(20.0),
             child: Text(
-              widget.group['description'],
+              widget.group.description,
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.black54,
@@ -194,8 +196,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   groupAction(userBloc) {
     List<Widget> data = [];
 
-    String msg =
-        userBloc.user.id == widget.group['owner_id'] ? "delete" : "exit";
+    String msg = userBloc.user.id == widget.group.ownerId ? "delete" : "exit";
 
     data.add(
       InkWell(
@@ -204,7 +205,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             context,
             "Are you sure want to $msg ?",
             () {
-              manageGroup(widget.group['id'], userBloc);
+              manageGroup(widget.group.id, userBloc);
             },
           );
         },
@@ -234,7 +235,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   addParticipants(userBloc) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == widget.group['owner_id']) {
+    if (userBloc.user.id == widget.group.ownerId) {
       data.add(
         InkWell(
           onTap: () {
@@ -306,7 +307,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   addGroupDescription(userBloc) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == widget.group['owner_id']) {
+    if (userBloc.user.id == widget.group.ownerId) {
       data.add(
         InkWell(
           onTap: () {
@@ -352,7 +353,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Text(
-              "Participants (${widget.group['subscribers'].length})",
+              "Participants (${widget.group.subscriptions.length})",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -361,7 +362,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
           ),
-          if (userBloc.user.id == widget.group['owner_id'])
+          if (userBloc.user.id == widget.group.ownerId)
             InkWell(
               onTap: () {
                 Navigator.pushNamed(
@@ -392,7 +393,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  List<Widget> getParticipants(List participants, UserBloc userBloc) {
+  List<Widget> getParticipants(
+    List<GroupSubscription> participants,
+    UserBloc userBloc,
+  ) {
     List<Widget> data = [];
 
     participants.forEach(
@@ -402,11 +406,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             leading: CircleAvatar(
               radius: 20.0,
               backgroundImage: NetworkImage(
-                "$baseUrl/users/${participant['info']['avatar']}",
+                "$baseUrl/users/${participant.subscriber.avatar}",
               ),
             ),
             title: Text(
-              participant['info']['name'].toUpperCase(),
+              participant.subscriber.name.toUpperCase(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -415,7 +419,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
             subtitle: Text(
-              participant['info']['location']['city'],
+              participant.subscriber.location.city,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black54,
@@ -423,12 +427,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                 fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
-            trailing: participant['info']['id'] == widget.group['owner_id']
+            trailing: participant.subscriber.id == widget.group.ownerId
                 ? IconButton(
                     icon: Icon(Icons.verified_user, color: Colors.grey),
                     onPressed: null,
                   )
-                : userBloc.user.id == widget.group['owner_id']
+                : userBloc.user.id == widget.group.ownerId
                     ? IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
@@ -437,8 +441,8 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                             "Are you sure want to remove ?",
                             () {
                               removeUser(
-                                widget.group['id'],
-                                participant['info']['id'],
+                                widget.group.id,
+                                participant.subscriberId,
                               );
                             },
                           );
