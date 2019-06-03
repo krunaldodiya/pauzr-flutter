@@ -77,15 +77,18 @@ class GroupBloc extends ChangeNotifier {
           await _apiProvider.createGroup(name, description, photo);
 
       final results = response.data;
+      final groupData = groups..add(Group.fromList(results['group']));
 
       setState(
-        groups: Group.fromList(results['groups']),
+        groups: groupData,
         loading: false,
         loaded: true,
       );
-    } catch (e) {
+
+      return groupData;
+    } catch (error) {
       setState(
-        error: e.response.data,
+        error: error.response.data,
         loading: false,
         loaded: true,
       );
@@ -100,15 +103,21 @@ class GroupBloc extends ChangeNotifier {
           await _apiProvider.editGroup(groupId, name, description, photo);
 
       final results = response.data;
+      final groupData = groups
+          .where((group) => group.id == groupId)
+          .map((group) => Group.fromList(results['group']))
+          .toList();
 
       setState(
-        groups: Group.fromList(results['groups']),
+        groups: groupData,
         loading: false,
         loaded: true,
       );
-    } catch (e) {
+
+      return groupData;
+    } catch (error) {
       setState(
-        error: e.response.data,
+        error: error.response.data,
         loading: false,
         loaded: true,
       );

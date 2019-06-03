@@ -187,34 +187,36 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     }
   }
 
-  void manageGroup(groupBloc) {
+  void manageGroup(groupBloc) async {
     XsProgressHud.show(context);
 
     String name = nameController.text;
     String description = descriptionController.text;
     String photo = photoController.text;
+
     int groupId = widget.group != null ? widget.group.id : null;
 
-    var callback = (data) {
+    if (groupId != null) {
+      final Group group =
+          await groupBloc.editGroup(groupId, name, description, photo);
       XsProgressHud.hide();
 
-      if (data.runtimeType != DioError) {
-        if (widget.group != null) {
-          Navigator.popUntil(context, (route) => route.isFirst);
-        } else {
-          Navigator.pushReplacementNamed(
-            context,
-            routeList.add_group_participants,
-            arguments: {"group": Group.fromMap(data['group'])},
-          );
-        }
-      }
-    };
+      Navigator.pushReplacementNamed(
+        context,
+        routeList.group_detail,
+        arguments: {"group": group},
+      );
+    }
 
-    if (groupId != null) {
-      groupBloc.editGroup(groupId, name, description, photo, callback);
-    } else {
-      groupBloc.createGroup(name, description, photo, callback);
+    if (groupId == null) {
+      final Group group = await groupBloc.createGroup(name, description, photo);
+      XsProgressHud.hide();
+
+      Navigator.pushReplacementNamed(
+        context,
+        routeList.add_group_participants,
+        arguments: {"group": group},
+      );
     }
   }
 }
