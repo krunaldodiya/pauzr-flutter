@@ -50,6 +50,15 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    photoController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
@@ -87,7 +96,9 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           if (loading != true)
             FlatButton(
               onPressed: () {
-                manageGroup(groupBloc);
+                widget.group == null
+                    ? createGroup(groupBloc)
+                    : editGroup(groupBloc);
               },
               child: Text(
                 widget.group != null ? "Submit" : "Next",
@@ -206,27 +217,29 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     }
   }
 
-  void manageGroup(groupBloc) async {
+  void createGroup(groupBloc) async {
     String name = nameController.text;
     String description = descriptionController.text;
     String photo = photoController.text;
 
-    int groupId = widget.group != null ? widget.group.id : null;
+    final Group group = await groupBloc.createGroup(name, description, photo);
 
-    if (groupId != null) {
-      await groupBloc.editGroup(groupId, name, description, photo);
+    Navigator.pushNamed(
+      context,
+      routeList.add_group_participants,
+      arguments: {
+        "group": group,
+      },
+    );
+  }
 
-      Navigator.pop(context);
-    }
+  void editGroup(groupBloc) async {
+    String name = nameController.text;
+    String description = descriptionController.text;
+    String photo = photoController.text;
 
-    if (groupId == null) {
-      final Group group = await groupBloc.createGroup(name, description, photo);
+    await groupBloc.editGroup(widget.group.id, name, description, photo);
 
-      Navigator.pushReplacementNamed(
-        context,
-        routeList.add_group_participants,
-        arguments: {"group": group},
-      );
-    }
+    Navigator.pop(context);
   }
 }

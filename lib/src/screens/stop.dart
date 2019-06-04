@@ -146,6 +146,8 @@ class _StopPage extends State<StopPage>
               started = false;
               rotation = 360;
             });
+
+            Navigator.pop(context);
           },
         );
       },
@@ -209,6 +211,8 @@ class _StopPage extends State<StopPage>
                             started = false;
                             rotation = 360;
                           });
+
+                          Navigator.pop(context);
                         },
                       );
                     },

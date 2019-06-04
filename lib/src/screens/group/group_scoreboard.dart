@@ -37,8 +37,15 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
-    final Group group =
-        groupBloc.groups.where((group) => group.id == widget.group.id).first;
+
+    final groupSelector =
+        groupBloc.groups.where((group) => group.id == widget.group.id);
+
+    final Group group = groupSelector.length > 0 ? groupSelector.first : null;
+
+    if (group == null) {
+      return Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       backgroundColor: theme.groupScoreboard.backgroundColor,
@@ -58,38 +65,36 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
             );
           },
           child: SafeArea(
-            child: group == null
-                ? Center(child: CircularProgressIndicator())
-                : Container(
-                    alignment: Alignment.center,
-                    child: ListTile(
-                      dense: true,
-                      contentPadding: EdgeInsets.all(0),
-                      isThreeLine: true,
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          "$baseUrl/users/${group.photo}",
-                        ),
-                      ),
-                      title: Text(
-                        group.name,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontFamily: Fonts.titilliumWebSemiBold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        group.description ?? "No description",
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13.0,
-                          fontFamily: Fonts.titilliumWebRegular,
-                        ),
-                      ),
-                    ),
+            child: Container(
+              alignment: Alignment.center,
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.all(0),
+                isThreeLine: true,
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    "$baseUrl/users/${group.photo}",
                   ),
+                ),
+                title: Text(
+                  group.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontFamily: Fonts.titilliumWebSemiBold,
+                  ),
+                ),
+                subtitle: Text(
+                  group.description ?? "No description",
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13.0,
+                    fontFamily: Fonts.titilliumWebRegular,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
         actions: <Widget>[

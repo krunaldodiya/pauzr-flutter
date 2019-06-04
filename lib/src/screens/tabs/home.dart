@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    routeList.scoreboard,
+                    routeList.main_scoreboard,
                     arguments: {"group": group},
                   );
                 },

@@ -57,7 +57,7 @@ class RouteGenerator {
         );
         break;
 
-      case routeList.scoreboard:
+      case routeList.group_scoreboard:
         return MaterialPageRoute(
           builder: (context) {
             return GroupScoreboardPage(
