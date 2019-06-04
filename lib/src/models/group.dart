@@ -5,7 +5,6 @@ import 'package:pauzr/src/models/user.dart';
 @immutable
 class Group {
   final int id;
-  final int ownerId;
   final String name;
   final String photo;
   final String description;
@@ -15,7 +14,6 @@ class Group {
 
   Group({
     this.id,
-    this.ownerId,
     this.name,
     this.description,
     this.photo,
@@ -27,7 +25,6 @@ class Group {
   Group copyWith(Map<String, dynamic> json) {
     return Group(
       id: json["id"] ?? this.id,
-      ownerId: json["ownerId"] ?? this.ownerId,
       name: json["name"] ?? this.name,
       description: json["description"] ?? this.description,
       photo: json["photo"] ?? this.photo,
@@ -39,7 +36,6 @@ class Group {
 
   Group.fromMap(Map<String, dynamic> json)
       : id = json != null ? json["id"] : null,
-        ownerId = json != null ? json["ownerId"] : null,
         name = json != null ? json["name"] : null,
         description = json != null ? json["description"] : null,
         photo = json != null ? json["photo"] : null,

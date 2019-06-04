@@ -220,7 +220,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
 
     choices.add("Group Info");
 
-    if (userBloc.user.id == group.ownerId) {
+    if (userBloc.user.id == group.owner.id) {
       choices.add("Edit Group");
     }
 

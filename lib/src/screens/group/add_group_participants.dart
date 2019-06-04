@@ -36,6 +36,10 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   void initState() {
     super.initState();
 
+    getInitialData();
+  }
+
+  getInitialData() {
     loadContacts();
   }
 

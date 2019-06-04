@@ -17,7 +17,11 @@ import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class ManageGroupPage extends StatefulWidget {
   final Group group;
-  ManageGroupPage({Key key, this.group}) : super(key: key);
+
+  ManageGroupPage({
+    Key key,
+    this.group,
+  }) : super(key: key);
 
   _ManageGroupPageState createState() => _ManageGroupPageState();
 }

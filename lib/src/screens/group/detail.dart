@@ -79,18 +79,21 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                         ),
                       ),
                       actions: <Widget>[
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              routeList.manage_group,
-                              arguments: {
-                                "group": widget.group,
-                              },
-                            );
-                          },
-                          icon: Icon(Icons.edit),
-                        )
+                        if (group.owner.id == userBloc.user.id)
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                routeList.manage_group,
+                                arguments: {
+                                  "group": widget.group,
+                                },
+                              );
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                            ),
+                          )
                       ],
                     ),
                     SliverList(
@@ -199,7 +202,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   groupAction(groupBloc, userBloc, group) {
     List<Widget> data = [];
 
-    String msg = userBloc.user.id == group.ownerId ? "delete" : "exit";
+    String msg = userBloc.user.id == group.owner.id ? "delete" : "exit";
 
     data.add(
       InkWell(
@@ -238,7 +241,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   addParticipants(userBloc, group) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == group.ownerId) {
+    if (userBloc.user.id == group.owner.id) {
       data.add(
         InkWell(
           onTap: () {
@@ -310,7 +313,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   addGroupDescription(userBloc, group) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == group.ownerId) {
+    if (userBloc.user.id == group.owner.id) {
       data.add(
         InkWell(
           onTap: () {
@@ -365,7 +368,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
           ),
-          if (userBloc.user.id == group.ownerId)
+          if (userBloc.user.id == group.owner.id)
             InkWell(
               onTap: () {
                 Navigator.pushNamed(
@@ -428,12 +431,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                 fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
-            trailing: participant.subscriber.id == group.ownerId
+            trailing: participant.subscriber.id == group.owner.id
                 ? IconButton(
                     icon: Icon(Icons.verified_user, color: Colors.grey),
                     onPressed: null,
                   )
-                : userBloc.user.id != group.ownerId
+                : userBloc.user.id != group.owner.id
                     ? null
                     : IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
