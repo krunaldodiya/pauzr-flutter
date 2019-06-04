@@ -33,122 +33,131 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
+    final Group group =
+        groupBloc.groups.where((group) => group.id == widget.group.id).first;
 
     return Scaffold(
       backgroundColor: theme.groupDetail.backgroundColor,
       body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverAppBar(
-                floating: true,
-                pinned: true,
-                backgroundColor: theme.groupDetail.appBackgroundColor,
-                centerTitle: true,
-                expandedHeight: 240.0,
-                title: Text(
-                  widget.group.name.toUpperCase(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontFamily: Fonts.titilliumWebRegular,
-                  ),
-                ),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5),
-                          BlendMode.dstATop,
+        child: group == null
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                color: Colors.white,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      floating: true,
+                      pinned: true,
+                      backgroundColor: theme.groupDetail.appBackgroundColor,
+                      centerTitle: true,
+                      expandedHeight: 240.0,
+                      title: Text(
+                        group.name.toUpperCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: Fonts.titilliumWebRegular,
                         ),
-                        image: NetworkImage(
-                          "$baseUrl/users/${widget.group.photo}",
+                      ),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            image: DecorationImage(
+                              colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.dstATop,
+                              ),
+                              image: NetworkImage(
+                                "$baseUrl/users/${group.photo}",
+                              ),
+                              fit: BoxFit.cover,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
                         ),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
+                      ),
+                      actions: <Widget>[
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                              context,
+                              routeList.manage_group,
+                              arguments: {
+                                "group": widget.group,
+                              },
+                            );
+                          },
+                          icon: Icon(Icons.edit),
+                        )
+                      ],
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        group.description != null
+                            ? showGroupDescription(group)
+                            : addGroupDescription(userBloc, group),
                       ),
                     ),
-                  ),
-                ),
-                actions: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        routeList.manage_group,
-                        arguments: {
-                          "group": widget.group,
-                        },
-                      );
-                    },
-                    icon: Icon(Icons.edit),
-                  )
-                ],
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  widget.group.description != null
-                      ? showGroupDescription()
-                      : addGroupDescription(userBloc),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(width: 5, color: Colors.grey),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(width: 5, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        addLabel(userBloc, group),
                       ),
                     ),
-                  ),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(addLabel(userBloc)),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  getParticipants(
-                    widget.group.subscriptions,
-                    groupBloc,
-                    userBloc,
-                  ),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(addParticipants(userBloc)),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(inviteFriends()),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(width: 5, color: Colors.grey),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        getParticipants(
+                          group.subscriptions,
+                          groupBloc,
+                          userBloc,
+                          group,
+                        ),
                       ),
                     ),
-                  ),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  groupAction(groupBloc, userBloc),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        addParticipants(userBloc, group),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(inviteFriends()),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(width: 5, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        groupAction(groupBloc, userBloc, group),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
-  showGroupDescription() {
+  showGroupDescription(group) {
     List<Widget> data = [];
 
     data.add(
@@ -171,7 +180,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           Container(
             margin: EdgeInsets.all(20.0),
             child: Text(
-              widget.group.description,
+              group.description,
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.black54,
@@ -187,10 +196,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  groupAction(groupBloc, userBloc) {
+  groupAction(groupBloc, userBloc, group) {
     List<Widget> data = [];
 
-    String msg = userBloc.user.id == widget.group.ownerId ? "delete" : "exit";
+    String msg = userBloc.user.id == group.ownerId ? "delete" : "exit";
 
     data.add(
       InkWell(
@@ -226,10 +235,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addParticipants(userBloc) {
+  addParticipants(userBloc, group) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == widget.group.ownerId) {
+    if (userBloc.user.id == group.ownerId) {
       data.add(
         InkWell(
           onTap: () {
@@ -298,10 +307,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addGroupDescription(userBloc) {
+  addGroupDescription(userBloc, group) {
     List<Widget> data = [];
 
-    if (userBloc.user.id == widget.group.ownerId) {
+    if (userBloc.user.id == group.ownerId) {
       data.add(
         InkWell(
           onTap: () {
@@ -337,7 +346,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  addLabel(userBloc) {
+  addLabel(userBloc, group) {
     List<Widget> data = [];
 
     data.add(
@@ -347,7 +356,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
             child: Text(
-              "Participants (${widget.group.subscriptions.length})",
+              "Participants (${group.subscriptions.length})",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -356,7 +365,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
           ),
-          if (userBloc.user.id == widget.group.ownerId)
+          if (userBloc.user.id == group.ownerId)
             InkWell(
               onTap: () {
                 Navigator.pushNamed(
@@ -387,11 +396,8 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  List<Widget> getParticipants(
-    List<GroupSubscription> participants,
-    GroupBloc groupBloc,
-    UserBloc userBloc,
-  ) {
+  List<Widget> getParticipants(List<GroupSubscription> participants,
+      GroupBloc groupBloc, UserBloc userBloc, Group group) {
     List<Widget> data = [];
 
     participants.forEach(
@@ -422,12 +428,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                 fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
-            trailing: participant.subscriber.id == widget.group.ownerId
+            trailing: participant.subscriber.id == group.ownerId
                 ? IconButton(
                     icon: Icon(Icons.verified_user, color: Colors.grey),
                     onPressed: null,
                   )
-                : userBloc.user.id != widget.group.ownerId
+                : userBloc.user.id != group.ownerId
                     ? null
                     : IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),

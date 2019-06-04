@@ -46,6 +46,21 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+
+    if (groupBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (groupBloc.loading == false) {
+      XsProgressHud.hide();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
@@ -188,8 +203,6 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   }
 
   void manageGroup(groupBloc) async {
-    XsProgressHud.show(context);
-
     String name = nameController.text;
     String description = descriptionController.text;
     String photo = photoController.text;
@@ -197,20 +210,13 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     int groupId = widget.group != null ? widget.group.id : null;
 
     if (groupId != null) {
-      final Group group =
-          await groupBloc.editGroup(groupId, name, description, photo);
-      XsProgressHud.hide();
+      await groupBloc.editGroup(groupId, name, description, photo);
 
-      Navigator.pushReplacementNamed(
-        context,
-        routeList.group_detail,
-        arguments: {"group": group},
-      );
+      Navigator.pop(context);
     }
 
     if (groupId == null) {
       final Group group = await groupBloc.createGroup(name, description, photo);
-      XsProgressHud.hide();
 
       Navigator.pushReplacementNamed(
         context,
