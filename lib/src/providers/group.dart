@@ -30,13 +30,17 @@ class GroupBloc extends ChangeNotifier {
 
     try {
       final Response response = await _apiProvider.getGroups();
+
       final results = response.data;
+      final groupData = Group.fromList(results['groups']);
 
       setState(
-        groups: Group.fromList(results['groups']),
+        groups: groupData,
         loading: false,
         loaded: true,
       );
+
+      return groupData;
     } catch (e) {
       setState(
         error: e.response.data,
@@ -50,16 +54,21 @@ class GroupBloc extends ChangeNotifier {
     setState(loading: true);
 
     try {
-      final Response response =
-          await _apiProvider.addParticipants(groupId, participants);
+      final Response response = await _apiProvider.addParticipants(
+        groupId,
+        participants,
+      );
 
       final results = response.data;
+      final groupData = Group.fromList(results['groups']);
 
       setState(
-        groups: Group.fromList(results['group']),
+        groups: groupData,
         loading: false,
         loaded: true,
       );
+
+      return groupData;
     } catch (e) {
       setState(
         error: e.response.data,
@@ -132,11 +141,15 @@ class GroupBloc extends ChangeNotifier {
 
     try {
       await _apiProvider.exitGroup(groupId, userId);
+      final groupData = groups..removeWhere((group) => group.id == groupId);
 
       setState(
+        groups: groupData,
         loading: false,
         loaded: true,
       );
+
+      return groupData;
     } catch (e) {
       setState(
         error: e.response.data,

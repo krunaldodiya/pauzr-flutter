@@ -473,19 +473,19 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
     switch (type) {
       case "exit":
-        Navigator.popUntil(context, (route) => route.isFirst);
+        print(type);
         break;
 
       case "delete":
-        Navigator.popUntil(context, (route) => route.isFirst);
+        print(type);
         break;
 
       case "remove":
-        Navigator.popUntil(context, (route) => route.isFirst);
+        print(type);
         break;
 
       default:
-        Navigator.popUntil(context, (route) => route.isFirst);
+        print(type);
     }
   }
 }
