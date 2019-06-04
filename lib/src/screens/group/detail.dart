@@ -273,6 +273,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               routeList.add_group_participants,
               arguments: {
                 "group": group,
+                "shouldPop": true,
               },
             );
           },
@@ -399,6 +400,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   routeList.add_group_participants,
                   arguments: {
                     "group": group,
+                    "shouldPop": true,
                   },
                 );
               },

@@ -18,21 +18,6 @@ class RequestOtpPage extends StatefulWidget {
 
 class _RequestOtpPage extends State<RequestOtpPage> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
-
-    if (otpBloc.loading == true) {
-      XsProgressHud.show(context);
-    }
-
-    if (otpBloc.loading == false) {
-      XsProgressHud.hide();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
@@ -108,7 +93,11 @@ class _RequestOtpPage extends State<RequestOtpPage> {
   }
 
   onRequestOtp(OtpBloc otpBloc) async {
+    XsProgressHud.show(context);
+
     await otpBloc.requestOtp();
+
+    XsProgressHud.hide();
 
     if (otpBloc.serverOtp != null) {
       return Navigator.pushReplacementNamed(context, routeList.verify_otp);

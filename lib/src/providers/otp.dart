@@ -21,40 +21,47 @@ class OtpBloc extends ChangeNotifier {
     return clientOtp != null && error == null;
   }
 
-  onChangeMobile(String input) {
-    mobile = input.length > 0 ? input : null;
-    error = null;
+  setState({
+    bool loading,
+    bool loaded,
+    Map error,
+    String mobile,
+    int clientOtp,
+    int serverOtp,
+  }) {
+    this.loading = loading ?? this.loading;
+    this.loaded = loaded ?? this.loaded;
+    this.error = error ?? this.error;
+    this.mobile = mobile ?? this.mobile;
+    this.clientOtp = clientOtp ?? this.clientOtp;
+    this.serverOtp = serverOtp ?? this.serverOtp;
 
     notifyListeners();
+  }
+
+  onChangeMobile(String input) {
+    setState(mobile: input.length > 0 ? input : null, error: null);
   }
 
   onChangeClientOtp(String otp) {
-    clientOtp = otp.length > 0 ? int.parse(otp) : null;
-    error = null;
-
-    notifyListeners();
+    setState(clientOtp: otp.length > 0 ? int.parse(otp) : null, error: null);
   }
 
   requestOtp() async {
-    loading = true;
+    setState(loading: true);
 
     try {
       final Response response = await _apiProvider.requestOtp(mobile);
       final results = response.data;
 
-      serverOtp = results['otp'];
-    } catch (e) {
-      error = e.response.data;
+      setState(serverOtp: results['otp'], loading: false, loaded: true);
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 
   verifyOtp(UserBloc userBloc) async {
-    loading = true;
+    setState(loading: true);
 
     try {
       final Response response = await _apiProvider.verifyOtp(mobile, clientOtp);
@@ -62,13 +69,10 @@ class OtpBloc extends ChangeNotifier {
 
       await userBloc.setAuthToken(results['access_token']);
       await userBloc.setAuthUser(results['user']);
-    } catch (e) {
-      error = e.response.data;
+
+      setState(serverOtp: results['otp'], loading: false, loaded: true);
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 }

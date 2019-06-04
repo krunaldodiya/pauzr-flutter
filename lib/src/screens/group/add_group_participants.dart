@@ -10,6 +10,7 @@ import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/models/group_subscription.dart';
 import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/resources/api.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,8 +18,13 @@ import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class AddGroupParticipantsPage extends StatefulWidget {
   final Group group;
+  final bool shouldPop;
 
-  AddGroupParticipantsPage({Key key, this.group}) : super(key: key);
+  AddGroupParticipantsPage({
+    Key key,
+    @required this.group,
+    @required this.shouldPop,
+  }) : super(key: key);
 
   _AddGroupParticipantsPageState createState() =>
       _AddGroupParticipantsPageState();
@@ -72,21 +78,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
           reloadContacts = false;
         });
       }
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
-
-    if (groupBloc.loading == true) {
-      XsProgressHud.show(context);
-    }
-
-    if (groupBloc.loading == false) {
-      XsProgressHud.hide();
     }
   }
 
@@ -285,9 +276,24 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       return Navigator.pop(context);
     }
 
-    await groupBloc.addParticipants(widget.group.id, _participants);
+    XsProgressHud.show(context);
 
-    Navigator.pop(context);
+    final group = await groupBloc.addParticipants(
+      widget.group.id,
+      _participants,
+    );
+
+    XsProgressHud.hide();
+
+    if (widget.shouldPop == true) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacementNamed(
+        context,
+        routeList.group_scoreboard,
+        arguments: {"group": group},
+      );
+    }
   }
 
   excludeContacts(contacts) {

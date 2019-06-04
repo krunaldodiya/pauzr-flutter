@@ -72,7 +72,7 @@ class GroupBloc extends ChangeNotifier {
         loaded: true,
       );
 
-      return groupData;
+      return currentGroup;
     } catch (e) {
       setState(
         error: e.response.data,

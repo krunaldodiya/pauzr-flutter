@@ -19,21 +19,6 @@ class VerifyOtpPage extends StatefulWidget {
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
-
-    if (otpBloc.loading == true) {
-      XsProgressHud.show(context);
-    }
-
-    if (otpBloc.loading == false) {
-      XsProgressHud.hide();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final OtpBloc otpBloc = Provider.of<OtpBloc>(context);
@@ -123,7 +108,11 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
   }
 
   void onVerifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
+    XsProgressHud.show(context);
+
     await otpBloc.verifyOtp(userBloc);
+
+    XsProgressHud.show(context);
 
     if (userBloc.user != null) {
       if (userBloc.user.status == 1) {

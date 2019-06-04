@@ -168,7 +168,10 @@ class RouteGenerator {
       case routeList.add_group_participants:
         return MaterialPageRoute(
           builder: (context) {
-            return AddGroupParticipantsPage(group: args['group']);
+            return AddGroupParticipantsPage(
+              group: args['group'],
+              shouldPop: args['shouldPop'],
+            );
           },
         );
         break;
