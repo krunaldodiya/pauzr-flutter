@@ -149,7 +149,7 @@ class GroupBloc extends ChangeNotifier {
       final groupData = groups..removeWhere((group) => group.id == groupId);
 
       setState(
-        groups: groupData,
+        groups: groupData.length > 0 ? groupData : [],
         loading: false,
         loaded: true,
       );
@@ -173,7 +173,7 @@ class GroupBloc extends ChangeNotifier {
       final groupData = groups..removeWhere((group) => group.id == groupId);
 
       setState(
-        groups: groupData,
+        groups: groupData.length > 0 ? groupData : [],
         loading: false,
         loaded: true,
       );

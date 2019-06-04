@@ -490,10 +490,14 @@ class _GroupDetailPage extends State<GroupDetailPage> {
 
   exitGroup(GroupBloc groupBloc, Group group, User user) async {
     await groupBloc.exitGroup(group.id, user.id);
+
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   deleteGroup(GroupBloc groupBloc, Group group, User user) async {
     await groupBloc.deleteGroup(group.id, user.id);
+
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   removeParticipant(GroupBloc groupBloc, Group group, User user) async {
