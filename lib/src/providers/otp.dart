@@ -57,7 +57,7 @@ class OtpBloc extends ChangeNotifier {
     loading = true;
 
     try {
-      final Response response = await _apiProvider.verifyOtp(mobile, serverOtp);
+      final Response response = await _apiProvider.verifyOtp(mobile, clientOtp);
       final results = response.data;
 
       await userBloc.setAuthToken(results['access_token']);
