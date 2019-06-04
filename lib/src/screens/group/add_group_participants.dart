@@ -13,6 +13,7 @@ import 'package:pauzr/src/resources/api.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class AddGroupParticipantsPage extends StatefulWidget {
   final Group group;
@@ -71,6 +72,21 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
           reloadContacts = false;
         });
       }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+
+    if (groupBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (groupBloc.loading == false) {
+      XsProgressHud.hide();
     }
   }
 
@@ -264,16 +280,14 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     );
   }
 
-  addParticipants(groupBloc) {
+  addParticipants(GroupBloc groupBloc) async {
     if (_participants.length == 0) {
       return Navigator.pop(context);
     }
 
-    groupBloc.addParticipants(widget.group.id, _participants, (data) {
-      if (data.runtimeType != DioError) {
-        Navigator.pop(context);
-      }
-    });
+    await groupBloc.addParticipants(widget.group.id, _participants);
+
+    Navigator.pop(context);
   }
 
   excludeContacts(contacts) {

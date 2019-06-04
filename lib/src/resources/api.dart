@@ -29,13 +29,6 @@ class ApiProvider {
     });
   }
 
-  Future addParticipants(int groupId, List participants) async {
-    return sendRequest(Api.addParticipants, {
-      "groupId": groupId,
-      "participants": participants,
-    });
-  }
-
   Future requestOtp(String mobile) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -64,7 +57,11 @@ class ApiProvider {
   }
 
   Future editGroup(
-      int groupId, String name, String description, String photo) async {
+    int groupId,
+    String name,
+    String description,
+    String photo,
+  ) async {
     return sendRequest(Api.editGroup, {
       "groupId": groupId,
       "name": name,
@@ -73,8 +70,29 @@ class ApiProvider {
     });
   }
 
+  Future addParticipants(int groupId, List participants) async {
+    return sendRequest(Api.addParticipants, {
+      "groupId": groupId,
+      "participants": participants,
+    });
+  }
+
+  Future removeParticipants(int groupId, int userId) async {
+    return sendRequest(Api.removeParticipants, {
+      "groupId": groupId,
+      "userId": userId,
+    });
+  }
+
   Future exitGroup(int groupId, int userId) async {
     return sendRequest(Api.exitGroup, {
+      "groupId": groupId,
+      "userId": userId,
+    });
+  }
+
+  Future deleteGroup(int groupId, int userId) async {
+    return sendRequest(Api.deleteGroup, {
       "groupId": groupId,
       "userId": userId,
     });
@@ -136,7 +154,9 @@ class Api {
   static String createGroup = "$baseUrl/api/groups/create";
   static String editGroup = "$baseUrl/api/groups/edit";
   static String exitGroup = "$baseUrl/api/groups/exit";
+  static String deleteGroup = "$baseUrl/api/groups/delete";
   static String addParticipants = "$baseUrl/api/groups/add-participants";
+  static String removeParticipants = "$baseUrl/api/groups/remove-participants";
   static String getGroups = "$baseUrl/api/groups/get";
   static String uploadGroupImage = "$baseUrl/api/groups/image/upload";
   static String syncContacts = "$baseUrl/api/groups/sync-contacts";

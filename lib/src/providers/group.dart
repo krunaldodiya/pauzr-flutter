@@ -60,7 +60,11 @@ class GroupBloc extends ChangeNotifier {
       );
 
       final results = response.data;
-      final groupData = Group.fromList(results['groups']);
+      final currentGroup = Group.fromMap(results['group']);
+
+      final groupData = groups
+          .map((group) => group.id == currentGroup.id ? currentGroup : group)
+          .toList();
 
       setState(
         groups: groupData,
@@ -141,7 +145,64 @@ class GroupBloc extends ChangeNotifier {
 
     try {
       await _apiProvider.exitGroup(groupId, userId);
+
       final groupData = groups..removeWhere((group) => group.id == groupId);
+
+      setState(
+        groups: groupData,
+        loading: false,
+        loaded: true,
+      );
+
+      return groupData;
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
+
+  deleteGroup(groupId, userId) async {
+    setState(loading: true);
+
+    try {
+      await _apiProvider.deleteGroup(groupId, userId);
+
+      final groupData = groups..removeWhere((group) => group.id == groupId);
+
+      setState(
+        groups: groupData,
+        loading: false,
+        loaded: true,
+      );
+
+      return groupData;
+    } catch (e) {
+      setState(
+        error: e.response.data,
+        loading: false,
+        loaded: true,
+      );
+    }
+  }
+
+  removeParticipants(groupId, userId) async {
+    setState(loading: true);
+
+    try {
+      final Response response = await _apiProvider.removeParticipants(
+        groupId,
+        userId,
+      );
+
+      final results = response.data;
+      final currentGroup = Group.fromMap(results['group']);
+
+      final groupData = groups
+          .map((group) => group.id == currentGroup.id ? currentGroup : group)
+          .toList();
 
       setState(
         groups: groupData,

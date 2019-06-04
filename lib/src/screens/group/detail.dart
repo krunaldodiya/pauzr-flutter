@@ -12,6 +12,7 @@ import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class GroupDetailPage extends StatefulWidget {
   final Group group;
@@ -26,6 +27,21 @@ class GroupDetailPage extends StatefulWidget {
 }
 
 class _GroupDetailPage extends State<GroupDetailPage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+
+    if (groupBloc.loading == true) {
+      XsProgressHud.show(context);
+    }
+
+    if (groupBloc.loading == false) {
+      XsProgressHud.hide();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -86,7 +102,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                                 context,
                                 routeList.manage_group,
                                 arguments: {
-                                  "group": widget.group,
+                                  "group": group,
                                 },
                               );
                             },
@@ -211,7 +227,9 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             context,
             "Are you sure want to $msg group ?",
             () {
-              manageGroup(groupBloc, widget.group, userBloc.user, msg);
+              msg == "delete"
+                  ? deleteGroup(groupBloc, group, userBloc.user)
+                  : exitGroup(groupBloc, group, userBloc.user);
             },
           );
         },
@@ -249,7 +267,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               context,
               routeList.add_group_participants,
               arguments: {
-                "group": widget.group,
+                "group": group,
               },
             );
           },
@@ -321,7 +339,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               context,
               routeList.manage_group,
               arguments: {
-                "group": widget.group,
+                "group": group,
               },
             );
           },
@@ -375,7 +393,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   context,
                   routeList.add_group_participants,
                   arguments: {
-                    "group": widget.group,
+                    "group": group,
                   },
                 );
               },
@@ -445,11 +463,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                             context,
                             "Are you sure want to remove ?",
                             () {
-                              manageGroup(
+                              removeParticipant(
                                 groupBloc,
-                                widget.group,
+                                group,
                                 participant.subscriber,
-                                "remove",
                               );
                             },
                           );
@@ -471,24 +488,15 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     return data;
   }
 
-  manageGroup(GroupBloc groupBloc, Group group, User user, String type) async {
+  exitGroup(GroupBloc groupBloc, Group group, User user) async {
     await groupBloc.exitGroup(group.id, user.id);
+  }
 
-    switch (type) {
-      case "exit":
-        print(type);
-        break;
+  deleteGroup(GroupBloc groupBloc, Group group, User user) async {
+    await groupBloc.deleteGroup(group.id, user.id);
+  }
 
-      case "delete":
-        print(type);
-        break;
-
-      case "remove":
-        print(type);
-        break;
-
-      default:
-        print(type);
-    }
+  removeParticipant(GroupBloc groupBloc, Group group, User user) async {
+    await groupBloc.removeParticipants(group.id, user.id);
   }
 }

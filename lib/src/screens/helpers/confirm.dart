@@ -32,8 +32,8 @@ Future<bool> showConfirmationPopup(BuildContext context, message, onPressYes) {
               ),
             ),
             onPressed: () {
+              Navigator.of(context).pop();
               onPressYes();
-              Navigator.popUntil(context, (route) => route.isFirst);
             },
           ),
         ],
