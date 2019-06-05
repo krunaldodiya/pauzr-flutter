@@ -24,14 +24,14 @@ class OtpBloc extends ChangeNotifier {
   setState({
     bool loading,
     bool loaded,
-    Map error,
+    Map error: const {},
     String mobile,
     int clientOtp,
     int serverOtp,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
-    this.error = error ?? this.error;
+    this.error = identical(error, {}) ? this.error : error;
     this.mobile = mobile ?? this.mobile;
     this.clientOtp = clientOtp ?? this.clientOtp;
     this.serverOtp = serverOtp ?? this.serverOtp;

@@ -6,12 +6,14 @@ class Stop {
   Color handBackgroundColor;
   Color waterColor;
   Color strokeCircleColor;
+  Color timerColor;
 
   Stop({
     @required this.backgroundColor,
     @required this.handBackgroundColor,
     @required this.waterColor,
     @required this.strokeCircleColor,
+    @required this.timerColor,
   });
 
   factory Stop.initial() {
@@ -20,6 +22,7 @@ class Stop {
       handBackgroundColor: Colors.black,
       waterColor: Colors.black,
       strokeCircleColor: Colors.black,
+      timerColor: Colors.black,
     );
   }
 }

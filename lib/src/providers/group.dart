@@ -14,12 +14,12 @@ class GroupBloc extends ChangeNotifier {
   setState({
     bool loading,
     bool loaded,
-    Map error,
+    Map error: const {},
     List<Group> groups,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
-    this.error = error ?? this.error;
+    this.error = identical(error, {}) ? this.error : error;
     this.groups = groups ?? this.groups;
 
     notifyListeners();

@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/blocs/timer/bloc.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
@@ -24,8 +23,6 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  TimerBloc timerBloc;
-
   int durationStatic;
   int durationDynamic;
 
@@ -46,11 +43,14 @@ class _StopPage extends State<StopPage>
   void initState() {
     super.initState();
 
+    getInitialData();
+  }
+
+  getInitialData() {
     WidgetsBinding.instance.addObserver(this);
 
     setState(() {
       started = true;
-      timerBloc = BlocProvider.of<TimerBloc>(context);
     });
 
     double tick = waterHeight / durationStatic;
@@ -189,9 +189,10 @@ class _StopPage extends State<StopPage>
                       Text(
                         getTimer(),
                         style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.black,
-                          fontFamily: Fonts.digital7,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0,
+                          color: theme.stop.timerColor,
+                          fontFamily: Fonts.titilliumWebBold,
                         ),
                       )
                     ],
@@ -295,11 +296,13 @@ class _StopPage extends State<StopPage>
     return "$min : $sec";
   }
 
-  void onSuccess(duration) {
-    timerBloc.setTimer(duration, (data) {
-      showSuccessPop(context, () {
-        Navigator.of(context).pop();
-      });
+  onSuccess(duration) async {
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+
+    await timerBloc.setTimer(duration);
+
+    showSuccessPop(context, () {
+      Navigator.of(context).pop();
     });
   }
 }

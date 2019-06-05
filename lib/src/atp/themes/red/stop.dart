@@ -6,4 +6,5 @@ Stop stopTheme = Stop(
   handBackgroundColor: Colors.white,
   strokeCircleColor: Colors.white,
   waterColor: Colors.white,
+  timerColor: Colors.black,
 );
