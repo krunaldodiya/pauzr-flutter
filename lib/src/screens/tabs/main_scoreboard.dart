@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
+import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -129,7 +130,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
     );
   }
 
-  getCards(results, UserBloc userBloc, theme) {
+  getCards(results, UserBloc userBloc, DefaultTheme theme) {
     return Row(
       children: <Widget>[
         Expanded(
@@ -140,7 +141,9 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             child: getCard(
               results['minutes_saved'].toString(),
               "Minutes Saved",
-              theme,
+              80.0,
+              40.0,
+              theme.mainScoreboard,
             ),
           ),
         ),
@@ -152,7 +155,9 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             child: getCard(
               results['points_earned'].toString(),
               "Points Earned",
-              theme,
+              80.0,
+              40.0,
+              theme.mainScoreboard,
             ),
           ),
         ),
@@ -164,57 +169,13 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             child: getCard(
               "${userBloc.user.level}/10",
               "Levels Cleared",
-              theme,
+              80.0,
+              40.0,
+              theme.mainScoreboard,
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Card getCard(String title, String msg, DefaultTheme theme) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                topRight: Radius.circular(5.0),
-              ),
-              color: theme.mainScoreboard.cardBackground,
-            ),
-            height: 90.0,
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 36.0,
-                  fontFamily: Fonts.titilliumWebBold,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: 80.0,
-            padding: EdgeInsets.all(5.0),
-            color: Colors.white,
-            child: Text(
-              msg,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
-                fontSize: 14.0,
-                fontFamily: Fonts.titilliumWebSemiBold,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

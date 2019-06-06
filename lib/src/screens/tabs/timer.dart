@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/tabs/quotes.dart';
-import 'package:pauzr/src/screens/tabs/timer_cards.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
@@ -121,7 +121,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  getTimerCard(time, theme) {
+  getTimerCard(int time, DefaultTheme theme) {
     // int duration = time * 60;
     int duration = time * 1;
 
@@ -135,7 +135,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
             "duration": duration,
           });
         },
-        child: getCard(time.toString(), "Minutes", theme),
+        child: getCard(time.toString(), "Minutes", 80.0, 40.0, theme.timer),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -56,62 +57,28 @@ class _MinutesPage extends State<MinutesPage>
     );
   }
 
-  getCards(body, theme) {
+  getCards(Map body, DefaultTheme theme) {
     return Row(
       children: <Widget>[
         Expanded(
-          child: getCard(body['sum'].toString(), "All Time Saving", theme),
+          child: getCard(
+            body['sum'].toString(),
+            "All Time Saving",
+            100.0,
+            50.0,
+            theme.minutes,
+          ),
         ),
         Expanded(
-          child: getCard(body['avg'].toString(), "Average per day", theme),
+          child: getCard(
+            body['avg'].toString(),
+            "Average per day",
+            100.0,
+            50.0,
+            theme.minutes,
+          ),
         ),
       ],
-    );
-  }
-
-  Card getCard(String title, String msg, DefaultTheme theme) {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5.0),
-                topRight: Radius.circular(5.0),
-              ),
-              color: theme.minutes.backgroundColor,
-            ),
-            height: 90.0,
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 36.0,
-                  fontFamily: Fonts.titilliumWebBold,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: 80.0,
-            padding: EdgeInsets.all(5.0),
-            color: Colors.white,
-            child: Text(
-              msg,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
-                fontSize: 14.0,
-                fontFamily: Fonts.titilliumWebSemiBold,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

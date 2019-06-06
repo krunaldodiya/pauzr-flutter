@@ -6,14 +6,16 @@ class MainScoreboard {
   Color navigationBackgroundColor;
   Color navigationColor;
   Color navigationButtonBackgroundColor;
-  Color cardBackground;
+  Color cardTopBackgroundColor;
+  Color cardBottomBackgroundColor;
 
   MainScoreboard({
     @required this.backgroundColor,
     @required this.navigationBackgroundColor,
     @required this.navigationColor,
     @required this.navigationButtonBackgroundColor,
-    @required this.cardBackground,
+    @required this.cardTopBackgroundColor,
+    @required this.cardBottomBackgroundColor,
   });
 
   factory MainScoreboard.initial() {
@@ -22,7 +24,8 @@ class MainScoreboard {
       navigationBackgroundColor: Colors.black,
       navigationColor: Colors.black,
       navigationButtonBackgroundColor: Colors.black,
-      cardBackground: Colors.black,
+      cardTopBackgroundColor: Colors.white,
+      cardBottomBackgroundColor: Colors.black,
     );
   }
 }

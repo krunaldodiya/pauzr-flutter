@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 
-getCard(String topText, String bottomText, DefaultTheme theme) {
+getCard(
+  String topText,
+  String bottomText,
+  double topHeight,
+  double bottomHeight,
+  theme,
+) {
   return Card(
     color: Colors.transparent,
     child: Column(
       children: <Widget>[
         Container(
-          height: 80.0,
+          height: topHeight,
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           decoration: BoxDecoration(
-            color: theme.timer.cardTopBackgroundColor,
+            color: theme.cardTopBackgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(5.0),
               topRight: Radius.circular(5.0),
@@ -29,9 +35,10 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
           ),
         ),
         Container(
-          height: 42.0,
+          height: bottomHeight,
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           decoration: BoxDecoration(
-            color: theme.timer.cardBottomBackgroundColor,
+            color: theme.cardBottomBackgroundColor,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(5.0),
               bottomRight: Radius.circular(5.0),
@@ -40,6 +47,7 @@ getCard(String topText, String bottomText, DefaultTheme theme) {
           child: Center(
             child: Text(
               bottomText,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
