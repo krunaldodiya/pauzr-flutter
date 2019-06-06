@@ -11,21 +11,34 @@ class LocationBloc extends ChangeNotifier {
   Map error;
   List<Location> locations = [];
 
+  setState({
+    bool loading,
+    bool loaded,
+    Map error: const {},
+    List<Location> locations,
+  }) {
+    this.loading = loading ?? this.loading;
+    this.loaded = loaded ?? this.loaded;
+    this.error = identical(error, {}) ? this.error : error;
+    this.locations = locations ?? this.locations;
+
+    notifyListeners();
+  }
+
   getLocations() async {
-    loading = true;
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.getLocations();
       final results = response.data;
 
-      locations = Location.fromList(results['locations']);
-    } catch (e) {
-      error = e.response.data;
+      setState(
+        locations: Location.fromList(results['locations']),
+        loading: false,
+        loaded: true,
+      );
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 }
