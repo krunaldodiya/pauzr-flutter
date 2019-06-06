@@ -26,7 +26,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   getGroups() async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.getGroups();
@@ -51,7 +51,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   addParticipants(groupId, participants) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.addParticipants(
@@ -83,7 +83,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   createGroup(name, description, photo) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response =
@@ -111,7 +111,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   editGroup(groupId, name, description, photo) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response =
@@ -141,7 +141,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   exitGroup(groupId, userId) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       await _apiProvider.exitGroup(groupId, userId);
@@ -165,7 +165,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   deleteGroup(groupId, userId) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       await _apiProvider.deleteGroup(groupId, userId);
@@ -189,7 +189,7 @@ class GroupBloc extends ChangeNotifier {
   }
 
   removeParticipants(groupId, userId) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.removeParticipants(

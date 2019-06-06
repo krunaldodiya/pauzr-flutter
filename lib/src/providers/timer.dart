@@ -25,7 +25,7 @@ class TimerBloc extends ChangeNotifier {
   }
 
   setTimer(duration) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.setTimer(duration);

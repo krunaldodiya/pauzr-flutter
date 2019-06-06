@@ -7,38 +7,47 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserBloc extends ChangeNotifier {
   final ApiProvider _apiProvider = ApiProvider();
 
-  bool loading = false;
-  bool loaded = false;
+  bool loading;
+  bool loaded;
   Map error;
   User user;
 
-  onChangeData(String key, String value, User userData) {
-    user = userData.copyWith({key: value.length > 0 ? value : null});
-    error = null;
+  setState({
+    bool loading,
+    bool loaded,
+    Map error: const {},
+    User user,
+  }) {
+    this.loading = loading ?? this.loading;
+    this.loaded = loaded ?? this.loaded;
+    this.error = identical(error, {}) ? this.error : error;
+    this.user = user ?? this.user;
 
     notifyListeners();
   }
 
+  onChangeData(String key, String value, User userData) {
+    setState(
+      user: userData.copyWith({key: value.length > 0 ? value : null}),
+      error: null,
+    );
+  }
+
   updateProfile() async {
-    loading = true;
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.updateProfile(user);
       final results = response.data;
 
       setAuthUser(results['user']);
-    } catch (e) {
-      error = e.response.data;
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 
   getAuthUser() async {
-    loading = true;
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.getAuthUser();
@@ -46,14 +55,9 @@ class UserBloc extends ChangeNotifier {
 
       setAuthToken(results['access_token']);
       setAuthUser(results['user']);
-    } catch (e) {
-      error = e.response.data;
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
     }
-
-    loading = false;
-    loaded = true;
-
-    notifyListeners();
   }
 
   setAuthToken(String token) async {
@@ -64,9 +68,12 @@ class UserBloc extends ChangeNotifier {
   }
 
   setAuthUser(Map userData) {
-    final User authUser = User.fromMap(userData);
-
-    user = authUser;
+    setState(
+      user: User.fromMap(userData),
+      error: null,
+      loading: false,
+      loaded: true,
+    );
   }
 
   removeAuth() async {
@@ -76,6 +83,11 @@ class UserBloc extends ChangeNotifier {
     prefs.remove("defaultTheme");
     prefs.remove("contacts");
 
-    user = null;
+    setState(
+      user: null,
+      error: null,
+      loading: false,
+      loaded: true,
+    );
   }
 }

@@ -48,7 +48,7 @@ class OtpBloc extends ChangeNotifier {
   }
 
   requestOtp() async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.requestOtp(mobile);
@@ -61,7 +61,7 @@ class OtpBloc extends ChangeNotifier {
   }
 
   verifyOtp(UserBloc userBloc) async {
-    setState(loading: true);
+    setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.verifyOtp(mobile, clientOtp);
