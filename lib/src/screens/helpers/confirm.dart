@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-Future<bool> showConfirmationPopup(BuildContext context, message, onPressYes) {
+Future<bool> showConfirmationPopup(
+  BuildContext context, {
+  yesText: "Yes",
+  noText: "No",
+  message: "Are you sure ?",
+  onPressYes,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -14,7 +20,7 @@ Future<bool> showConfirmationPopup(BuildContext context, message, onPressYes) {
         actions: <Widget>[
           FlatButton(
             child: Text(
-              "No",
+              noText,
               style: TextStyle(
                 color: Colors.black,
               ),
@@ -26,7 +32,7 @@ Future<bool> showConfirmationPopup(BuildContext context, message, onPressYes) {
           RaisedButton(
             color: Colors.red,
             child: Text(
-              "Yes",
+              yesText,
               style: TextStyle(
                 color: Colors.white,
               ),

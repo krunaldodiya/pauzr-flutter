@@ -140,8 +140,10 @@ class _StopPage extends State<StopPage>
       onWillPop: () async {
         return showConfirmationPopup(
           context,
-          "Are you sure want to cancel ?",
-          () {
+          yesText: "Yes",
+          noText: "No",
+          message: "Are you sure ?",
+          onPressYes: () {
             setState(() {
               started = false;
               rotation = 360;
@@ -206,8 +208,10 @@ class _StopPage extends State<StopPage>
                     onPressed: () {
                       return showConfirmationPopup(
                         context,
-                        "Are you sure want to cancel ?",
-                        () {
+                        yesText: "Yes",
+                        noText: "No",
+                        message: "Remove this user from group",
+                        onPressYes: () {
                           setState(() {
                             started = false;
                             rotation = 360;

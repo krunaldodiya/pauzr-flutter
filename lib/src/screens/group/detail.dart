@@ -230,8 +230,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
         onTap: () {
           return showConfirmationPopup(
             context,
-            "Are you sure want to $msg group ?",
-            () {
+            yesText: msg,
+            noText: "cancel",
+            message: "Are you sure want to $msg '${group.name}' group ?",
+            onPressYes: () {
               msg == "delete"
                   ? deleteGroup(groupBloc, group, userBloc.user)
                   : exitGroup(groupBloc, group, userBloc.user);
@@ -468,8 +470,11 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                         onPressed: () {
                           return showConfirmationPopup(
                             context,
-                            "Are you sure want to remove ?",
-                            () {
+                            yesText: "remove",
+                            noText: "cancel",
+                            message:
+                                "Remove this user from ${group.name} group",
+                            onPressYes: () {
                               removeParticipant(
                                 groupBloc,
                                 group,

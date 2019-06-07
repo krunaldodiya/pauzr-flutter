@@ -6,4 +6,6 @@ Points pointsTheme = Points(
   appBackgroundColor: Colors.black,
   cardTopBackgroundColor: Colors.black,
   cardBottomBackgroundColor: Colors.white,
+  cardTopColor: Colors.white,
+  cardBottomColor: Colors.black,
 );

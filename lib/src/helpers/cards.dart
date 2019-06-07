@@ -27,7 +27,7 @@ getCard(
               topText,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: theme.cardTopColor,
                 fontSize: 36.0,
                 fontFamily: Fonts.titilliumWebBold,
               ),
@@ -50,7 +50,7 @@ getCard(
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: theme.cardBottomColor,
                 fontSize: 16.0,
                 fontFamily: Fonts.titilliumWebBold,
               ),

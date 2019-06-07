@@ -298,10 +298,11 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   excludeContacts(contacts) {
     List data = [];
+
     List<GroupSubscription> subscriptions = widget.group.subscriptions;
-    List subscriberIds = subscriptions.map((subscriber) {
-      return subscriber.subscriberId;
-    }).toList();
+    List subscriberIds = subscriptions
+        .map((subscription) => subscription.subscriber.id)
+        .toList();
 
     contacts.forEach((contact) {
       if (subscriberIds.contains(contact['id']) == false) {

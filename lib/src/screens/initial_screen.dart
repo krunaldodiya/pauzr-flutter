@@ -49,7 +49,7 @@ class _InitialScreenState extends State<InitialScreen> {
       return NoNetwork();
     }
 
-    if (widget.userBloc.loading == true || widget.themeBloc.theme == null) {
+    if (widget.userBloc.loaded != true || widget.themeBloc.loaded != true) {
       return Center(child: CircularProgressIndicator());
     }
 

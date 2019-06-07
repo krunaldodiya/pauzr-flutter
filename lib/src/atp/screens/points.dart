@@ -6,12 +6,16 @@ class Points {
   Color appBackgroundColor;
   Color cardTopBackgroundColor;
   Color cardBottomBackgroundColor;
+  Color cardTopColor;
+  Color cardBottomColor;
 
   Points({
     @required this.backgroundColor,
     @required this.appBackgroundColor,
     @required this.cardTopBackgroundColor,
     @required this.cardBottomBackgroundColor,
+    @required this.cardTopColor,
+    @required this.cardBottomColor,
   });
 
   factory Points.initial() {
@@ -20,6 +24,8 @@ class Points {
       appBackgroundColor: Colors.black,
       cardTopBackgroundColor: Colors.black,
       cardBottomBackgroundColor: Colors.black,
+      cardTopColor: Colors.white,
+      cardBottomColor: Colors.black,
     );
   }
 }

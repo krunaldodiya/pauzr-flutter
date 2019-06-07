@@ -43,6 +43,7 @@ class EditableFormField extends StatelessWidget {
           fontFamily: Fonts.titilliumWebRegular,
         ),
         keyboardType: this.keyboardType ?? TextInputType.text,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           alignLabelWithHint: true,
           errorText: errorText,
