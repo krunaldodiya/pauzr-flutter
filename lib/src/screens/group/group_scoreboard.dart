@@ -220,7 +220,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
     }
   }
 
-  getChoices(userBloc, group) {
+  List getChoices(userBloc, group) {
     List choices = [];
 
     choices.add("Group Info");
