@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -101,7 +102,25 @@ class _PointsPage extends State<PointsPage>
             itemCount: history.length,
             itemBuilder: (context, int index) {
               final item = history[index];
-              return getRankCard(item);
+
+              return Column(
+                children: <Widget>[
+                  if (showDateLabel(history, index))
+                    Container(
+                      child: Text(
+                        separtedDateTime(item['created_at'], 'date'),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                          fontSize: 16.0,
+                          fontFamily: Fonts.titilliumWebRegular,
+                        ),
+                      ),
+                      margin: EdgeInsets.all(10.0),
+                    ),
+                  getRankCard(item),
+                ],
+              );
             },
           ),
         ),
@@ -137,11 +156,11 @@ class _PointsPage extends State<PointsPage>
           ),
           subtitle: Container(
             child: Text(
-              "${item['created_at']}",
+              "${separtedDateTime(item['created_at'], 'time')}",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.black,
-                fontSize: 16.0,
+                fontSize: 14.0,
                 fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
@@ -149,5 +168,22 @@ class _PointsPage extends State<PointsPage>
         ),
       ),
     );
+  }
+
+  separtedDateTime(dateTime, output) {
+    final date = DateTime.parse(dateTime);
+
+    final formatter = output == 'date' ? 'dd-MM-yyyy' : "hh:mm a";
+    String formattedDob = DateFormat(formatter).format(date);
+
+    return formattedDob;
+  }
+
+  showDateLabel(history, index) {
+    final previousIndex = index == 0 ? 0 : index - 1;
+    final date = DateTime.parse(history[index]['created_at']);
+    final previousDate = DateTime.parse(history[previousIndex]['created_at']);
+
+    return date.day == previousDate.day;
   }
 }
