@@ -3,8 +3,8 @@ import 'package:pauzr/src/atp/screens/points.dart';
 
 Points pointsTheme = Points(
   backgroundColor: Colors.grey.shade100,
-  appBackgroundColor: Colors.blue,
-  cardTopBackgroundColor: Colors.blue,
+  appBackgroundColor: Colors.indigo,
+  cardTopBackgroundColor: Colors.indigo,
   cardBottomBackgroundColor: Colors.white,
   cardTopColor: Colors.white,
   cardBottomColor: Colors.black,
