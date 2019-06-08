@@ -351,7 +351,7 @@ class _StopPage extends State<StopPage>
       type: 'success',
       message: message,
       navigateAway: () {
-        Navigator.of(context).pop();
+        Navigator.popUntil(context, (route) => route.isFirst);
       },
     );
   }
