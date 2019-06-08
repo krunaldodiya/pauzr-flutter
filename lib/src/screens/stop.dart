@@ -39,6 +39,8 @@ class _StopPage extends State<StopPage>
   int pauseTime;
   var timer;
 
+  Map points = {20: 1, 40: 3, 60: 3};
+
   @override
   void initState() {
     super.initState();
@@ -123,9 +125,16 @@ class _StopPage extends State<StopPage>
         rotation = 360;
       });
 
-      showCanceledPop(context, () {
-        Navigator.of(context).pop();
-      });
+      String message = "You didn’t Pauz for $durationStatic mins.";
+
+      showTimerPop(
+        context,
+        type: 'failed',
+        message: message,
+        navigateAway: () {
+          Navigator.of(context).pop();
+        },
+      );
     } else {
       print("resumed after $seconds seconds.");
     }
@@ -236,45 +245,74 @@ class _StopPage extends State<StopPage>
     );
   }
 
-  Future<bool> showSuccessPop(BuildContext context, navigateAway) {
+  Future<bool> showTimerPop(
+    BuildContext context, {
+    type,
+    message,
+    navigateAway,
+  }) {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Congrats! You have unlocked points."),
-          actions: <Widget>[
-            RaisedButton(
-              color: Colors.green,
-              child: Text(
-                "Okay",
-                style: TextStyle(color: Colors.white),
+          backgroundColor: Colors.blue,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                type == 'success' ? "Congratulations!" : "Sorry!",
+                style: TextStyle(
+                  fontSize: 26.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.titilliumWebRegular,
+                  color: type == 'success' ? Colors.green : Colors.red,
+                ),
               ),
-              onPressed: () {
-                setState(() {
-                  started = false;
-                });
-                Navigator.of(context).pop();
-                navigateAway();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<bool> showCanceledPop(BuildContext context, navigateAway) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Oops! Better luck next time."),
+              Container(height: 10.0),
+              Text(
+                message,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.titilliumWebRegular,
+                  color: Colors.white,
+                ),
+              ),
+              Container(height: 10.0),
+              Text(
+                "Keep Pauzing!",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.titilliumWebRegular,
+                  color: Colors.yellowAccent,
+                ),
+              ),
+              Container(height: 10.0),
+              Text(
+                "#DefeatedThePhone",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.titilliumWebRegular,
+                  color: Colors.cyanAccent,
+                ),
+              )
+            ],
+          ),
           actions: <Widget>[
             RaisedButton(
-              color: Colors.red,
+              color: type == 'success' ? Colors.green : Colors.red,
               child: Text(
                 "Okay",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Fonts.titilliumWebRegular,
+                  color: Colors.white,
+                ),
               ),
               onPressed: () {
                 setState(() {
@@ -305,8 +343,16 @@ class _StopPage extends State<StopPage>
 
     await timerBloc.setTimer(duration);
 
-    showSuccessPop(context, () {
-      Navigator.of(context).pop();
-    });
+    String pointer = points[durationStatic] > 1 ? 'points' : 'point';
+    String message = "You have won ${points[durationStatic]} $pointer.";
+
+    showTimerPop(
+      context,
+      type: 'success',
+      message: message,
+      navigateAway: () {
+        Navigator.of(context).pop();
+      },
+    );
   }
 }

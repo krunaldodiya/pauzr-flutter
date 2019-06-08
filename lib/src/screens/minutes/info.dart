@@ -184,6 +184,6 @@ class _MinutesPage extends State<MinutesPage>
     final date = DateTime.parse(history[index]['created_at']);
     final previousDate = DateTime.parse(history[previousIndex]['created_at']);
 
-    return date.day == previousDate.day;
+    return index == 0 || date.day != previousDate.day;
   }
 }
