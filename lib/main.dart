@@ -9,6 +9,8 @@ import 'package:pauzr/src/screens/app.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/providers/ranking.dart';
+
 void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -18,6 +20,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<RankingBloc>.value(
+          notifier: RankingBloc(),
+        ),
         ChangeNotifierProvider<TimerBloc>.value(
           notifier: TimerBloc(),
         ),

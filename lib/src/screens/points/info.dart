@@ -64,7 +64,7 @@ class _PointsPage extends State<PointsPage>
         Expanded(
           child: getCard(
             body['sum'].toString(),
-            "All Time Saving",
+            "All Time Earnings",
             100.0,
             50.0,
             theme.points,

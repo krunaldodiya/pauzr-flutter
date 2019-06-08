@@ -64,7 +64,7 @@ class _MinutesPage extends State<MinutesPage>
         Expanded(
           child: getCard(
             body['sum'].toString(),
-            "All Time Saving",
+            "All Time Savings",
             100.0,
             50.0,
             theme.minutes,

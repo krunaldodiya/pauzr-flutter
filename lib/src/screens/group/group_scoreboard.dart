@@ -1,15 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/components/rankings.dart';
+import 'package:pauzr/src/components/get_rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/providers/group.dart';
+import 'package:pauzr/src/providers/ranking.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
-import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
 import 'package:swipedetector/swipedetector.dart';
@@ -28,13 +27,27 @@ class GroupScoreboardPage extends StatefulWidget {
 
 class _GroupScoreboardPage extends State<GroupScoreboardPage>
     with SingleTickerProviderStateMixin {
-  String period = "Today";
+  String period;
+
+  @override
+  void initState() {
+    super.initState();
+    getInitialData();
+  }
+
+  getInitialData() {
+    Future.delayed(Duration(microseconds: 1), () {
+      final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
+      changePeriod("Today", rankingBloc);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+    final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -42,10 +55,6 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
         groupBloc.groups.where((group) => group.id == widget.group.id);
 
     final Group group = groupSelector.length > 0 ? groupSelector.first : null;
-
-    if (group == null) {
-      return Center(child: CircularProgressIndicator());
-    }
 
     return Scaffold(
       backgroundColor: theme.groupScoreboard.backgroundColor,
@@ -64,34 +73,32 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               },
             );
           },
-          child: SafeArea(
-            child: Container(
-              alignment: Alignment.center,
-              child: ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.all(0),
-                isThreeLine: true,
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    "$baseUrl/users/${group.photo}",
-                  ),
+          child: Container(
+            alignment: Alignment.center,
+            child: ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.all(0),
+              isThreeLine: true,
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  "$baseUrl/users/${group.photo}",
                 ),
-                title: Text(
-                  group.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontFamily: Fonts.titilliumWebSemiBold,
-                  ),
+              ),
+              title: Text(
+                group.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontFamily: Fonts.titilliumWebSemiBold,
                 ),
-                subtitle: Text(
-                  group.description ?? "No description",
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 13.0,
-                    fontFamily: Fonts.titilliumWebRegular,
-                  ),
+              ),
+              subtitle: Text(
+                group.description ?? "No description",
+                maxLines: 1,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.0,
+                  fontFamily: Fonts.titilliumWebRegular,
                 ),
               ),
             ),
@@ -120,80 +127,59 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
           ),
         ],
       ),
-      body: SwipeDetector(
-        swipeConfiguration: SwipeConfiguration(
-          verticalSwipeMinVelocity: 100.0,
-          verticalSwipeMinDisplacement: 50.0,
-          verticalSwipeMaxWidthThreshold: 100.0,
-          horizontalSwipeMaxHeightThreshold: 50.0,
-          horizontalSwipeMinDisplacement: 50.0,
-          horizontalSwipeMinVelocity: 200.0,
-        ),
-        onSwipeLeft: () {
-          if (period == "Today") {
-            setState(() {
-              period = "This Week";
-            });
-          } else if (period == "This Week") {
-            setState(() {
-              period = "This Month";
-            });
-          }
-        },
-        onSwipeRight: () {
-          if (period == "This Month") {
-            setState(() {
-              period = "This Week";
-            });
-          } else if (period == "This Week") {
-            setState(() {
-              period = "Today";
-            });
-          }
-        },
-        child: FutureBuilder(
-          future: ApiProvider().getRankings(period, group.id),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-
-            final Response response = snapshot.data;
-            final results = response.data;
-
-            return CustomScrollView(
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      getSwitch(
-                        items: ["Today", "This Week", "This Month"],
-                        selected: period,
-                        onSelect: (index, value) {
-                          setState(() {
-                            period = value;
-                          });
-                        },
-                        theme: theme,
+      body: SafeArea(
+        child: rankingBloc.loaded == false
+            ? Center(child: CircularProgressIndicator())
+            : SwipeDetector(
+                swipeConfiguration: SwipeConfiguration(
+                  verticalSwipeMinVelocity: 100.0,
+                  verticalSwipeMinDisplacement: 50.0,
+                  verticalSwipeMaxWidthThreshold: 100.0,
+                  horizontalSwipeMaxHeightThreshold: 50.0,
+                  horizontalSwipeMinDisplacement: 50.0,
+                  horizontalSwipeMinVelocity: 200.0,
+                ),
+                onSwipeLeft: () {
+                  if (period == "Today") {
+                    changePeriod("This Week", rankingBloc);
+                  } else if (period == "This Week") {
+                    changePeriod("This Month", rankingBloc);
+                  }
+                },
+                onSwipeRight: () {
+                  if (period == "This Month") {
+                    changePeriod("This Week", rankingBloc);
+                  } else if (period == "This Week") {
+                    changePeriod("Today", rankingBloc);
+                  }
+                },
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          getSwitch(
+                            items: ["Today", "This Week", "This Month"],
+                            selected: period,
+                            onSelect: (index, value) {
+                              changePeriod(value, rankingBloc);
+                            },
+                            theme: theme,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        GetRanking(
+                          user: userBloc.user,
+                          rankings: rankingBloc.rankings,
+                        ).getList(),
+                      ),
+                    ),
+                  ],
                 ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    Ranking(user: userBloc.user, results: results).getList(),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
       ),
     );
   }
@@ -230,5 +216,10 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
     }
 
     return choices;
+  }
+
+  void changePeriod(value, rankingBloc) {
+    setState(() => period = value);
+    rankingBloc.getRankings(period, widget.group.id);
   }
 }
