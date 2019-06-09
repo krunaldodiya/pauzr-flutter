@@ -46,7 +46,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
     return Scaffold(
       backgroundColor: theme.mainScoreboard.backgroundColor,
       body: SafeArea(
-        child: rankingBloc.loaded == false
+        child: rankingBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
             : SwipeDetector(
                 swipeConfiguration: SwipeConfiguration(

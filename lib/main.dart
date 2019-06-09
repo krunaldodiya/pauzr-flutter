@@ -5,6 +5,7 @@ import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/providers/wallet.dart';
 import 'package:pauzr/src/screens/app.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<WalletBloc>.value(
+          notifier: WalletBloc(),
+        ),
         ChangeNotifierProvider<RankingBloc>.value(
           notifier: RankingBloc(),
         ),

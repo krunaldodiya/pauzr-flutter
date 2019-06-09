@@ -1,11 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/models/timer.dart';
 import 'package:pauzr/src/providers/theme.dart';
-import 'package:pauzr/src/resources/api.dart';
+import 'package:pauzr/src/providers/timer.dart';
 import 'package:provider/provider.dart';
 
 class MinutesPage extends StatefulWidget {
@@ -18,8 +18,23 @@ class MinutesPage extends StatefulWidget {
 class _MinutesPage extends State<MinutesPage>
     with SingleTickerProviderStateMixin {
   @override
+  void initState() {
+    super.initState();
+
+    getInitialData();
+  }
+
+  getInitialData() {
+    Future.delayed(Duration(microseconds: 1), () {
+      final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+      timerBloc.getTimerHistory();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -38,55 +53,15 @@ class _MinutesPage extends State<MinutesPage>
         ),
       ),
       body: SafeArea(
-        child: FutureBuilder(
-          future: ApiProvider().getSavedMinutes(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-
-            return createListView(context, snapshot, theme);
-          },
-        ),
+        child: timerBloc.loaded == false
+            ? Center(child: CircularProgressIndicator())
+            : createListView(context, timerBloc, theme),
       ),
     );
   }
 
-  getCards(Map body, DefaultTheme theme) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: getCard(
-            body['sum'].toString(),
-            "All Time Savings",
-            100.0,
-            50.0,
-            theme.minutes,
-          ),
-        ),
-        Expanded(
-          child: getCard(
-            body['avg'].toString(),
-            "Average per day",
-            100.0,
-            50.0,
-            theme.minutes,
-          ),
-        ),
-      ],
-    );
-  }
-
-  createListView(context, snapshot, DefaultTheme theme) {
-    final Response response = snapshot.data;
-    final results = response.data;
-    final List history = results['history'];
+  createListView(context, TimerBloc timerBloc, DefaultTheme theme) {
+    final List<Timer> timerHistory = timerBloc.timerHistory;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -94,21 +69,21 @@ class _MinutesPage extends State<MinutesPage>
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(5.0),
-          child: getCards(results, theme),
+          child: getCards(timerBloc, theme),
         ),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: history.length,
+            itemCount: timerHistory.length,
             itemBuilder: (context, int index) {
-              final item = history[index];
+              final Timer item = timerHistory[index];
 
               return Column(
                 children: <Widget>[
-                  if (showDateLabel(history, index))
+                  if (showDateLabel(timerHistory, index))
                     Container(
                       child: Text(
-                        separtedDateTime(item['created_at'], 'date'),
+                        separtedDateTime(item.createdAt, 'date'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.blue,
@@ -128,7 +103,32 @@ class _MinutesPage extends State<MinutesPage>
     );
   }
 
-  Card getRankCard(Map item) {
+  getCards(TimerBloc timerBloc, DefaultTheme theme) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: getCard(
+            timerBloc.sum.toString(),
+            "All Time Savings",
+            100.0,
+            50.0,
+            theme.minutes,
+          ),
+        ),
+        Expanded(
+          child: getCard(
+            timerBloc.avg.toString(),
+            "Average per day",
+            100.0,
+            50.0,
+            theme.minutes,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Card getRankCard(Timer item) {
     return Card(
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
@@ -145,7 +145,7 @@ class _MinutesPage extends State<MinutesPage>
           title: Container(
             margin: EdgeInsets.only(bottom: 5.0),
             child: Text(
-              "${item['duration']} Minutes",
+              "${item.duration} Minutes",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
@@ -156,7 +156,7 @@ class _MinutesPage extends State<MinutesPage>
           ),
           subtitle: Container(
             child: Text(
-              "${separtedDateTime(item['created_at'], 'time')}",
+              "${separtedDateTime(item.createdAt, 'time')}",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.black,
@@ -179,11 +179,15 @@ class _MinutesPage extends State<MinutesPage>
     return formattedDob;
   }
 
-  showDateLabel(history, index) {
-    final previousIndex = index == 0 ? 0 : index - 1;
-    final date = DateTime.parse(history[index]['created_at']);
-    final previousDate = DateTime.parse(history[previousIndex]['created_at']);
+  showDateLabel(List<Timer> timerHistory, int index) {
+    final currentHistory = timerHistory[index];
+    final previousHistory =
+        index > 0 ? timerHistory[index - 1] : currentHistory;
 
-    return index == 0 || date.day != previousDate.day;
+    final currentTimerHistoryDate = DateTime.parse(currentHistory.createdAt);
+    final previousTimerHistoryDate = DateTime.parse(previousHistory.createdAt);
+
+    return index == 0 ||
+        currentTimerHistoryDate.day != previousTimerHistoryDate.day;
   }
 }

@@ -1,12 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/models/wallet_transaction.dart';
 import 'package:pauzr/src/providers/theme.dart';
-import 'package:pauzr/src/resources/api.dart';
+import 'package:pauzr/src/providers/wallet.dart';
 import 'package:provider/provider.dart';
 
 class PointsPage extends StatefulWidget {
@@ -19,8 +19,24 @@ class PointsPage extends StatefulWidget {
 class _PointsPage extends State<PointsPage>
     with SingleTickerProviderStateMixin {
   @override
+  void initState() {
+    super.initState();
+
+    getInitialData();
+  }
+
+  getInitialData() {
+    Future.delayed(Duration(microseconds: 1), () {
+      final WalletBloc walletBloc = Provider.of<WalletBloc>(context);
+      walletBloc.getWalletHistory();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final WalletBloc walletBloc = Provider.of<WalletBloc>(context);
+
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
@@ -38,55 +54,15 @@ class _PointsPage extends State<PointsPage>
         ),
       ),
       body: SafeArea(
-        child: FutureBuilder(
-          future: ApiProvider().getEarnedPoints(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-
-            return createListView(context, snapshot, theme);
-          },
-        ),
+        child: walletBloc.loaded == false
+            ? Center(child: CircularProgressIndicator())
+            : createListView(context, walletBloc, theme),
       ),
     );
   }
 
-  getCards(Map body, DefaultTheme theme) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: getCard(
-            body['sum'].toString(),
-            "All Time Earnings",
-            100.0,
-            50.0,
-            theme.points,
-          ),
-        ),
-        Expanded(
-          child: getCard(
-            body['avg'].toString(),
-            "Average per day",
-            100.0,
-            50.0,
-            theme.points,
-          ),
-        ),
-      ],
-    );
-  }
-
-  createListView(context, snapshot, theme) {
-    final Response response = snapshot.data;
-    final results = response.data;
-    final List history = results['history'];
+  createListView(context, WalletBloc walletBloc, theme) {
+    final List<WalletTransaction> walletHistory = walletBloc.walletHistory;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -94,21 +70,21 @@ class _PointsPage extends State<PointsPage>
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(5.0),
-          child: getCards(results, theme),
+          child: getCards(walletBloc, theme),
         ),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: history.length,
+            itemCount: walletHistory.length,
             itemBuilder: (context, int index) {
-              final item = history[index];
+              final WalletTransaction item = walletHistory[index];
 
               return Column(
                 children: <Widget>[
-                  if (showDateLabel(history, index))
+                  if (showDateLabel(walletHistory, index))
                     Container(
                       child: Text(
-                        separtedDateTime(item['created_at'], 'date'),
+                        separtedDateTime(item.createdAt, 'date'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.blue,
@@ -128,7 +104,32 @@ class _PointsPage extends State<PointsPage>
     );
   }
 
-  Card getRankCard(Map item) {
+  getCards(WalletBloc walletBloc, DefaultTheme theme) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: getCard(
+            walletBloc.sum.toString(),
+            "All Time Earnings",
+            100.0,
+            50.0,
+            theme.points,
+          ),
+        ),
+        Expanded(
+          child: getCard(
+            walletBloc.avg.toString(),
+            "Average per day",
+            100.0,
+            50.0,
+            theme.points,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Card getRankCard(WalletTransaction item) {
     return Card(
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
@@ -145,7 +146,7 @@ class _PointsPage extends State<PointsPage>
           title: Container(
             margin: EdgeInsets.only(bottom: 5.0),
             child: Text(
-              "${item['amount']} Points",
+              "${item.amount} Points",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
@@ -156,7 +157,7 @@ class _PointsPage extends State<PointsPage>
           ),
           subtitle: Container(
             child: Text(
-              "${separtedDateTime(item['created_at'], 'time')}",
+              "${separtedDateTime(item.createdAt, 'time')}",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.black,
@@ -179,11 +180,15 @@ class _PointsPage extends State<PointsPage>
     return formattedDob;
   }
 
-  showDateLabel(history, index) {
-    final previousIndex = index == 0 ? 0 : index - 1;
-    final date = DateTime.parse(history[index]['created_at']);
-    final previousDate = DateTime.parse(history[previousIndex]['created_at']);
+  showDateLabel(List<WalletTransaction> walletHistory, int index) {
+    final currentHistory = walletHistory[index];
+    final previousHistory =
+        index > 0 ? walletHistory[index - 1] : currentHistory;
 
-    return index == 0 || date.day != previousDate.day;
+    final currentWalletHistoryDate = DateTime.parse(currentHistory.createdAt);
+    final previousWalletHistoryDate = DateTime.parse(previousHistory.createdAt);
+
+    return index == 0 ||
+        currentWalletHistoryDate.day != previousWalletHistoryDate.day;
   }
 }
