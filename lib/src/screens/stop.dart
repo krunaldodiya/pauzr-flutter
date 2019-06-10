@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -7,6 +8,7 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
@@ -49,33 +51,37 @@ class _StopPage extends State<StopPage>
   }
 
   getInitialData() {
-    WidgetsBinding.instance.addObserver(this);
+    Future.delayed(Duration(microseconds: 1), () {
+      final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-    setState(() {
-      started = true;
-    });
+      WidgetsBinding.instance.addObserver(this);
 
-    double tick = waterHeight / durationStatic;
+      setState(() {
+        started = true;
+      });
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (started == true) {
-        if (durationDynamic > 0) {
-          setState(() {
-            rotation = rotation - 1;
-            durationDynamic--;
-            waterController.changeWaterHeight(durationDynamic * tick);
-          });
+      double tick = waterHeight / durationStatic;
+
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (started == true) {
+          if (durationDynamic > 0) {
+            setState(() {
+              rotation = rotation - 1;
+              durationDynamic--;
+              waterController.changeWaterHeight(durationDynamic * tick);
+            });
+          }
+
+          if (durationDynamic == 0) {
+            setState(() {
+              started = false;
+              rotation = 360;
+            });
+
+            onSuccess(widget.duration, userBloc);
+          }
         }
-
-        if (durationDynamic == 0) {
-          setState(() {
-            started = false;
-            rotation = 360;
-          });
-
-          onSuccess(widget.duration);
-        }
-      }
+      });
     });
   }
 
@@ -219,7 +225,7 @@ class _StopPage extends State<StopPage>
                         context,
                         yesText: "Yes",
                         noText: "No",
-                        message: "Remove this user from group",
+                        message: "Are you sure want to stop timer ?",
                         onPressYes: () {
                           setState(() {
                             started = false;
@@ -338,10 +344,13 @@ class _StopPage extends State<StopPage>
     return "$min : $sec";
   }
 
-  onSuccess(duration) async {
+  onSuccess(duration, UserBloc userBloc) async {
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
-    await timerBloc.setTimer(duration);
+    final Response response = await timerBloc.setTimer(duration);
+    final results = response.data;
+
+    await userBloc.setAuthUser(results['user']);
 
     String pointer = points[durationStatic] > 1 ? 'points' : 'point';
     String message = "You have won ${points[durationStatic]} $pointer.";

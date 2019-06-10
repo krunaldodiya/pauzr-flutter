@@ -62,10 +62,10 @@ class TimerBloc extends ChangeNotifier {
 
     try {
       final Response response = await _apiProvider.setTimer(duration);
-      final results = response.data;
 
       setState(loading: false, loaded: true);
-      return results;
+
+      return response;
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
     }

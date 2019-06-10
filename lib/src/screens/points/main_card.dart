@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/models/user.dart';
 
-Card getMainCard(level, user) {
+Card getMainCard(level, User user) {
   int rank = level['index'];
 
   return Card(
@@ -14,8 +15,8 @@ Card getMainCard(level, user) {
       ),
       child: ListTile(
         leading: Icon(
-          rank <= user.level ? Icons.check_circle : Icons.lock,
-          color: rank <= user.level ? Colors.green : Colors.red,
+          rank <= user.level.level ? Icons.check_circle : Icons.lock,
+          color: rank <= user.level.level ? Colors.green : Colors.red,
           size: 40.0,
         ),
         title: Container(

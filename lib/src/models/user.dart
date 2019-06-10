@@ -1,3 +1,4 @@
+import 'package:pauzr/src/models/level.dart';
 import 'package:pauzr/src/models/location.dart';
 import 'package:pauzr/src/models/profession.dart';
 import 'package:meta/meta.dart';
@@ -13,7 +14,7 @@ class User {
   final String gender;
   final Location location;
   final Profession profession;
-  final int level;
+  final Level level;
   final int status;
 
   User({
@@ -60,7 +61,9 @@ class User {
         profession = json["profession"] is Profession
             ? json["profession"]
             : Profession.fromMap(json["profession"]),
-        level = json["level"],
+        level = json["level"] is Level
+            ? json["level"]
+            : Level.fromMap(json["level"]),
         status = json["status"];
 
   static fromList(List users) {

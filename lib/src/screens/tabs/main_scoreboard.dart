@@ -154,7 +154,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
               Navigator.pushNamed(context, routeList.levels);
             },
             child: getCard(
-              "${userBloc.user.level}/10",
+              "${userBloc.user.level.level}/10",
               "Levels Cleared",
               80.0,
               40.0,

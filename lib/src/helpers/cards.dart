@@ -28,7 +28,7 @@ getCard(
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: theme.cardTopColor,
-                fontSize: 36.0,
+                fontSize: 32.0,
                 fontFamily: Fonts.titilliumWebBold,
               ),
             ),

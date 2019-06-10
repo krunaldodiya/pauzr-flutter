@@ -81,7 +81,7 @@ class GetRanking {
                   child: Text("|"),
                 ),
                 Text(
-                  "Level: ${ranking.user.level}",
+                  "Level: ${ranking.user.level.level}",
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     color: Colors.black,
