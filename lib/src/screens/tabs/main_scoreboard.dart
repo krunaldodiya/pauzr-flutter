@@ -20,11 +20,12 @@ class MainScoreboardPage extends StatefulWidget {
 
 class _MainScoreboardPage extends State<MainScoreboardPage>
     with SingleTickerProviderStateMixin {
-  String period = "Today";
+  String period;
 
   @override
   void initState() {
     super.initState();
+
     getInitialData();
   }
 
@@ -48,71 +49,79 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
       body: SafeArea(
         child: rankingBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : SwipeDetector(
-                swipeConfiguration: SwipeConfiguration(
-                  verticalSwipeMinVelocity: 100.0,
-                  verticalSwipeMinDisplacement: 50.0,
-                  verticalSwipeMaxWidthThreshold: 100.0,
-                  horizontalSwipeMaxHeightThreshold: 50.0,
-                  horizontalSwipeMinDisplacement: 50.0,
-                  horizontalSwipeMinVelocity: 200.0,
+            : buildSwipeDetector(rankingBloc, theme, userBloc),
+      ),
+    );
+  }
+
+  SwipeDetector buildSwipeDetector(
+    RankingBloc rankingBloc,
+    DefaultTheme theme,
+    UserBloc userBloc,
+  ) {
+    return SwipeDetector(
+      swipeConfiguration: SwipeConfiguration(
+        verticalSwipeMinVelocity: 100.0,
+        verticalSwipeMinDisplacement: 50.0,
+        verticalSwipeMaxWidthThreshold: 100.0,
+        horizontalSwipeMaxHeightThreshold: 50.0,
+        horizontalSwipeMinDisplacement: 50.0,
+        horizontalSwipeMinVelocity: 200.0,
+      ),
+      onSwipeLeft: () {
+        if (period == "Today") {
+          changePeriod("This Week", rankingBloc);
+        } else if (period == "This Week") {
+          changePeriod("This Month", rankingBloc);
+        }
+      },
+      onSwipeRight: () {
+        if (period == "This Month") {
+          changePeriod("This Week", rankingBloc);
+        } else if (period == "This Week") {
+          changePeriod("Today", rankingBloc);
+        }
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                getSwitch(
+                  items: ["Today", "This Week", "This Month"],
+                  selected: period,
+                  onSelect: (index, value) {
+                    changePeriod(value, rankingBloc);
+                  },
+                  theme: theme,
                 ),
-                onSwipeLeft: () {
-                  if (period == "Today") {
-                    changePeriod("This Week", rankingBloc);
-                  } else if (period == "This Week") {
-                    changePeriod("This Month", rankingBloc);
-                  }
-                },
-                onSwipeRight: () {
-                  if (period == "This Month") {
-                    changePeriod("This Week", rankingBloc);
-                  } else if (period == "This Week") {
-                    changePeriod("Today", rankingBloc);
-                  }
-                },
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          getSwitch(
-                            items: ["Today", "This Week", "This Month"],
-                            selected: period,
-                            onSelect: (index, value) {
-                              changePeriod(value, rankingBloc);
-                            },
-                            theme: theme,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(5.0),
-                            child: getCards(rankingBloc, userBloc, theme),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: Text(
-                              "City: ${userBloc.user.location.city}",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22.0,
-                                fontFamily: Fonts.titilliumWebRegular,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        GetRanking(
-                          user: userBloc.user,
-                          rankings: rankingBloc.rankings,
-                        ).getList(),
-                      ),
-                    ),
-                  ],
+                Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: getCards(rankingBloc, userBloc, theme),
                 ),
-              ),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: Text(
+                    "City: ${userBloc.user.location.city}",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22.0,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              GetRanking(
+                user: userBloc.user,
+                rankings: rankingBloc.rankings,
+              ).getList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -166,7 +175,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
     );
   }
 
-  void changePeriod(value, rankingBloc) {
+  void changePeriod(value, RankingBloc rankingBloc) {
     setState(() => period = value);
     rankingBloc.getRankings(period, null);
   }

@@ -18,6 +18,8 @@ void main() async {
   String authToken = prefs.getString("authToken");
   String defaultTheme = prefs.getString("defaultTheme") ?? "black";
 
+  prefs.remove("authToken");
+
   runApp(
     MultiProvider(
       providers: [

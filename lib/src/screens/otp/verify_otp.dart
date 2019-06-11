@@ -114,12 +114,9 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
 
     XsProgressHud.show(context);
 
-    if (userBloc.user != null) {
+    if (userBloc.loaded == true) {
       if (userBloc.user.status == 1) {
-        Navigator.of(context).pushReplacementNamed(
-          routeList.tab,
-          arguments: null,
-        );
+        Navigator.of(context).pushReplacementNamed(routeList.tab);
       }
 
       if (userBloc.user.status == 0) {

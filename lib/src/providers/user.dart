@@ -47,16 +47,13 @@ class UserBloc extends ChangeNotifier {
   }
 
   getAuthUser() async {
-    setState(loading: true, loaded: false);
-
     try {
       final Response response = await _apiProvider.getAuthUser();
       final results = response.data;
 
-      setAuthToken(results['access_token']);
-      setAuthUser(results['user']);
+      await setAuthUser(results['user']);
     } catch (error) {
-      setState(error: error.response.data, loading: false, loaded: true);
+      setState(loading: false, loaded: true);
     }
   }
 

@@ -13,25 +13,23 @@ class GetRanking {
   getList() {
     List<Widget> list = [];
 
-    rankings
-      ..sort((a, b) => b.duration.compareTo(a.duration))
-      ..asMap().forEach((index, ranking) {
-        final Ranking userRanking = ranking.copyWith({"rank": index + 1});
+    rankings.forEach((ranking) {
+      if (ranking.user.id == user.id) {
+        list.add(getRankCard(ranking));
+      }
+    });
 
-        if (ranking.user.id == user.id) {
-          list.add(getRankCard(userRanking));
+    list.add(
+      Container(
+        height: 0.5,
+        color: Colors.black87,
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+      ),
+    );
 
-          list.add(
-            Container(
-              height: 0.5,
-              color: Colors.black87,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            ),
-          );
-        }
-
-        list.add(getRankCard(userRanking));
-      });
+    rankings.forEach((ranking) {
+      list.add(getRankCard(ranking));
+    });
 
     return list;
   }

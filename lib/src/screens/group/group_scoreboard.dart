@@ -128,58 +128,63 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
         ],
       ),
       body: SafeArea(
-        child: rankingBloc.loaded == false
+        child: rankingBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : SwipeDetector(
-                swipeConfiguration: SwipeConfiguration(
-                  verticalSwipeMinVelocity: 100.0,
-                  verticalSwipeMinDisplacement: 50.0,
-                  verticalSwipeMaxWidthThreshold: 100.0,
-                  horizontalSwipeMaxHeightThreshold: 50.0,
-                  horizontalSwipeMinDisplacement: 50.0,
-                  horizontalSwipeMinVelocity: 200.0,
+            : buildSwipeDetector(rankingBloc, theme, userBloc),
+      ),
+    );
+  }
+
+  SwipeDetector buildSwipeDetector(
+      RankingBloc rankingBloc, DefaultTheme theme, UserBloc userBloc) {
+    return SwipeDetector(
+      swipeConfiguration: SwipeConfiguration(
+        verticalSwipeMinVelocity: 100.0,
+        verticalSwipeMinDisplacement: 50.0,
+        verticalSwipeMaxWidthThreshold: 100.0,
+        horizontalSwipeMaxHeightThreshold: 50.0,
+        horizontalSwipeMinDisplacement: 50.0,
+        horizontalSwipeMinVelocity: 200.0,
+      ),
+      onSwipeLeft: () {
+        if (period == "Today") {
+          changePeriod("This Week", rankingBloc);
+        } else if (period == "This Week") {
+          changePeriod("This Month", rankingBloc);
+        }
+      },
+      onSwipeRight: () {
+        if (period == "This Month") {
+          changePeriod("This Week", rankingBloc);
+        } else if (period == "This Week") {
+          changePeriod("Today", rankingBloc);
+        }
+      },
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                getSwitch(
+                  items: ["Today", "This Week", "This Month"],
+                  selected: period,
+                  onSelect: (index, value) {
+                    changePeriod(value, rankingBloc);
+                  },
+                  theme: theme,
                 ),
-                onSwipeLeft: () {
-                  if (period == "Today") {
-                    changePeriod("This Week", rankingBloc);
-                  } else if (period == "This Week") {
-                    changePeriod("This Month", rankingBloc);
-                  }
-                },
-                onSwipeRight: () {
-                  if (period == "This Month") {
-                    changePeriod("This Week", rankingBloc);
-                  } else if (period == "This Week") {
-                    changePeriod("Today", rankingBloc);
-                  }
-                },
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          getSwitch(
-                            items: ["Today", "This Week", "This Month"],
-                            selected: period,
-                            onSelect: (index, value) {
-                              changePeriod(value, rankingBloc);
-                            },
-                            theme: theme,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        GetRanking(
-                          user: userBloc.user,
-                          rankings: rankingBloc.rankings,
-                        ).getList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              GetRanking(
+                user: userBloc.user,
+                rankings: rankingBloc.rankings,
+              ).getList(),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -198,7 +198,6 @@ class RouteGenerator {
             return InitialScreen(
               authToken: args['authToken'],
               userBloc: args['userBloc'],
-              themeBloc: args['themeBloc'],
             );
           },
         );

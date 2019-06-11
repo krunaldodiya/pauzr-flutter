@@ -27,7 +27,7 @@ class ManageGroupPage extends StatefulWidget {
 }
 
 class _ManageGroupPageState extends State<ManageGroupPage> {
-  ApiProvider apiProvider = ApiProvider();
+  ApiProvider _apiProvider = ApiProvider();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -188,7 +188,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     });
 
     try {
-      final response = await apiProvider.uploadGroupImage(formdata);
+      final response = await _apiProvider.uploadGroupImage(formdata);
       final results = response.data;
 
       setState(() {

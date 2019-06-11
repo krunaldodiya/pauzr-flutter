@@ -28,7 +28,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePage extends State<EditProfilePage> {
-  ApiProvider apiProvider = ApiProvider();
+  ApiProvider _apiProvider = ApiProvider();
   bool loading = false;
 
   TextEditingController nameController = TextEditingController();
@@ -71,20 +71,20 @@ class _EditProfilePage extends State<EditProfilePage> {
     return Icon(Icons.person);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
 
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
+  //   final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-    if (userBloc.loading == true) {
-      XsProgressHud.show(context);
-    }
+  //   if (userBloc.loading == true) {
+  //     XsProgressHud.show(context);
+  //   }
 
-    if (userBloc.loading == false) {
-      XsProgressHud.hide();
-    }
-  }
+  //   if (userBloc.loading == false) {
+  //     XsProgressHud.hide();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +250,11 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   onSubmit(UserBloc userBloc) async {
+    XsProgressHud.show(context);
+
     await userBloc.updateProfile();
+
+    XsProgressHud.hide();
 
     if (userBloc.loaded == true) {
       if (widget.shouldPop == true) {
@@ -264,6 +268,8 @@ class _EditProfilePage extends State<EditProfilePage> {
   void uploadImage(userBloc) async {
     final file = await ImagePicker.pickImage(source: ImageSource.gallery);
 
+    XsProgressHud.show(context);
+
     setState(() {
       loading = true;
     });
@@ -273,15 +279,19 @@ class _EditProfilePage extends State<EditProfilePage> {
     });
 
     try {
-      final response = await apiProvider.uploadAvatar(formdata);
+      final response = await _apiProvider.uploadAvatar(formdata);
       final results = response.data;
 
-      userBloc.setAuthUser(results['user']);
+      await userBloc.setAuthUser(results['user']);
+
+      XsProgressHud.hide();
 
       setState(() {
         loading = false;
       });
     } catch (e) {
+      XsProgressHud.hide();
+
       setState(() {
         loading = false;
       });

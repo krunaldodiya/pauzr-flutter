@@ -38,8 +38,19 @@ class RankingBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getRankings(period, groupId);
       final results = response.data;
 
+      final List<Ranking> rankings = Ranking.fromList(results['rankings']);
+
+      final List<Ranking> rankingsWithSorted = rankings
+        ..sort((a, b) => b.duration.compareTo(a.duration));
+
+      final List<Ranking> rankingsWithSortedWithRank = [];
+
+      rankingsWithSorted.asMap().forEach((index, ranking) {
+        rankingsWithSortedWithRank.add(ranking.copyWith({"rank": index + 1}));
+      });
+
       setState(
-        rankings: Ranking.fromList(results['rankings']),
+        rankings: rankingsWithSortedWithRank,
         minutesSaved: results['minutes_saved'],
         pointsEarned: results['points_earned'],
         loading: false,
@@ -47,6 +58,8 @@ class RankingBloc extends ChangeNotifier {
       );
       return results;
     } catch (error) {
+      print(error);
+
       setState(error: error.response.data, loading: false, loaded: true);
     }
   }
