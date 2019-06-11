@@ -106,7 +106,6 @@ class ApiProvider {
       "dob": user.dob,
       "gender": user.gender,
       "location_id": user.location.id,
-      "profession_id": user.profession.id,
     });
   }
 

@@ -36,7 +36,6 @@ class _EditProfilePage extends State<EditProfilePage> {
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  TextEditingController professionController = TextEditingController();
 
   @override
   void initState() {
@@ -54,7 +53,6 @@ class _EditProfilePage extends State<EditProfilePage> {
       dobController.text = userBloc.user.dob;
       genderController.text = userBloc.user.gender;
       locationController.text = userBloc.user.location.city;
-      professionController.text = userBloc.user.profession.name;
     });
   }
 
@@ -70,21 +68,6 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     return Icon(Icons.person);
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-
-  //   final UserBloc userBloc = Provider.of<UserBloc>(context);
-
-  //   if (userBloc.loading == true) {
-  //     XsProgressHud.show(context);
-  //   }
-
-  //   if (userBloc.loading == false) {
-  //     XsProgressHud.hide();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

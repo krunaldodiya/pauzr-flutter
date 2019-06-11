@@ -1,6 +1,5 @@
 import 'package:pauzr/src/models/level.dart';
 import 'package:pauzr/src/models/location.dart';
-import 'package:pauzr/src/models/profession.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -13,7 +12,6 @@ class User {
   final String dob;
   final String gender;
   final Location location;
-  final Profession profession;
   final Level level;
   final int status;
 
@@ -26,7 +24,6 @@ class User {
     this.dob,
     this.gender,
     this.location,
-    this.profession,
     this.level,
     this.status,
   });
@@ -41,7 +38,6 @@ class User {
       dob: json["dob"] ?? this.dob,
       gender: json["gender"] ?? this.gender,
       location: json["location"] ?? this.location,
-      profession: json["profession"] ?? this.profession,
       level: json["level"] ?? this.level,
       status: json["status"] ?? this.status,
     );
@@ -58,9 +54,6 @@ class User {
         location = json["location"] is Location
             ? json["location"]
             : Location.fromMap(json["location"]),
-        profession = json["profession"] is Profession
-            ? json["profession"]
-            : Profession.fromMap(json["profession"]),
         level = json["level"] is Level
             ? json["level"]
             : Level.fromMap(json["level"]),
