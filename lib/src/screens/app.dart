@@ -24,17 +24,15 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  void getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final UserBloc userBloc = Provider.of<UserBloc>(context);
-      final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+  getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
 
-      themeBloc.setTheme(DefaultTheme.defaultTheme(widget.defaultTheme));
-      userBloc.getAuthUser();
-    });
+    await themeBloc.setTheme(DefaultTheme.defaultTheme(widget.defaultTheme));
+    await userBloc.getAuthUser();
   }
 
   @override
@@ -47,7 +45,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(platform: TargetPlatform.iOS),
       home: userBloc.loaded != true || themeBloc.loaded != true
           ? Center(child: CircularProgressIndicator())
-          : InitialScreen(authToken: widget.authToken, userBloc: userBloc),
+          : InitialScreen(authToken: widget.authToken),
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

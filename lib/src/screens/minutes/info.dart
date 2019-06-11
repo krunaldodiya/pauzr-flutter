@@ -21,14 +21,12 @@ class _MinutesPage extends State<MinutesPage>
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
-      timerBloc.getTimerHistory();
-    });
+  getInitialData() async {
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+    timerBloc.getTimerHistory();
   }
 
   @override

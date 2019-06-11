@@ -17,17 +17,15 @@ class _ChooseLocationState extends State<ChooseLocation> {
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  void getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
+  void getInitialData() async {
+    final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
 
-      if (locationBloc.locations.length == 0) {
-        locationBloc.getLocations();
-      }
-    });
+    if (locationBloc.locations.length == 0) {
+      locationBloc.getLocations();
+    }
   }
 
   @override

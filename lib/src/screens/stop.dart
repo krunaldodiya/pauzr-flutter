@@ -47,41 +47,39 @@ class _StopPage extends State<StopPage>
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final UserBloc userBloc = Provider.of<UserBloc>(context);
+  getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-      WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
-      setState(() {
-        started = true;
-      });
+    setState(() {
+      started = true;
+    });
 
-      double tick = waterHeight / durationStatic;
+    double tick = waterHeight / durationStatic;
 
-      timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (started == true) {
-          if (durationDynamic > 0) {
-            setState(() {
-              rotation = rotation - 1;
-              durationDynamic--;
-              waterController.changeWaterHeight(durationDynamic * tick);
-            });
-          }
-
-          if (durationDynamic == 0) {
-            setState(() {
-              started = false;
-              rotation = 360;
-            });
-
-            onSuccess(widget.duration, userBloc);
-          }
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (started == true) {
+        if (durationDynamic > 0) {
+          setState(() {
+            rotation = rotation - 1;
+            durationDynamic--;
+            waterController.changeWaterHeight(durationDynamic * tick);
+          });
         }
-      });
+
+        if (durationDynamic == 0) {
+          setState(() {
+            started = false;
+            rotation = 360;
+          });
+
+          onSuccess(widget.duration, userBloc);
+        }
+      }
     });
   }
 

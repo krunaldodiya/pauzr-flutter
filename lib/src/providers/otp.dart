@@ -72,8 +72,6 @@ class OtpBloc extends ChangeNotifier {
 
       setState(loading: false, loaded: true);
     } catch (error) {
-      print(error);
-
       setState(error: error.response.data, loading: false, loaded: true);
     }
   }

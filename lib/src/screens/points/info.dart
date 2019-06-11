@@ -22,14 +22,12 @@ class _PointsPage extends State<PointsPage>
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final WalletBloc walletBloc = Provider.of<WalletBloc>(context);
-      walletBloc.getWalletHistory();
-    });
+  getInitialData() async {
+    final WalletBloc walletBloc = Provider.of<WalletBloc>(context);
+    walletBloc.getWalletHistory();
   }
 
   @override

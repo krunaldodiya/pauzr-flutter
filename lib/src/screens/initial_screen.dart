@@ -4,16 +4,12 @@ import 'package:pauzr/src/helpers/initial_screen.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/no_network.dart';
+import 'package:provider/provider.dart';
 
 class InitialScreen extends StatefulWidget {
   final String authToken;
-  final UserBloc userBloc;
 
-  InitialScreen({
-    Key key,
-    @required this.authToken,
-    @required this.userBloc,
-  }) : super(key: key);
+  InitialScreen({Key key, @required this.authToken}) : super(key: key);
 
   @override
   _InitialScreenState createState() => _InitialScreenState();
@@ -42,6 +38,8 @@ class _InitialScreenState extends State<InitialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     if (connectivityResult == ConnectivityResult.none) {
       return NoNetwork();
     }
@@ -50,6 +48,6 @@ class _InitialScreenState extends State<InitialScreen> {
       return IntroPage();
     }
 
-    return getInitialScreen(widget.userBloc.user);
+    return getInitialScreen(userBloc.user);
   }
 }

@@ -5,15 +5,19 @@ Future sendRequest(api, [body, method = "POST"]) async {
   final Dio dio = Dio();
   final headers = await getHeaders();
 
-  return dio.request(
-    Uri.encodeFull(api),
-    data: body,
-    options: Options(
-      method: method,
-      headers: headers,
-      responseType: ResponseType.json,
-    ),
-  );
+  try {
+    return dio.request(
+      Uri.encodeFull(api),
+      data: body,
+      options: Options(
+        method: method,
+        headers: headers,
+        responseType: ResponseType.json,
+      ),
+    );
+  } catch (e) {
+    print(e);
+  }
 }
 
 getHeaders() async {

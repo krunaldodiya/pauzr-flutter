@@ -195,10 +195,7 @@ class RouteGenerator {
       case routeList.initial_screen:
         return MaterialPageRoute(
           builder: (context) {
-            return InitialScreen(
-              authToken: args['authToken'],
-              userBloc: args['userBloc'],
-            );
+            return InitialScreen(authToken: args['authToken']);
           },
         );
         break;

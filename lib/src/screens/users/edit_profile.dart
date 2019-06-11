@@ -41,19 +41,17 @@ class _EditProfilePage extends State<EditProfilePage> {
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final UserBloc userBloc = Provider.of<UserBloc>(context);
+  getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
-      nameController.text = userBloc.user.name;
-      emailController.text = userBloc.user.email;
-      dobController.text = userBloc.user.dob;
-      genderController.text = userBloc.user.gender;
-      locationController.text = userBloc.user.location.city;
-    });
+    nameController.text = userBloc.user.name;
+    emailController.text = userBloc.user.email;
+    dobController.text = userBloc.user.dob;
+    genderController.text = userBloc.user.gender;
+    locationController.text = userBloc.user.location.city;
   }
 
   Widget getLeadingIcon() {

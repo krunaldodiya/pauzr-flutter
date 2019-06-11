@@ -26,14 +26,12 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
-      changePeriod("Today", rankingBloc);
-    });
+  getInitialData() async {
+    final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
+    changePeriod("Today", rankingBloc);
   }
 
   @override

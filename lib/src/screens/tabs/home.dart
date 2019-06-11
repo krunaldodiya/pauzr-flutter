@@ -20,14 +20,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    getInitialData();
+    Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
-  getInitialData() {
-    Future.delayed(Duration(microseconds: 1), () {
-      final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
-      groupBloc.getGroups();
-    });
+  getInitialData() async {
+    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+    groupBloc.getGroups();
   }
 
   @override
