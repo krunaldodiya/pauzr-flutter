@@ -114,7 +114,7 @@ class _StopPage extends State<StopPage>
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String pauseTime = prefs.getString("pauseTime");
 
-          if (pauseTime == null) {
+          if (pauseTime == null && isScreenLocked() == false) {
             prefs.setString("pauseTime", DateTime.now().toString());
           }
 
@@ -144,6 +144,10 @@ class _StopPage extends State<StopPage>
       default:
         print("default");
     }
+  }
+
+  bool isScreenLocked() {
+    return false;
   }
 
   Future onSelectNotification(String payload) async {
