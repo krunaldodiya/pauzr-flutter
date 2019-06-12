@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
 
 class StopPage extends StatefulWidget {
@@ -38,7 +40,6 @@ class _StopPage extends State<StopPage>
   bool started;
   int notificationId = 1;
 
-  int pauseTime;
   var timer;
 
   Map points = {20: 1, 40: 3, 60: 3};
@@ -92,27 +93,52 @@ class _StopPage extends State<StopPage>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
     switch (state) {
+      case AppLifecycleState.suspending:
+        {
+          print("suspending");
+        }
+        break;
+
+      case AppLifecycleState.paused:
+        {
+          print("pauzed");
+        }
+        break;
+
       case AppLifecycleState.inactive:
         {
-          setState(() {
-            pauseTime = durationDynamic;
-          });
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String pauseTime = prefs.getString("pauseTime");
+
+          if (pauseTime == null) {
+            prefs.setString("pauseTime", DateTime.now().toString());
+          }
 
           NotificationManager(
-            id: notificationId,
-            title: "Pauzr",
-            body: "Tap to go back",
+            payload: {
+              "id": notificationId,
+              "title": "Pauzr",
+              "body": "Tap to go back",
+            },
             onSelectNotification: onSelectNotification,
           ).showOngoingNotification();
         }
         break;
 
       case AppLifecycleState.resumed:
-        NotificationManager.close(notificationId);
+        {
+          onSelectNotification(
+            json.encode({
+              "id": notificationId,
+              "title": "Pauzr",
+              "body": "Tap to go back",
+            }),
+          );
+        }
         break;
 
       default:
@@ -121,7 +147,14 @@ class _StopPage extends State<StopPage>
   }
 
   Future onSelectNotification(String payload) async {
-    int seconds = pauseTime - durationDynamic;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String pauseTimeString = prefs.getString("pauseTime");
+
+    final DateTime currentTime = DateTime.now();
+    final DateTime pauseTime = DateTime.parse(pauseTimeString);
+
+    Duration difference = currentTime.difference(pauseTime);
+    int seconds = difference.inSeconds;
 
     if (seconds > 5) {
       setState(() {
@@ -142,6 +175,9 @@ class _StopPage extends State<StopPage>
     } else {
       print("resumed after $seconds seconds.");
     }
+
+    NotificationManager.close(notificationId);
+    prefs.remove("pauseTime");
   }
 
   @override

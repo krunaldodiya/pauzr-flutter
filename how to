@@ -1,3 +1,4 @@
+flutter create --org com.pauzr -i objc -a java --description 'A time saver app' pauzr
 flutter create --org com.pauzr -i swift -a kotlin --description 'A time saver app' pauzr
 flutter build apk --release
 

@@ -6,9 +6,7 @@ class NotificationManager {
   final FlutterLocalNotificationsPlugin notifications =
       FlutterLocalNotificationsPlugin();
 
-  int id;
-  String title;
-  String body;
+  Map payload;
   Function onSelectNotification;
 
   NotificationManager.close(id) {
@@ -16,14 +14,10 @@ class NotificationManager {
   }
 
   NotificationManager({
-    int id,
-    String title,
-    String body,
+    Map payload,
     Function onSelectNotification,
   }) {
-    this.id = id;
-    this.title = title;
-    this.body = body;
+    this.payload = payload;
     this.onSelectNotification = onSelectNotification;
 
     final settingAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -53,11 +47,11 @@ class NotificationManager {
     final ios = IOSNotificationDetails();
 
     return notifications.show(
-      id,
-      title,
-      body,
+      payload['id'],
+      payload['title'],
+      payload['body'],
       NotificationDetails(android, ios),
-      payload: json.encode({"id": id, "title": title, "body": body}),
+      payload: json.encode(payload),
     );
   }
 }
