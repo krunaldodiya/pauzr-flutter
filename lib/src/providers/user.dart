@@ -26,14 +26,16 @@ class UserBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  onChangeData(String key, String value, User userData) {
+  onChangeData(String key, dynamic value, User userData) {
+    value = value.isNotEmpty ? value : null;
+
     setState(
-      user: userData.copyWith({key: value.length > 0 ? value : null}),
+      user: userData.copyWith({key: value}),
       error: null,
     );
   }
 
-  updateProfile() async {
+  updateProfile(user) async {
     setState(loading: true, loaded: false);
 
     try {

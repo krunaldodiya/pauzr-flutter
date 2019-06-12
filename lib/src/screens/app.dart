@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(platform: TargetPlatform.iOS),
+      // theme: ThemeData(platform: TargetPlatform.iOS),
       home: userBloc.loaded != true || themeBloc.loaded != true
           ? Center(child: CircularProgressIndicator())
           : InitialScreen(authToken: widget.authToken),

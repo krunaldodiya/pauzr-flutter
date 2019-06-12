@@ -91,13 +91,15 @@ class _ChooseLocationState extends State<ChooseLocation> {
                   itemCount: locations.length,
                   itemBuilder: (BuildContext context, index) {
                     final Location location = locations[index];
+
                     return GestureDetector(
                       onTap: () {
                         userBloc.onChangeData(
                           "location",
-                          location.city,
+                          location,
                           userBloc.user,
                         );
+
                         Navigator.of(context).pop(location);
                       },
                       child: Container(

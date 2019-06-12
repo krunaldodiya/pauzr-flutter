@@ -4,11 +4,13 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/models/group_subscription.dart';
 import 'package:pauzr/src/providers/group.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:permission_handler/permission_handler.dart';
@@ -33,7 +35,7 @@ class AddGroupParticipantsPage extends StatefulWidget {
 class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   List _participants = [];
   List _contacts = [];
-  bool loading;
+  bool loading = false;
   bool reloadContacts = false;
   String keywords;
 
@@ -84,6 +86,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   @override
   Widget build(BuildContext context) {
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+
+    final DefaultTheme theme = themeBloc.theme;
 
     List filteredContact = _contacts.where((contact) {
       if (keywords != null) {
@@ -106,9 +111,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.groupScoreboard.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: theme.groupScoreboard.appBackgroundColor,
         title: Container(
           alignment: Alignment.center,
           child: ListTile(
@@ -149,7 +154,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
           )
         ],
       ),
-      body: loading == true
+      body: loading != false
           ? showLoadingMessage()
           : showContacts(filteredContact),
     );
@@ -222,7 +227,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                   ),
                 ),
                 title: Text(
-                  contact['name'].toUpperCase(),
+                  contact['givenName'] ?? contact['displayName'],
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,

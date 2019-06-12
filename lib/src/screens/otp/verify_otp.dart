@@ -82,7 +82,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
                 FlatButton(
                   onPressed: () {
                     if (otpBloc.isValidMobile == true)
-                      onVerifyOtp(otpBloc, userBloc);
+                      verifyOtp(otpBloc, userBloc);
                   },
                   padding:
                       EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
@@ -107,24 +107,22 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     );
   }
 
-  void onVerifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
+  verifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
     XsProgressHud.show(context);
 
     await otpBloc.verifyOtp(userBloc);
 
-    XsProgressHud.show(context);
+    XsProgressHud.hide();
 
-    if (userBloc.loaded == true) {
-      if (userBloc.user.status == 1) {
-        Navigator.of(context).pushReplacementNamed(routeList.tab);
-      }
+    if (userBloc.user.status == 1) {
+      Navigator.of(context).pushReplacementNamed(routeList.tab);
+    }
 
-      if (userBloc.user.status == 0) {
-        Navigator.of(context).pushReplacementNamed(
-          routeList.edit_profile,
-          arguments: {"shouldPop": false},
-        );
-      }
+    if (userBloc.user.status == 0) {
+      Navigator.of(context).pushReplacementNamed(
+        routeList.edit_profile,
+        arguments: {"shouldPop": false},
+      );
     }
   }
 }

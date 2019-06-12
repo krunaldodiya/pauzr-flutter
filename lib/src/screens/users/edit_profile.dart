@@ -233,7 +233,7 @@ class _EditProfilePage extends State<EditProfilePage> {
   onSubmit(UserBloc userBloc) async {
     XsProgressHud.show(context);
 
-    await userBloc.updateProfile();
+    await userBloc.updateProfile(userBloc.user);
 
     XsProgressHud.hide();
 
