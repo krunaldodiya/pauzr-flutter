@@ -8,11 +8,14 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/providers/wallet.dart';
 import 'package:pauzr/src/screens/app.dart';
 import 'package:provider/provider.dart';
+import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/providers/ranking.dart';
 
 void main() async {
+  Screen.keepOn(true);
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   String authToken = prefs.getString("authToken");

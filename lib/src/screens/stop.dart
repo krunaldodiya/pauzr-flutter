@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -47,6 +48,10 @@ class _StopPage extends State<StopPage>
   @override
   void initState() {
     super.initState();
+
+    RawKeyboard.instance.addListener((RawKeyEvent event) {
+      print("Test");
+    });
 
     Future.delayed(Duration(microseconds: 1), getInitialData);
   }
