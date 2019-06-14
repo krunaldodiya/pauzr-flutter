@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/tabs.dart';
@@ -56,17 +57,17 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
         },
         items: <Widget>[
           Icon(
-            Icons.group,
+            Ionicons.ios_people,
             color: Colors.white,
             size: 25.0,
           ),
           Icon(
-            Icons.pause,
+            Ionicons.ios_pause,
             color: Colors.white,
             size: 25.0,
           ),
           Icon(
-            Icons.dashboard,
+            Ionicons.ios_trophy,
             color: Colors.white,
             size: 25.0,
           ),
