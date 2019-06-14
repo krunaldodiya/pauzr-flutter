@@ -126,8 +126,8 @@ class _StopPage extends State<StopPage>
           NotificationManager(
             payload: {
               "id": notificationId,
-              "title": "Pauzr",
-              "body": "Tap to go back",
+              "title": "#DefeatThePhone",
+              "body": "Tap to continue Pauzing. Be quick!",
             },
             onSelectNotification: onSelectNotification,
           ).showOngoingNotification();
@@ -139,8 +139,8 @@ class _StopPage extends State<StopPage>
           onSelectNotification(
             json.encode({
               "id": notificationId,
-              "title": "Pauzr",
-              "body": "Tap to go back",
+              "title": "#DefeatThePhone",
+              "body": "Tap to continue Pauzing. Be quick!",
             }),
           );
         }
@@ -268,7 +268,7 @@ class _StopPage extends State<StopPage>
                         context,
                         yesText: "Yes",
                         noText: "No",
-                        message: "Are you sure want to stop timer ?",
+                        message: "Want to stop Pauzing?",
                         onPressYes: () {
                           setState(() {
                             started = false;
@@ -341,7 +341,7 @@ class _StopPage extends State<StopPage>
               ),
               Container(height: 10.0),
               Text(
-                "#DefeatedThePhone",
+                "#DefeatThePhone",
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,

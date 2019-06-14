@@ -11,26 +11,27 @@ class UserBloc extends ChangeNotifier {
   bool loaded;
   Map error;
   User user;
+  int tabIndex = 1;
 
   setState({
     bool loading,
     bool loaded,
     Map error: const {},
     User user,
+    int tabIndex,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.user = user ?? this.user;
+    this.tabIndex = tabIndex ?? this.tabIndex;
 
     notifyListeners();
   }
 
   onChangeData(String key, dynamic value, User userData) {
-    value = value.isNotEmpty ? value : null;
-
     setState(
-      user: userData.copyWith({key: value}),
+      user: userData.copyWith({key: value == "" ? null : value}),
       error: null,
     );
   }

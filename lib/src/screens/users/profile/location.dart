@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/models/location.dart';
 import 'package:pauzr/src/providers/location.dart';
+import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +32,11 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final LocationBloc locationBloc = Provider.of<LocationBloc>(context);
+
+    final DefaultTheme theme = themeBloc.theme;
 
     List locations = locationBloc.locations;
 
@@ -46,13 +51,14 @@ class _ChooseLocationState extends State<ChooseLocation> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: theme.editProfile.backgroundColor,
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(20.0),
               child: TextField(
+                cursorColor: theme.editProfile.cursorColor,
                 onChanged: (value) {
                   setState(() {
                     keywords = value;

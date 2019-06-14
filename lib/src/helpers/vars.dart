@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show kReleaseMode;
 
-String appName = "Pauzr";
+String appName = "PauzR";
 String appId = "https://play.google.com/store/apps/details?id=com.whatsapp";
 
 String baseUrl =

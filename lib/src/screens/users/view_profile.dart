@@ -28,9 +28,10 @@ class _ViewProfilePage extends State<ViewProfilePage> {
     return Scaffold(
       backgroundColor: theme.viewProfile.backgroundColor,
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: theme.viewProfile.backgroundColor,
         title: Text(
-          userBloc.user.name,
+          userBloc.user.name.toUpperCase(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 18.0,

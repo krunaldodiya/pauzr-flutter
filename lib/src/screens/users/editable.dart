@@ -6,9 +6,10 @@ class EditableFormField extends StatelessWidget {
   final String labelText;
   final String errorText;
   final Function onChanged;
-  final Color borderColor;
   final Color textColor;
   final Color labelColor;
+  final Color borderColor;
+  final Color cursorColor;
   final int maxLength;
   final int maxLines;
   final TextInputType keyboardType;
@@ -22,6 +23,7 @@ class EditableFormField extends StatelessWidget {
     this.textColor,
     this.labelColor,
     this.borderColor,
+    this.cursorColor,
     this.maxLength,
     this.maxLines,
     this.keyboardType,
@@ -43,7 +45,7 @@ class EditableFormField extends StatelessWidget {
           fontFamily: Fonts.titilliumWebRegular,
         ),
         keyboardType: this.keyboardType ?? TextInputType.text,
-        cursorColor: Colors.white,
+        cursorColor: cursorColor ?? Colors.white,
         decoration: InputDecoration(
           alignLabelWithHint: true,
           errorText: errorText,

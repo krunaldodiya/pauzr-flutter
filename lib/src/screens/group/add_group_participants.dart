@@ -111,9 +111,9 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     }).toList();
 
     return Scaffold(
-      backgroundColor: theme.groupScoreboard.backgroundColor,
+      backgroundColor: theme.addGroupParticipants.backgroundColor,
       appBar: AppBar(
-        backgroundColor: theme.groupScoreboard.appBackgroundColor,
+        backgroundColor: theme.addGroupParticipants.appBackgroundColor,
         title: Container(
           alignment: Alignment.center,
           child: ListTile(

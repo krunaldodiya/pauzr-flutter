@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
@@ -110,6 +111,9 @@ class _HomePageState extends State<HomePage> {
               final Group group = groups[index];
               final List<GroupSubscription> subscriptions = group.subscriptions;
 
+              final date = DateTime.parse(group.createdAt);
+              String formattedDate = DateFormat('dd-MM-yyyy').format(date);
+
               return ListTile(
                 onTap: () {
                   Navigator.pushNamed(
@@ -127,7 +131,29 @@ class _HomePageState extends State<HomePage> {
                 ),
                 title: Text(group.name),
                 subtitle: Text(
-                  "${subscriptions.length.toString()} participants.",
+                  "${subscriptions.length} participants.",
+                ),
+                trailing: Column(
+                  children: <Widget>[
+                    Text(
+                      "Created on",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                        fontSize: 14.0,
+                        fontFamily: Fonts.titilliumWebRegular,
+                      ),
+                    ),
+                    Text(
+                      formattedDate,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.black87,
+                        fontSize: 12.0,
+                        fontFamily: Fonts.titilliumWebRegular,
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

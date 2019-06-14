@@ -24,7 +24,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    timer = Timer.periodic(Duration(seconds: 10), (timer) {
       setState(() {
         currentQuote = currentQuote == 13 ? 0 : currentQuote + 1;
       });

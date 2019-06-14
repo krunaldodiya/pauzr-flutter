@@ -77,12 +77,13 @@ class _EditProfilePage extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: theme.editProfile.backgroundColor,
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: theme.editProfile.backgroundColor,
         title: Text(
-          "Edit Profile",
+          "Edit Profile".toUpperCase(),
           style: TextStyle(
             fontWeight: FontWeight.w400,
-            fontSize: 12.0,
+            fontSize: 14.0,
             color: Colors.white,
             fontFamily: Fonts.titilliumWebSemiBold,
           ),
@@ -113,6 +114,7 @@ class _EditProfilePage extends State<EditProfilePage> {
               Container(height: 20.0),
               if (widget.shouldPop == true) photoUpload(userBloc),
               EditableFormField(
+                cursorColor: theme.editProfile.cursorColor,
                 controller: nameController,
                 labelText: "Full Name",
                 errorText: getErrorText(userBloc.error, 'name'),
@@ -121,6 +123,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                 },
               ),
               EditableFormField(
+                cursorColor: theme.editProfile.cursorColor,
                 controller: emailController,
                 labelText: "Email Address",
                 errorText: getErrorText(userBloc.error, 'email'),

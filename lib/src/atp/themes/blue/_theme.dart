@@ -1,4 +1,5 @@
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/atp/screens/add_group_participants.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
@@ -20,6 +21,7 @@ import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
+import 'package:pauzr/src/atp/themes/blue/add_group_participants.dart';
 import 'package:pauzr/src/atp/themes/blue/drawer.dart';
 import 'package:pauzr/src/atp/themes/blue/edit_profile.dart';
 import 'package:pauzr/src/atp/themes/blue/group_detail.dart';
@@ -71,6 +73,8 @@ class Blue implements DefaultTheme {
   MainScoreboard mainScoreboard = mainScoreboardTheme;
   @override
   GroupScoreboard groupScoreboard = groupScoreboardTheme;
+  @override
+  AddGroupParticipants addGroupParticipants = addGroupParticipantsTheme;
   @override
   GroupDetail groupDetail = groupDetailTheme;
   @override

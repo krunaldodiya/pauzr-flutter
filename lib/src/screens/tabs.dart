@@ -18,8 +18,6 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
-  int showTabIndex = 1;
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -31,32 +29,30 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
       backgroundColor: theme.tabs.backgroundColor,
       appBar: getAppBar(context, userBloc, theme),
       body: SafeArea(
-        child: getTabsPage(showTabIndex),
+        child: getTabsPage(userBloc.tabIndex),
       ),
-      bottomNavigationBar: getNavigationBar(context, theme),
+      bottomNavigationBar: getNavigationBar(userBloc, theme),
       drawer: Drawer(
         child: DrawerPage(userBloc: userBloc, themeBloc: themeBloc),
       ),
     );
   }
 
-  Container getNavigationBar(context, DefaultTheme theme) {
-    var data = getTabsTheme(showTabIndex, theme);
+  Container getNavigationBar(UserBloc userBloc, DefaultTheme theme) {
+    var data = getTabsTheme(userBloc.tabIndex, theme);
 
     return Container(
       color: Colors.transparent,
       height: 50.0,
       child: CurvedNavigationBar(
-        initialIndex: 1,
+        initialIndex: userBloc.tabIndex,
         color: data.navigationColor,
         backgroundColor: data.navigationBackgroundColor,
         buttonBackgroundColor: data.navigationButtonBackgroundColor,
         animationCurve: Curves.easeOutCubic,
         animationDuration: Duration(milliseconds: 500),
         onTap: (index) {
-          setState(() {
-            showTabIndex = index;
-          });
+          userBloc.setState(tabIndex: index);
         },
         items: <Widget>[
           Icon(
@@ -85,6 +81,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
     DefaultTheme theme,
   ) {
     return AppBar(
+      centerTitle: true,
       elevation: 0.5,
       backgroundColor: theme.tabs.appBarBackgroundColor,
       textTheme: TextTheme(
@@ -99,7 +96,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
         color: Colors.white,
       ),
       title: Text(
-        "Pauzr",
+        getTitle(userBloc),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.white,
@@ -139,5 +136,23 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
         )
       ],
     );
+  }
+
+  String getTitle(UserBloc userBloc) {
+    String title;
+
+    if (userBloc.tabIndex == 0) {
+      title = "Groups";
+    }
+
+    if (userBloc.tabIndex == 1) {
+      title = appName;
+    }
+
+    if (userBloc.tabIndex == 2) {
+      title = "Scoreboard";
+    }
+
+    return title;
   }
 }

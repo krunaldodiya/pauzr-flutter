@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
@@ -223,18 +224,28 @@ class _GroupDetailPage extends State<GroupDetailPage> {
   groupAction(groupBloc, userBloc, group) {
     List<Widget> data = [];
 
-    String msg = userBloc.user.id == group.owner.id ? "delete" : "exit";
+    String action;
+    String message;
+
+    if (userBloc.user.id == group.owner.id) {
+      action = "delete";
+      message =
+          "Group will be deleted for all users. This action cannot be undone later.";
+    } else {
+      action = "exit";
+      message = "Are you sure want to $action '${group.name}' group ?";
+    }
 
     data.add(
       InkWell(
         onTap: () {
           return showConfirmationPopup(
             context,
-            yesText: msg,
-            noText: "cancel",
-            message: "Are you sure want to $msg '${group.name}' group ?",
+            yesText: toBeginningOfSentenceCase(action),
+            noText: "Cancel",
+            message: message,
             onPressYes: () {
-              msg == "delete"
+              action == "delete"
                   ? deleteGroup(groupBloc, group, userBloc.user)
                   : exitGroup(groupBloc, group, userBloc.user);
             },
@@ -243,12 +254,12 @@ class _GroupDetailPage extends State<GroupDetailPage> {
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 20.0),
           leading: Icon(
-            msg == "delete" ? Icons.delete : Icons.exit_to_app,
+            action == "delete" ? Icons.delete : Icons.exit_to_app,
             color: Colors.red,
             size: 30.0,
           ),
           title: Text(
-            msg.toUpperCase(),
+            action.toUpperCase(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.red,
@@ -309,7 +320,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     data.add(
       InkWell(
         onTap: () {
-          Share.share('check out Pauzr App $appId').then((data) {
+          Share.share('check out $appName App $appId').then((data) {
             print("data");
           });
         },
@@ -470,10 +481,10 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                         onPressed: () {
                           return showConfirmationPopup(
                             context,
-                            yesText: "remove",
-                            noText: "cancel",
+                            yesText: "Remove",
+                            noText: "Cancel",
                             message:
-                                "Remove this user from ${group.name} group",
+                                "Remove this user from '${group.name}' group ?",
                             onPressYes: () {
                               removeParticipant(
                                 groupBloc,

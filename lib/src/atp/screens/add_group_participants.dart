@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-class ManageGroup {
+class AddGroupParticipants {
   Color backgroundColor;
   Color appBackgroundColor;
-  Color cursorColor;
 
-  ManageGroup({
+  AddGroupParticipants({
     @required this.backgroundColor,
     @required this.appBackgroundColor,
-    @required this.cursorColor,
   });
 
-  factory ManageGroup.initial() {
-    return ManageGroup(
+  factory AddGroupParticipants.initial() {
+    return AddGroupParticipants(
       backgroundColor: Colors.black,
       appBackgroundColor: Colors.black,
-      cursorColor: Colors.black,
     );
   }
 }

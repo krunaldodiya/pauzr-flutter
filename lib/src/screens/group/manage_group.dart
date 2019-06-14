@@ -149,6 +149,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           ),
           Container(height: 10.0),
           EditableFormField(
+            cursorColor: theme.manageGroup.cursorColor,
             keyboardType: TextInputType.text,
             maxLength: 20,
             textColor: Colors.black,
@@ -159,6 +160,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
             errorText: getErrorText(groupBloc.error, 'name'),
           ),
           EditableFormField(
+            cursorColor: theme.manageGroup.cursorColor,
             maxLength: 100,
             maxLines: 3,
             textColor: Colors.black,

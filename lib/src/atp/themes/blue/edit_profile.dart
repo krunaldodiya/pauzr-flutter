@@ -3,4 +3,5 @@ import 'package:pauzr/src/atp/screens/edit_profile.dart';
 
 EditProfile editProfileTheme = EditProfile(
   backgroundColor: Colors.indigo,
+  cursorColor: Colors.white,
 );

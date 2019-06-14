@@ -26,8 +26,11 @@ class DrawerPage extends StatefulWidget {
 class _DrawerPageState extends State<DrawerPage> {
   @override
   Widget build(BuildContext context) {
-    final DefaultTheme theme = widget.themeBloc.theme;
-    final User user = widget.userBloc.user;
+    final ThemeBloc themeBloc = widget.themeBloc;
+    final UserBloc userBloc = widget.userBloc;
+
+    final DefaultTheme theme = themeBloc.theme;
+    final User user = userBloc.user;
 
     return Container(
       color: theme.drawerMenu.backgroundColor,
@@ -76,13 +79,12 @@ class _DrawerPageState extends State<DrawerPage> {
               Icons.home,
               color: Colors.white,
             ),
-            onTap: () {
-              Navigator.of(context).pop();
+            onTap: () async {
+              await userBloc.setState(tabIndex: 1);
+              Navigator.pushReplacementNamed(context, routeList.tab);
             },
           ),
-          Divider(
-            color: Colors.white,
-          ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "About",
@@ -131,7 +133,7 @@ class _DrawerPageState extends State<DrawerPage> {
               color: Colors.white,
             ),
             onTap: () async {
-              Share.share('check out Pauzr App $appId').then((data) {
+              Share.share('check out $appName App $appId').then((data) {
                 print("data");
               });
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/atp/screens/add_group_participants.dart';
 import 'package:pauzr/src/atp/screens/drawer_menu.dart';
 import 'package:pauzr/src/atp/screens/edit_profile.dart';
 import 'package:pauzr/src/atp/screens/group_detail.dart';
@@ -45,6 +46,7 @@ class DefaultTheme {
   ViewProfile viewProfile;
   MainScoreboard mainScoreboard;
   GroupScoreboard groupScoreboard;
+  AddGroupParticipants addGroupParticipants;
   GroupDetail groupDetail;
   Levels levels;
   ManageGroup manageGroup;
@@ -68,6 +70,7 @@ class DefaultTheme {
     @required this.viewProfile,
     @required this.mainScoreboard,
     @required this.groupScoreboard,
+    @required this.addGroupParticipants,
     @required this.groupDetail,
     @required this.levels,
     @required this.manageGroup,
@@ -95,6 +98,7 @@ class DefaultTheme {
       viewProfile: theme.viewProfile,
       mainScoreboard: theme.mainScoreboard,
       groupScoreboard: theme.groupScoreboard,
+      addGroupParticipants: theme.addGroupParticipants,
       groupDetail: theme.groupDetail,
       levels: theme.levels,
       manageGroup: theme.manageGroup,
