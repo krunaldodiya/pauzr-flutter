@@ -20,6 +20,8 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   int currentQuote = 0;
   var timer;
 
+  Map points = {20: 1, 40: 3, 60: 5};
+
   @override
   void initState() {
     super.initState();
@@ -109,9 +111,9 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
               margin: EdgeInsets.only(bottom: 50.0),
               child: Row(
                 children: <Widget>[
-                  getTimerCard(20, theme),
-                  getTimerCard(40, theme),
-                  getTimerCard(60, theme),
+                  getTimerCard(20, "Minutes", theme),
+                  getTimerCard(40, "Minutes", theme),
+                  getTimerCard(60, "Minutes", theme),
                 ],
               ),
             ),
@@ -121,12 +123,15 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
     );
   }
 
-  getTimerCard(int time, DefaultTheme theme) {
+  getTimerCard(int time, String msg, DefaultTheme theme) {
     // int duration = time * 60;
     int duration = time * 1;
 
+    String pointer = points[time] > 1 ? 'points' : 'point';
+    String message = "${points[time]} $pointer";
+
     return Container(
-      height: 130.0,
+      height: 140.0,
       width: MediaQuery.of(context).size.width / 3,
       alignment: Alignment.center,
       child: GestureDetector(
@@ -135,7 +140,14 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
             "duration": duration,
           });
         },
-        child: getCard(time.toString(), "Minutes", 80.0, 40.0, theme.timer),
+        child: getCard(
+          time.toString(),
+          msg,
+          message,
+          90.0,
+          40.0,
+          theme.timer,
+        ),
       ),
     );
   }

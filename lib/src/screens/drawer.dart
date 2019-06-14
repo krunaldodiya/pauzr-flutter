@@ -68,25 +68,6 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           ListTile(
             title: Text(
-              appName,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-            trailing: Icon(
-              Icons.home,
-              color: Colors.white,
-            ),
-            onTap: () async {
-              await userBloc.setState(tabIndex: 1);
-              Navigator.pushReplacementNamed(context, routeList.tab);
-            },
-          ),
-          Divider(color: Colors.white),
-          ListTile(
-            title: Text(
               "About",
               style: TextStyle(
                 color: Colors.white,
@@ -102,6 +83,7 @@ class _DrawerPageState extends State<DrawerPage> {
               // Navigator.of(context).pop();
             },
           ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "Themes",

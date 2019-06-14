@@ -108,6 +108,7 @@ class _PointsPage extends State<PointsPage>
         Expanded(
           child: getCard(
             walletBloc.sum.toString(),
+            null,
             "All Time Earnings",
             100.0,
             50.0,
@@ -117,6 +118,7 @@ class _PointsPage extends State<PointsPage>
         Expanded(
           child: getCard(
             walletBloc.avg.toString(),
+            null,
             "Average per day",
             100.0,
             50.0,

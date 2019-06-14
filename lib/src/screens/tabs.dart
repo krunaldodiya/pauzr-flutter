@@ -19,6 +19,36 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
+  var items = <Widget>[
+    Icon(
+      Ionicons.ios_people,
+      color: Colors.white,
+      size: 25.0,
+    ),
+    Icon(
+      Ionicons.ios_pause,
+      color: Colors.white,
+      size: 25.0,
+    ),
+    Icon(
+      Ionicons.ios_stats,
+      color: Colors.white,
+      size: 25.0,
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(microseconds: 1), getInitialData);
+  }
+
+  getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    userBloc.setState(tabIndex: 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -52,26 +82,8 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
         buttonBackgroundColor: data.navigationButtonBackgroundColor,
         animationCurve: Curves.easeOutCubic,
         animationDuration: Duration(milliseconds: 500),
-        onTap: (index) {
-          userBloc.setState(tabIndex: index);
-        },
-        items: <Widget>[
-          Icon(
-            Ionicons.ios_people,
-            color: Colors.white,
-            size: 25.0,
-          ),
-          Icon(
-            Ionicons.ios_pause,
-            color: Colors.white,
-            size: 25.0,
-          ),
-          Icon(
-            Ionicons.ios_trophy,
-            color: Colors.white,
-            size: 25.0,
-          ),
-        ],
+        onTap: (index) => userBloc.setState(tabIndex: index),
+        items: items,
       ),
     );
   }

@@ -107,6 +107,7 @@ class _MinutesPage extends State<MinutesPage>
         Expanded(
           child: getCard(
             timerBloc.sum.toString(),
+            null,
             "All Time Savings",
             100.0,
             50.0,
@@ -116,6 +117,7 @@ class _MinutesPage extends State<MinutesPage>
         Expanded(
           child: getCard(
             timerBloc.avg.toString(),
+            null,
             "Average per day",
             100.0,
             50.0,

@@ -43,7 +43,7 @@ class _StopPage extends State<StopPage>
 
   var timer;
 
-  Map points = {20: 1, 40: 3, 60: 3};
+  Map points = {20: 1, 40: 3, 60: 5};
 
   @override
   void initState() {
@@ -171,12 +171,12 @@ class _StopPage extends State<StopPage>
         rotation = 360;
       });
 
-      String message = "You didn’t Pauz for $durationStatic mins.";
-
       showTimerPop(
         context,
         type: 'failed',
-        message: message,
+        heading: "Oops! You didn’t Pauz for $durationStatic mins.",
+        points: "0",
+        pointer: "Point",
         navigateAway: () {
           Navigator.of(context).pop();
         },
@@ -296,42 +296,64 @@ class _StopPage extends State<StopPage>
 
   Future<bool> showTimerPop(
     BuildContext context, {
-    type,
-    message,
-    navigateAway,
+    String type,
+    String heading,
+    String points,
+    String pointer,
+    Function navigateAway,
   }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.lightBlueAccent,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                type == 'success' ? "Congratulations!" : "Sorry!",
+                heading,
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 26.0,
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
                   color: type == 'success' ? Colors.green : Colors.red,
                 ),
               ),
               Container(height: 10.0),
-              Text(
-                message,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: Fonts.titilliumWebRegular,
-                  color: Colors.white,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    points,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 64.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Fonts.titilliumWebRegular,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Container(width: 10.0),
+                  Text(
+                    pointer,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: Fonts.titilliumWebRegular,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
               Container(height: 10.0),
               Text(
                 "Keep Pauzing!",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -342,6 +364,7 @@ class _StopPage extends State<StopPage>
               Container(height: 10.0),
               Text(
                 "#DefeatThePhone",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -396,12 +419,13 @@ class _StopPage extends State<StopPage>
     await userBloc.setAuthUser(results['user']);
 
     String pointer = points[durationStatic] > 1 ? 'points' : 'point';
-    String message = "You have won ${points[durationStatic]} $pointer.";
 
     showTimerPop(
       context,
       type: 'success',
-      message: message,
+      heading: "Congrats! You have won ${points[durationStatic]} $pointer.",
+      points: points[durationStatic],
+      pointer: pointer,
       navigateAway: () {
         Navigator.popUntil(context, (route) => route.isFirst);
       },

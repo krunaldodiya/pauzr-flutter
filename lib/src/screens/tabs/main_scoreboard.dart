@@ -134,6 +134,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             },
             child: getCard(
               rankingBloc.minutesSaved.toString(),
+              null,
               "Minutes Saved",
               80.0,
               40.0,
@@ -148,6 +149,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             },
             child: getCard(
               rankingBloc.pointsEarned.toString(),
+              null,
               "Points Earned",
               80.0,
               40.0,
@@ -162,6 +164,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
             },
             child: getCard(
               "${userBloc.user.level.level}/10",
+              null,
               "Levels Cleared",
               80.0,
               40.0,
