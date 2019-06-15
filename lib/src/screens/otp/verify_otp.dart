@@ -114,15 +114,17 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
 
     XsProgressHud.hide();
 
-    if (userBloc.user.status == 1) {
-      Navigator.of(context).pushReplacementNamed(routeList.tab);
-    }
+    if (userBloc.error == null) {
+      if (userBloc.user.status == 1) {
+        Navigator.of(context).pushReplacementNamed(routeList.tab);
+      }
 
-    if (userBloc.user.status == 0) {
-      Navigator.of(context).pushReplacementNamed(
-        routeList.edit_profile,
-        arguments: {"shouldPop": false},
-      );
+      if (userBloc.user.status == 0) {
+        Navigator.of(context).pushReplacementNamed(
+          routeList.edit_profile,
+          arguments: {"shouldPop": false},
+        );
+      }
     }
   }
 }

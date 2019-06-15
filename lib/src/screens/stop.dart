@@ -319,7 +319,8 @@ class _StopPage extends State<StopPage>
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
-                  color: type == 'success' ? Colors.green : Colors.red,
+                  color:
+                      type == 'success' ? Colors.greenAccent : Colors.redAccent,
                 ),
               ),
               Container(height: 10.0),
@@ -424,7 +425,7 @@ class _StopPage extends State<StopPage>
       context,
       type: 'success',
       heading: "Congrats! You have won ${points[durationStatic]} $pointer.",
-      points: points[durationStatic],
+      points: points[durationStatic].toString(),
       pointer: pointer,
       navigateAway: () {
         Navigator.popUntil(context, (route) => route.isFirst);
