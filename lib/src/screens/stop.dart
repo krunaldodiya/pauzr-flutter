@@ -166,21 +166,7 @@ class _StopPage extends State<StopPage>
     int seconds = difference.inSeconds;
 
     if (seconds > 5) {
-      setState(() {
-        started = false;
-        rotation = 360;
-      });
-
-      showTimerPop(
-        context,
-        type: 'failed',
-        heading: "Oops! You didn’t Pauz for $durationStatic mins.",
-        points: "0",
-        pointer: "Point",
-        navigateAway: () {
-          Navigator.of(context).pop();
-        },
-      );
+      onFailure();
     } else {
       print("resumed after $seconds seconds.");
     }
@@ -307,7 +293,7 @@ class _StopPage extends State<StopPage>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.lightBlueAccent,
+          backgroundColor: Color(0xff70B3DD),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -319,8 +305,7 @@ class _StopPage extends State<StopPage>
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
-                  color:
-                      type == 'success' ? Colors.greenAccent : Colors.redAccent,
+                  color: Colors.black,
                 ),
               ),
               Container(height: 10.0),
@@ -359,7 +344,7 @@ class _StopPage extends State<StopPage>
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
-                  color: Colors.yellowAccent,
+                  color: Colors.indigo,
                 ),
               ),
               Container(height: 10.0),
@@ -370,13 +355,13 @@ class _StopPage extends State<StopPage>
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
-                  color: Colors.cyanAccent,
+                  color: Colors.black,
                 ),
               )
             ],
           ),
           actions: <Widget>[
-            RaisedButton(
+            FlatButton(
               color: type == 'success' ? Colors.green : Colors.red,
               child: Text(
                 "Okay",
@@ -411,6 +396,24 @@ class _StopPage extends State<StopPage>
     return "$min : $sec";
   }
 
+  onFailure() {
+    setState(() {
+      started = false;
+      rotation = 360;
+    });
+
+    showTimerPop(
+      context,
+      type: 'failed',
+      heading: "Oops! You didn’t Pauz for $durationStatic mins.",
+      points: "0",
+      pointer: "Point",
+      navigateAway: () {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      },
+    );
+  }
+
   onSuccess(duration, UserBloc userBloc) async {
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
@@ -424,7 +427,7 @@ class _StopPage extends State<StopPage>
     showTimerPop(
       context,
       type: 'success',
-      heading: "Congrats! You have won ${points[durationStatic]} $pointer.",
+      heading: "Congrats! You have won",
       points: points[durationStatic].toString(),
       pointer: pointer,
       navigateAway: () {

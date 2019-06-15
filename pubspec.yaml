@@ -13,7 +13,7 @@ dependencies:
   carousel_pro: ^0.0.13
   intro_slider: ^1.1.9
   cupertino_icons: ^0.1.2
-  curved_navigation_bar: ^0.1.26
+  curved_navigation_bar: ^0.2.20
   flutter_vector_icons: ^0.1.0
   waveprogressbar_flutter: ^0.1.2
   shared_preferences: ^0.5.2
@@ -45,7 +45,8 @@ flutter:
     - assets/images/hello.png
     - assets/images/man.png
     - assets/images/woman.png
-    - assets/images/splash.png
+    - assets/images/screen.png
+    - assets/images/icon.png
     - assets/images/quotes/APJ-Abdul-Kalam.jpg
     - assets/images/quotes/Swami-Vivekananda.jpg
     - assets/images/quotes/Jack-Ma.png

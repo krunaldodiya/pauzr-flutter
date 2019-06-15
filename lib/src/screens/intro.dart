@@ -37,6 +37,7 @@ class _IntroPage extends State<IntroPage> {
             getSliderInfo(theme.intro1),
             getSliderInfo(theme.intro2),
             getSliderInfo(theme.intro3),
+            getSliderInfo(theme.intro4),
           ],
           onDonePress: this.onDonePress,
           onSkipPress: this.onSkipPress,

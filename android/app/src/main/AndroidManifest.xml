@@ -42,7 +42,7 @@
         android:usesCleartextTraffic="true"
         android:name="io.flutter.app.FlutterApplication"
         android:label="pauzr"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

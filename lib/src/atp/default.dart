@@ -9,6 +9,7 @@ import 'package:pauzr/src/atp/screens/intro.dart';
 import 'package:pauzr/src/atp/screens/intro1.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 import 'package:pauzr/src/atp/screens/intro3.dart';
+import 'package:pauzr/src/atp/screens/intro4.dart';
 import 'package:pauzr/src/atp/screens/levels.dart';
 import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/manage_group.dart';
@@ -36,6 +37,7 @@ class DefaultTheme {
   Intro1 intro1;
   Intro2 intro2;
   Intro3 intro3;
+  Intro4 intro4;
   Home home;
   Timer timer;
   Tabs tabs;
@@ -60,6 +62,7 @@ class DefaultTheme {
     @required this.intro1,
     @required this.intro2,
     @required this.intro3,
+    @required this.intro4,
     @required this.home,
     @required this.timer,
     @required this.tabs,
@@ -88,6 +91,7 @@ class DefaultTheme {
       intro1: theme.intro1,
       intro2: theme.intro2,
       intro3: theme.intro3,
+      intro4: theme.intro4,
       home: theme.home,
       timer: theme.timer,
       tabs: theme.tabs,

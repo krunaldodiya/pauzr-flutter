@@ -30,8 +30,8 @@ class Intro2 {
   factory Intro2.initial() {
     return Intro2(
       backgroundColor: Colors.black87,
-      title: "PENCIL",
-      description: "Ye indulgence unreserved connection alteration appearance",
+      title: "Point",
+      description: "Earn points for not using the phone",
       pathImage: "assets/images/photo_pencil.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,

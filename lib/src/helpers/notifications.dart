@@ -20,7 +20,7 @@ class NotificationManager {
     this.payload = payload;
     this.onSelectNotification = onSelectNotification;
 
-    final settingAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final settingAndroid = AndroidInitializationSettings('@drawable/icon');
     final settingIos = IOSInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) {
         return onSelectNotification(payload);

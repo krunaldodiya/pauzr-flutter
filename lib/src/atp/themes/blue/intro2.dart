@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 
 Intro2 intro2Theme = Intro2(
-  backgroundColor: Colors.indigo,
+  backgroundColor: Color(0xff0D62A2),
   title: Intro2.initial().title,
   description: Intro2.initial().description,
   pathImage: Intro2.initial().pathImage,

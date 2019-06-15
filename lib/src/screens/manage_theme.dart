@@ -17,9 +17,9 @@ class _ManageThemeState extends State<ManageTheme> {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
 
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Color(0xff0D62A2),
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xff0D62A2),
         title: Text(
           "Manage Theme",
           style: TextStyle(

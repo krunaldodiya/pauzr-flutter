@@ -30,9 +30,8 @@ class Intro1 {
   factory Intro1.initial() {
     return Intro1(
       backgroundColor: Colors.black87,
-      title: "ERASER",
-      description:
-          "Allow miles wound place the leave had. To sitting subject no improve studied limited",
+      title: "Time",
+      description: "Select the time you want to pause your phone for",
       pathImage: "assets/images/photo_eraser.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,

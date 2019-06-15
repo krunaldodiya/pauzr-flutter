@@ -9,6 +9,7 @@ import 'package:pauzr/src/atp/screens/intro.dart';
 import 'package:pauzr/src/atp/screens/intro1.dart';
 import 'package:pauzr/src/atp/screens/intro2.dart';
 import 'package:pauzr/src/atp/screens/intro3.dart';
+import 'package:pauzr/src/atp/screens/intro4.dart';
 import 'package:pauzr/src/atp/screens/levels.dart';
 import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/manage_group.dart';
@@ -31,6 +32,7 @@ import 'package:pauzr/src/atp/themes/black/intro.dart';
 import 'package:pauzr/src/atp/themes/black/intro1.dart';
 import 'package:pauzr/src/atp/themes/black/intro2.dart';
 import 'package:pauzr/src/atp/themes/black/intro3.dart';
+import 'package:pauzr/src/atp/themes/black/intro4.dart';
 import 'package:pauzr/src/atp/themes/black/levels.dart';
 import 'package:pauzr/src/atp/themes/black/main_scoreboard.dart';
 import 'package:pauzr/src/atp/themes/black/manage_group.dart';
@@ -53,6 +55,8 @@ class Black implements DefaultTheme {
   Intro2 intro2 = intro2Theme;
   @override
   Intro3 intro3 = intro3Theme;
+  @override
+  Intro4 intro4 = intro4Theme;
   @override
   Home home = homeTheme;
   @override

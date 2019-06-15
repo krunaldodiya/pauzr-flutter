@@ -30,9 +30,8 @@ class Intro3 {
   factory Intro3.initial() {
     return Intro3(
       backgroundColor: Colors.black87,
-      title: "RULER",
-      description:
-          "Much evil soon high in hope do view. Out may few northward believing attempted.",
+      title: "Level",
+      description: "Compete on city level",
       pathImage: "assets/images/photo_ruler.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,
