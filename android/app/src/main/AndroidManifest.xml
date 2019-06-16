@@ -41,7 +41,7 @@
     <application
         android:usesCleartextTraffic="true"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="pauzr"
+        android:label="PauzR"
         android:icon="@drawable/icon">
         <activity
             android:name=".MainActivity"
