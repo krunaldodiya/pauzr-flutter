@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 leading: CircleAvatar(
                   radius: 20.0,
                   backgroundImage: NetworkImage(
-                    "$baseUrl/users/${group.photo}",
+                    "$baseUrl/storage/${group.photo}",
                   ),
                 ),
                 title: Text(group.name),

@@ -221,7 +221,7 @@ class _EditProfilePage extends State<EditProfilePage> {
         child: ClipOval(
           child: loading == false
               ? Image.network(
-                  "$baseUrl/users/${userBloc.user.avatar}",
+                  "$baseUrl/storage/${userBloc.user.avatar}",
                   width: 120.0,
                   height: 120.0,
                   fit: BoxFit.cover,

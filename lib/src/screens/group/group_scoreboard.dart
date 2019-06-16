@@ -80,7 +80,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               isThreeLine: true,
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(
-                  "$baseUrl/users/${group.photo}",
+                  "$baseUrl/storage/${group.photo}",
                 ),
               ),
               title: Text(

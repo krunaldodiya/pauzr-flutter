@@ -54,7 +54,7 @@ class _DrawerPageState extends State<DrawerPage> {
             currentAccountPicture: Container(
               child: ClipOval(
                 child: Image.network(
-                  "$baseUrl/users/${user.avatar}",
+                  "$baseUrl/storage/${user.avatar}",
                   width: 60.0,
                   height: 60.0,
                   fit: BoxFit.cover,

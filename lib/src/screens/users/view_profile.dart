@@ -68,7 +68,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                   child: Container(
                     child: ClipOval(
                       child: Image.network(
-                        "$baseUrl/users/${userBloc.user.avatar}",
+                        "$baseUrl/storage/${userBloc.user.avatar}",
                         width: 150.0,
                         height: 150.0,
                         fit: BoxFit.cover,

@@ -92,7 +92,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                           BlendMode.dstATop,
                         ),
                         image: NetworkImage(
-                          "$baseUrl/users/${group.photo}",
+                          "$baseUrl/storage/${group.photo}",
                         ),
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
@@ -448,7 +448,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
             leading: CircleAvatar(
               radius: 20.0,
               backgroundImage: NetworkImage(
-                "$baseUrl/users/${participant.subscriber.avatar}",
+                "$baseUrl/storage/${participant.subscriber.avatar}",
               ),
             ),
             title: Text(

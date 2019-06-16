@@ -46,7 +46,7 @@ class GetRanking {
           leading: CircleAvatar(
             radius: 30.0,
             backgroundImage: NetworkImage(
-              "$baseUrl/users/${ranking.user.avatar}",
+              "$baseUrl/storage/${ranking.user.avatar}",
             ),
           ),
           title: Container(

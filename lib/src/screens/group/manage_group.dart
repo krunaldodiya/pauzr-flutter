@@ -110,7 +110,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
                         BlendMode.dstATop,
                       ),
                       image: NetworkImage(
-                        "$baseUrl/users/${photoController.text}",
+                        "$baseUrl/storage/${photoController.text}",
                       ),
                       fit: BoxFit.cover,
                       alignment: Alignment.center,

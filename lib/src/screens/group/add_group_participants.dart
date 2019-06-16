@@ -223,7 +223,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                 leading: CircleAvatar(
                   radius: 20.0,
                   backgroundImage: NetworkImage(
-                    "$baseUrl/users/${contact['avatar']}",
+                    "$baseUrl/storage/${contact['avatar']}",
                   ),
                 ),
                 title: Text(

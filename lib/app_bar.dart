@@ -52,7 +52,7 @@ AppBar getAppBar(
             padding: EdgeInsets.all(10.0),
             child: ClipOval(
               child: Image.network(
-                "$baseUrl/users/${userBloc.user.avatar}",
+                "$baseUrl/storage/${userBloc.user.avatar}",
                 width: 36.0,
                 height: 36.0,
                 fit: BoxFit.cover,
