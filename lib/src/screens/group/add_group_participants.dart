@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -222,7 +223,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                 onTap: () => toggleContact(contact),
                 leading: CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: NetworkImage(
+                  backgroundImage: CachedNetworkImageProvider(
                     "$baseUrl/storage/${contact['avatar']}",
                   ),
                 ),

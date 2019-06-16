@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
@@ -45,7 +46,7 @@ class GetRanking {
         child: ListTile(
           leading: CircleAvatar(
             radius: 30.0,
-            backgroundImage: NetworkImage(
+            backgroundImage: CachedNetworkImageProvider(
               "$baseUrl/storage/${ranking.user.avatar}",
             ),
           ),

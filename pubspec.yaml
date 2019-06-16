@@ -29,6 +29,7 @@ dependencies:
   contacts_service: ^0.2.6
   permission_handler: ^3.0.2
   screen: ^0.0.5
+  cached_network_image: ^0.8.0
 
 dev_dependencies:
   flutter_test:

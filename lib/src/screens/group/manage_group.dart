@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -109,7 +110,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
                         Colors.black.withOpacity(0.5),
                         BlendMode.dstATop,
                       ),
-                      image: NetworkImage(
+                      image: CachedNetworkImageProvider(
                         "$baseUrl/storage/${photoController.text}",
                       ),
                       fit: BoxFit.cover,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_rankings.dart';
@@ -79,7 +80,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               contentPadding: EdgeInsets.all(0),
               isThreeLine: true,
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(
+                backgroundImage: CachedNetworkImageProvider(
                   "$baseUrl/storage/${group.photo}",
                 ),
               ),

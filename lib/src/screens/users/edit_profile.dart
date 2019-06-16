@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -219,16 +220,17 @@ class _EditProfilePage extends State<EditProfilePage> {
         width: 120.0,
         margin: EdgeInsets.only(bottom: 20.0),
         child: ClipOval(
-          child: loading == false
-              ? Image.network(
-                  "$baseUrl/storage/${userBloc.user.avatar}",
-                  width: 120.0,
-                  height: 120.0,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                )
-              : CircularProgressIndicator(),
-        ),
+            child: CachedNetworkImage(
+          imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+          placeholder: (context, url) {
+            return CircularProgressIndicator();
+          },
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          width: 120.0,
+          height: 120.0,
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+        )),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 isThreeLine: false,
                 leading: CircleAvatar(
                   radius: 20.0,
-                  backgroundImage: NetworkImage(
+                  backgroundImage: CachedNetworkImageProvider(
                     "$baseUrl/storage/${group.photo}",
                   ),
                 ),

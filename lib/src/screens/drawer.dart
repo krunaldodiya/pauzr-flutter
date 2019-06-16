@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -53,8 +54,10 @@ class _DrawerPageState extends State<DrawerPage> {
             ),
             currentAccountPicture: Container(
               child: ClipOval(
-                child: Image.network(
-                  "$baseUrl/storage/${user.avatar}",
+                child: CachedNetworkImage(
+                  imageUrl: "$baseUrl/storage/${user.avatar}",
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                   width: 60.0,
                   height: 60.0,
                   fit: BoxFit.cover,

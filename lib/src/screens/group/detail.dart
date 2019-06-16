@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -91,7 +92,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                           Colors.black.withOpacity(0.5),
                           BlendMode.dstATop,
                         ),
-                        image: NetworkImage(
+                        image: CachedNetworkImageProvider(
                           "$baseUrl/storage/${group.photo}",
                         ),
                         fit: BoxFit.cover,
@@ -447,7 +448,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
           ListTile(
             leading: CircleAvatar(
               radius: 20.0,
-              backgroundImage: NetworkImage(
+              backgroundImage: CachedNetworkImageProvider(
                 "$baseUrl/storage/${participant.subscriber.avatar}",
               ),
             ),

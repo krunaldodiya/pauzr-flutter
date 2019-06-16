@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -67,8 +68,12 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                   tag: 'profile-image',
                   child: Container(
                     child: ClipOval(
-                      child: Image.network(
-                        "$baseUrl/storage/${userBloc.user.avatar}",
+                      child: CachedNetworkImage(
+                        imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+                        placeholder: (context, url) {
+                          return CircularProgressIndicator();
+                        },
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                         width: 150.0,
                         height: 150.0,
                         fit: BoxFit.cover,

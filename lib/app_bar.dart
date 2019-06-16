@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
@@ -51,8 +52,10 @@ AppBar getAppBar(
           child: Container(
             padding: EdgeInsets.all(10.0),
             child: ClipOval(
-              child: Image.network(
-                "$baseUrl/storage/${userBloc.user.avatar}",
+              child: CachedNetworkImage(
+                imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 width: 36.0,
                 height: 36.0,
                 fit: BoxFit.cover,
