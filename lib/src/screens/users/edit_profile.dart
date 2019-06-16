@@ -252,8 +252,6 @@ class _EditProfilePage extends State<EditProfilePage> {
   void uploadImage(userBloc) async {
     final file = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    XsProgressHud.show(context);
-
     setState(() {
       loading = true;
     });
@@ -268,14 +266,10 @@ class _EditProfilePage extends State<EditProfilePage> {
 
       await userBloc.setAuthUser(results['user']);
 
-      XsProgressHud.hide();
-
       setState(() {
         loading = false;
       });
     } catch (e) {
-      XsProgressHud.hide();
-
       setState(() {
         loading = false;
       });
