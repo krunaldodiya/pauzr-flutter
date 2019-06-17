@@ -99,6 +99,8 @@ class _StopPage extends State<StopPage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
+    bool status = await platform.invokeMethod("getDeviceStatus");
+
     switch (state) {
       case AppLifecycleState.paused:
         {
@@ -119,8 +121,6 @@ class _StopPage extends State<StopPage>
 
       case AppLifecycleState.resumed:
         {
-          bool status = await platform.invokeMethod("getDeviceStatus");
-
           onSelectNotification(
             json.encode({
               "id": notificationId,
