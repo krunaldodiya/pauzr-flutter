@@ -28,6 +28,8 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  var platform = MethodChannel("com.pauzr.org/info");
+
   int durationStatic;
   int durationDynamic;
 
@@ -48,10 +50,6 @@ class _StopPage extends State<StopPage>
   @override
   void initState() {
     super.initState();
-
-    RawKeyboard.instance.addListener((RawKeyEvent event) {
-      print("Test");
-    });
 
     Future.delayed(Duration(microseconds: 1), getInitialData);
   }
@@ -102,32 +100,17 @@ class _StopPage extends State<StopPage>
     super.didChangeAppLifecycleState(state);
 
     switch (state) {
-      case AppLifecycleState.suspending:
-        {
-          print("suspending");
-        }
-        break;
-
       case AppLifecycleState.paused:
         {
-          print("pauzed");
-        }
-        break;
-
-      case AppLifecycleState.inactive:
-        {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          String pauseTime = prefs.getString("pauseTime");
-
-          if (pauseTime == null && isScreenLocked() == false) {
-            prefs.setString("pauseTime", DateTime.now().toString());
-          }
+          prefs.setString("pauseTime", DateTime.now().toString());
 
           NotificationManager(
             payload: {
               "id": notificationId,
               "title": "#DefeatThePhone",
               "body": "Tap to continue Pauzing. Be quick!",
+              "status": false,
             },
             onSelectNotification: onSelectNotification,
           ).showOngoingNotification();
@@ -136,11 +119,14 @@ class _StopPage extends State<StopPage>
 
       case AppLifecycleState.resumed:
         {
+          bool status = await platform.invokeMethod("getDeviceStatus");
+
           onSelectNotification(
             json.encode({
               "id": notificationId,
               "title": "#DefeatThePhone",
               "body": "Tap to continue Pauzing. Be quick!",
+              "status": status,
             }),
           );
         }
@@ -151,11 +137,10 @@ class _StopPage extends State<StopPage>
     }
   }
 
-  bool isScreenLocked() {
-    return false;
-  }
-
   Future onSelectNotification(String payload) async {
+    Map data = json.decode(payload);
+    bool status = data['status'];
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String pauseTimeString = prefs.getString("pauseTime");
 
@@ -165,14 +150,15 @@ class _StopPage extends State<StopPage>
     Duration difference = currentTime.difference(pauseTime);
     int seconds = difference.inSeconds;
 
-    if (seconds > 5) {
+    if (status != true && seconds > 5) {
+      prefs.remove("pauseTime");
       onFailure();
     } else {
+      prefs.setString("pauseTime", DateTime.now().toString());
       print("resumed after $seconds seconds.");
     }
 
     NotificationManager.close(notificationId);
-    prefs.remove("pauseTime");
   }
 
   @override
