@@ -13,3 +13,6 @@ storeFile=./pauzr.jks
 
 flutter build apk --release --target-platform=android-arm64
 flutter build apk --release --target-platform=android-arm
+
+Sudo Password: Pi6UBwUi85lUM9bNpddy
+Database Password: Odqdr9IMc5ES2j0KRUCC
