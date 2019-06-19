@@ -61,7 +61,11 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
                   ),
                 ),
                 FlatButton(
-                  onPressed: otpBloc.requestOtp,
+                  onPressed: () async {
+                    XsProgressHud.show(context);
+                    await otpBloc.requestOtp();
+                    XsProgressHud.hide();
+                  },
                   child: Text(
                     "Resend OTP",
                     style: TextStyle(
@@ -109,9 +113,7 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
 
   verifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
     XsProgressHud.show(context);
-
     await otpBloc.verifyOtp(userBloc);
-
     XsProgressHud.hide();
 
     if (userBloc.error == null) {
