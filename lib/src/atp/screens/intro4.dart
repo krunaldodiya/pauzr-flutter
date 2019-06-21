@@ -32,7 +32,7 @@ class Intro4 {
       backgroundColor: Colors.black87,
       title: "Fun",
       description: "Create groups with friends, family for more fun",
-      pathImage: "assets/images/photo_ruler.png",
+      pathImage: "assets/images/intro/4.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,
       titleFontColor: Colors.white,

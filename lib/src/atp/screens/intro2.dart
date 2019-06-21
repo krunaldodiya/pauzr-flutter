@@ -32,7 +32,7 @@ class Intro2 {
       backgroundColor: Colors.black87,
       title: "Point",
       description: "Earn points for not using the phone",
-      pathImage: "assets/images/photo_pencil.png",
+      pathImage: "assets/images/intro/2.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,
       titleFontColor: Colors.white,

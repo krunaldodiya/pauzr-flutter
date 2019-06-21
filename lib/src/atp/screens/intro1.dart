@@ -32,7 +32,7 @@ class Intro1 {
       backgroundColor: Colors.black87,
       title: "Time",
       description: "Select the time you want to pause your phone for",
-      pathImage: "assets/images/photo_eraser.png",
+      pathImage: "assets/images/intro/1.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,
       titleFontColor: Colors.white,

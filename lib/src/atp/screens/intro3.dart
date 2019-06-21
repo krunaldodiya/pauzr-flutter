@@ -32,7 +32,7 @@ class Intro3 {
       backgroundColor: Colors.black87,
       title: "Level",
       description: "Compete on city level",
-      pathImage: "assets/images/photo_ruler.png",
+      pathImage: "assets/images/intro/3.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,
       titleFontColor: Colors.white,

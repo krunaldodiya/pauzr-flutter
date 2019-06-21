@@ -124,8 +124,8 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   }
 
   getTimerCard(int time, String msg, DefaultTheme theme) {
-    // int duration = time * 60;
-    int duration = time * 1;
+    int duration = time * 60;
+    // int duration = time * 1;
 
     String pointer = points[time] > 1 ? 'points' : 'point';
     String message = "${points[time]} $pointer";

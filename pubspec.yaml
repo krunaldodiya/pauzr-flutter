@@ -1,6 +1,6 @@
 name: pauzr
 description: A time saver app
-version: 1.0.6+6
+version: 1.0.7+7
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -48,6 +48,10 @@ flutter:
     - assets/images/woman.png
     - assets/images/screen.png
     - assets/images/icon.png
+    - assets/images/intro/1.png
+    - assets/images/intro/2.png
+    - assets/images/intro/3.png
+    - assets/images/intro/4.png
     - assets/images/quotes/APJ-Abdul-Kalam.jpg
     - assets/images/quotes/Swami-Vivekananda.jpg
     - assets/images/quotes/Jack-Ma.png
