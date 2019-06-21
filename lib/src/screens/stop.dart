@@ -330,7 +330,7 @@ class _StopPage extends State<StopPage>
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   fontFamily: Fonts.titilliumWebRegular,
-                  color: Colors.indigo,
+                  color: Color(0xff0D62A2),
                 ),
               ),
               Container(height: 10.0),
@@ -348,7 +348,7 @@ class _StopPage extends State<StopPage>
           ),
           actions: <Widget>[
             FlatButton(
-              color: type == 'success' ? Colors.green : Colors.red,
+              color: type == 'success' ? Color(0xff0D62A2) : Colors.red,
               child: Text(
                 "Okay",
                 style: TextStyle(
