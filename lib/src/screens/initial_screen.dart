@@ -1,8 +1,8 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/no_network.dart';
-import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/tabs.dart';
 import 'package:pauzr/src/screens/users/edit_profile.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +48,7 @@ class _InitialScreenState extends State<InitialScreen> {
     }
 
     if (widget.authToken == null || userBloc.user == null) {
-      return RequestOtpPage();
+      return IntroPage();
     }
 
     if (userBloc.user.status == 1) {

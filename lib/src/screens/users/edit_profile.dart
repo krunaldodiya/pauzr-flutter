@@ -165,7 +165,7 @@ class _EditProfilePage extends State<EditProfilePage> {
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, routeList.gender).then((gender) {
-                    final Location data = gender;
+                    final String data = gender;
 
                     if (data != null) {
                       setState(() {
