@@ -391,7 +391,7 @@ class _StopPage extends State<StopPage>
     showTimerPop(
       context,
       type: 'failed',
-      heading: "Oops! You didn’t Pauz for $durationStatic mins.",
+      heading: "Oops! You didn’t Pauz for ${durationStatic ~/ 60} mins.",
       points: "0",
       pointer: "Point",
       navigateAway: () {
@@ -414,7 +414,7 @@ class _StopPage extends State<StopPage>
       context,
       type: 'success',
       heading: "Congrats! You have won",
-      points: points[durationStatic].toString(),
+      points: points[durationStatic ~/ 60].toString(),
       pointer: pointer,
       navigateAway: () {
         Navigator.popUntil(context, (route) => route.isFirst);

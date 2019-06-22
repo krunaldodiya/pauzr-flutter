@@ -30,7 +30,7 @@ class Intro4 {
   factory Intro4.initial() {
     return Intro4(
       backgroundColor: Colors.black87,
-      title: "Fun",
+      title: "Create Group",
       description: "Create groups with friends, family for more fun",
       pathImage: "assets/images/intro/4.png",
       titleFontFamily: Fonts.titilliumWebRegular,

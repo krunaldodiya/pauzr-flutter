@@ -30,7 +30,7 @@ class Intro3 {
   factory Intro3.initial() {
     return Intro3(
       backgroundColor: Colors.black87,
-      title: "Level",
+      title: "City Scoreboard",
       description: "Compete on city level",
       pathImage: "assets/images/intro/3.png",
       titleFontFamily: Fonts.titilliumWebRegular,

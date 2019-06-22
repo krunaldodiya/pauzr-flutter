@@ -30,7 +30,7 @@ class Intro2 {
   factory Intro2.initial() {
     return Intro2(
       backgroundColor: Colors.black87,
-      title: "Point",
+      title: "Earn Points",
       description: "Earn points for not using the phone",
       pathImage: "assets/images/intro/2.png",
       titleFontFamily: Fonts.titilliumWebRegular,

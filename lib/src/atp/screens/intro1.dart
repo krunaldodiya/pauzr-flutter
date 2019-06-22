@@ -30,7 +30,7 @@ class Intro1 {
   factory Intro1.initial() {
     return Intro1(
       backgroundColor: Colors.black87,
-      title: "Time",
+      title: "Select Time",
       description: "Select the time you want to pause your phone for",
       pathImage: "assets/images/intro/1.png",
       titleFontFamily: Fonts.titilliumWebRegular,
