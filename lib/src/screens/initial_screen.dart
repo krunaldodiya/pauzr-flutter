@@ -1,15 +1,19 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:pauzr/src/helpers/initial_screen.dart';
 import 'package:pauzr/src/providers/user.dart';
-import 'package:pauzr/src/screens/intro.dart';
 import 'package:pauzr/src/screens/no_network.dart';
+import 'package:pauzr/src/screens/otp/request_otp.dart';
+import 'package:pauzr/src/screens/tabs.dart';
+import 'package:pauzr/src/screens/users/edit_profile.dart';
 import 'package:provider/provider.dart';
 
 class InitialScreen extends StatefulWidget {
   final String authToken;
 
-  InitialScreen({Key key, @required this.authToken}) : super(key: key);
+  InitialScreen({
+    Key key,
+    @required this.authToken,
+  }) : super(key: key);
 
   @override
   _InitialScreenState createState() => _InitialScreenState();
@@ -19,12 +23,11 @@ class _InitialScreenState extends State<InitialScreen> {
   ConnectivityResult connectivityResult;
   var subscription;
 
-  void checkConnection() {
-    subscription = Connectivity().onConnectivityChanged.listen(
-      (ConnectivityResult result) {
-        setState(() => connectivityResult = result);
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
+
+    checkConnection();
   }
 
   @override
@@ -44,10 +47,22 @@ class _InitialScreenState extends State<InitialScreen> {
       return NoNetwork();
     }
 
-    if (widget.authToken == null) {
-      return IntroPage();
+    if (widget.authToken == null || userBloc.user == null) {
+      return RequestOtpPage();
     }
 
-    return getInitialScreen(userBloc.user);
+    if (userBloc.user.status == 1) {
+      return TabsPage();
+    }
+
+    return EditProfilePage(shouldPop: false);
+  }
+
+  void checkConnection() {
+    subscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) {
+        setState(() => connectivityResult = result);
+      },
+    );
   }
 }

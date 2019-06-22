@@ -9,6 +9,7 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerPage extends StatefulWidget {
   final UserBloc userBloc;
@@ -25,6 +26,14 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+  launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = widget.themeBloc;
@@ -71,24 +80,6 @@ class _DrawerPageState extends State<DrawerPage> {
           ),
           ListTile(
             title: Text(
-              "About",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-            trailing: Icon(
-              Icons.info,
-              color: Colors.white,
-            ),
-            onTap: () async {
-              // Navigator.of(context).pop();
-            },
-          ),
-          Divider(color: Colors.white),
-          ListTile(
-            title: Text(
               "Themes",
               style: TextStyle(
                 color: Colors.white,
@@ -104,6 +95,7 @@ class _DrawerPageState extends State<DrawerPage> {
               Navigator.pushNamed(context, routeList.manage_theme);
             },
           ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "Share",
@@ -123,6 +115,58 @@ class _DrawerPageState extends State<DrawerPage> {
               });
             },
           ),
+          ListTile(
+            title: Text(
+              "Rate & Review us",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.star,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              launchURL(appId);
+            },
+          ),
+          ListTile(
+            title: Text(
+              "Terms & Conditions",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.assignment,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              launchURL("$webUrl/terms");
+            },
+          ),
+          ListTile(
+            title: Text(
+              "Have any query ?",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.mail,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              launchURL("mailto:$emailAddress");
+            },
+          ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "Logout",
