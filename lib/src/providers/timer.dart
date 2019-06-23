@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/models/timer.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 
 class TimerBloc extends ChangeNotifier {
@@ -57,15 +58,16 @@ class TimerBloc extends ChangeNotifier {
     }
   }
 
-  setTimer(int duration) async {
+  setTimer(int duration, UserBloc userBloc) async {
     setState(loading: true, loaded: false);
 
     try {
       final Response response = await _apiProvider.setTimer(duration);
+      final results = response.data;
+
+      await userBloc.setAuthUser(results['user']);
 
       setState(loading: false, loaded: true);
-
-      return response;
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
     }

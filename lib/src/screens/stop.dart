@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -66,6 +65,7 @@ class _StopPage extends State<StopPage>
 
   getInitialData() async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -93,7 +93,7 @@ class _StopPage extends State<StopPage>
             waterController.changeWaterHeight(0);
           });
 
-          onSuccess(widget.duration, userBloc);
+          onSuccess(widget.duration, userBloc, timerBloc);
         }
       }
     });
@@ -415,13 +415,8 @@ class _StopPage extends State<StopPage>
     );
   }
 
-  onSuccess(duration, UserBloc userBloc) async {
-    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
-
-    final Response response = await timerBloc.setTimer(timerMinutes);
-    final results = response.data;
-
-    await userBloc.setAuthUser(results['user']);
+  onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
+    await timerBloc.setTimer(timerMinutes, userBloc);
 
     String pointer = points[durationStatic] > 1 ? 'points' : 'point';
 
