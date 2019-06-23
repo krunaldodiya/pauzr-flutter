@@ -384,14 +384,17 @@ class _StopPage extends State<StopPage>
     );
   }
 
+  String twoDigits(int n) {
+    return (n >= 10) ? "$n" : "0$n";
+  }
+
   String getTimer() {
-    int seconds = durationDynamic % 60;
-    int minutes = timerMinutes;
+    final now = Duration(seconds: durationDynamic);
 
-    String sec = seconds > 9 ? "$seconds" : "0$seconds";
-    String min = minutes > 9 ? "$minutes" : "0$minutes";
+    String twoDigitMinutes = twoDigits(now.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(now.inSeconds.remainder(60));
 
-    return "$min : $sec";
+    return "$twoDigitMinutes : $twoDigitSeconds";
   }
 
   onFailure() {
