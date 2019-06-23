@@ -56,6 +56,20 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
 
     final Group group = groupSelector.length > 0 ? groupSelector.first : null;
 
+    if (groupBloc.loaded == true && group == null) {
+      return Container(
+        padding: EdgeInsets.all(20.0),
+        child: Text(
+          "Group $group does not exists.",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontFamily: Fonts.titilliumWebSemiBold,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: theme.groupScoreboard.backgroundColor,
       appBar: AppBar(
@@ -69,7 +83,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               context,
               routeList.group_detail,
               arguments: {
-                "group": group != null ? group : widget.group,
+                "group": group,
               },
             );
           },
