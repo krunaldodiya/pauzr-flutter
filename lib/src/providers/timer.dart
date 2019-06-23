@@ -57,7 +57,7 @@ class TimerBloc extends ChangeNotifier {
     }
   }
 
-  setTimer(duration) async {
+  setTimer(int duration) async {
     setState(loading: true, loaded: false);
 
     try {

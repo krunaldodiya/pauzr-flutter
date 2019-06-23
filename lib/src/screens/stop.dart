@@ -22,8 +22,13 @@ class StopPage extends StatefulWidget {
   StopPage({Key key, @required this.duration}) : super(key: key);
 
   @override
-  _StopPage createState() =>
-      _StopPage(durationStatic: duration, durationDynamic: duration);
+  _StopPage createState() {
+    return _StopPage(
+      durationStatic: duration,
+      durationDynamic: duration,
+      timerMinutes: duration ~/ 60,
+    );
+  }
 }
 
 class _StopPage extends State<StopPage>
@@ -32,8 +37,13 @@ class _StopPage extends State<StopPage>
 
   int durationStatic;
   int durationDynamic;
+  int timerMinutes;
 
-  _StopPage({this.durationStatic, this.durationDynamic});
+  _StopPage({
+    this.durationStatic,
+    this.durationDynamic,
+    this.timerMinutes,
+  });
 
   double waterHeight = 0.9;
   double rotation = 360;
@@ -63,15 +73,16 @@ class _StopPage extends State<StopPage>
       started = true;
     });
 
-    double tick = waterHeight / durationStatic;
+    double tickValue = waterHeight / durationStatic;
+    double rotateValue = 360 / durationStatic;
 
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (started == true) {
         if (durationDynamic > 0) {
           setState(() {
-            rotation = rotation - 1;
+            rotation = rotation - rotateValue;
             durationDynamic--;
-            waterController.changeWaterHeight(durationDynamic * tick);
+            waterController.changeWaterHeight(durationDynamic * tickValue);
           });
         }
 
@@ -79,6 +90,7 @@ class _StopPage extends State<StopPage>
           setState(() {
             started = false;
             rotation = 360;
+            waterController.changeWaterHeight(0);
           });
 
           onSuccess(widget.duration, userBloc);
@@ -374,7 +386,7 @@ class _StopPage extends State<StopPage>
 
   String getTimer() {
     int seconds = durationDynamic % 60;
-    int minutes = durationDynamic ~/ 60;
+    int minutes = timerMinutes;
 
     String sec = seconds > 9 ? "$seconds" : "0$seconds";
     String min = minutes > 9 ? "$minutes" : "0$minutes";
@@ -391,7 +403,7 @@ class _StopPage extends State<StopPage>
     showTimerPop(
       context,
       type: 'failed',
-      heading: "Oops! You didn’t Pauz for ${durationStatic ~/ 60} mins.",
+      heading: "Oops! You didn’t Pauz for $timerMinutes mins.",
       points: "0",
       pointer: "Point",
       navigateAway: () {
@@ -403,7 +415,7 @@ class _StopPage extends State<StopPage>
   onSuccess(duration, UserBloc userBloc) async {
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
-    final Response response = await timerBloc.setTimer(duration);
+    final Response response = await timerBloc.setTimer(timerMinutes);
     final results = response.data;
 
     await userBloc.setAuthUser(results['user']);
@@ -414,7 +426,7 @@ class _StopPage extends State<StopPage>
       context,
       type: 'success',
       heading: "Congrats! You have won",
-      points: points[durationStatic ~/ 60].toString(),
+      points: points[timerMinutes].toString(),
       pointer: pointer,
       navigateAway: () {
         Navigator.popUntil(context, (route) => route.isFirst);
