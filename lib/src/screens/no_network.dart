@@ -6,7 +6,7 @@ class NoNetwork extends StatefulWidget {
   _NoNetwork createState() => _NoNetwork();
 }
 
-class _NoNetwork extends State<NoNetwork> with SingleTickerProviderStateMixin {
+class _NoNetwork extends State<NoNetwork> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
