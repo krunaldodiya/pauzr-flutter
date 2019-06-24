@@ -400,7 +400,10 @@ class _StopPage extends State<StopPage>
   String getTimer() {
     final now = Duration(seconds: durationDynamic);
 
-    String twoDigitMinutes = twoDigits(now.inMinutes.remainder(60));
+    String twoDigitMinutes = twoDigits(
+      now.inMinutes.remainder(60) == 0 ? 60 : now.inMinutes.remainder(60),
+    );
+
     String twoDigitSeconds = twoDigits(now.inSeconds.remainder(60));
 
     return "$twoDigitMinutes : $twoDigitSeconds";
