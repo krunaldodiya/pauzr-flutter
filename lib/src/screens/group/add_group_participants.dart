@@ -210,45 +210,47 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
             ),
           ],
         ),
-        ListView.builder(
-          primary: true,
-          shrinkWrap: true,
-          itemCount: filteredContact.length,
-          itemBuilder: (context, index) {
-            Map contact = filteredContact?.elementAt(index);
+        Expanded(
+          child: ListView.builder(
+            primary: true,
+            shrinkWrap: true,
+            itemCount: filteredContact.length,
+            itemBuilder: (context, index) {
+              Map contact = filteredContact?.elementAt(index);
 
-            return Container(
-              color: exists(contact) ? Colors.green.shade50 : Colors.white,
-              child: ListTile(
-                onTap: () => toggleContact(contact),
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: CachedNetworkImageProvider(
-                    "$baseUrl/storage/${contact['avatar']}",
+              return Container(
+                color: exists(contact) ? Colors.green.shade50 : Colors.white,
+                child: ListTile(
+                  onTap: () => toggleContact(contact),
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: CachedNetworkImageProvider(
+                      "$baseUrl/storage/${contact['avatar']}",
+                    ),
                   ),
-                ),
-                title: Text(
-                  contact['givenName'] ?? contact['displayName'],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontFamily: Fonts.titilliumWebSemiBold,
+                  title: Text(
+                    contact['givenName'] ?? contact['displayName'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontFamily: Fonts.titilliumWebSemiBold,
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  contact['mobile'],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontFamily: Fonts.titilliumWebRegular,
+                  subtitle: Text(
+                    contact['mobile'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
                   ),
+                  trailing: exists(contact)
+                      ? Icon(Icons.check_circle, color: Colors.green)
+                      : null,
                 ),
-                trailing: exists(contact)
-                    ? Icon(Icons.check_circle, color: Colors.green)
-                    : null,
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ],
     );

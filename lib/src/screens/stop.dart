@@ -32,7 +32,7 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  var platform = MethodChannel("com.pauzr.org/info");
+  final EventChannel eventChannel = EventChannel('com.pauzr.org/info');
 
   int durationStatic;
   int durationDynamic;
@@ -59,8 +59,17 @@ class _StopPage extends State<StopPage>
   @override
   void initState() {
     super.initState();
-
+    listenToScreenStatus();
     Future.delayed(Duration(microseconds: 1), getInitialData);
+  }
+
+  void listenToScreenStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("screenStatus", "ACTION_SCREEN_ON");
+
+    eventChannel.receiveBroadcastStream().listen((Object event) async {
+      prefs.setString("screenStatus", event);
+    });
   }
 
   getInitialData() async {
@@ -74,7 +83,7 @@ class _StopPage extends State<StopPage>
     });
 
     double tickValue = waterHeight / durationStatic;
-    double rotateValue = 360 / durationStatic;
+    double rotateValue = 1;
 
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (started == true) {
@@ -111,23 +120,27 @@ class _StopPage extends State<StopPage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
-    bool status = await platform.invokeMethod("getDeviceStatus");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     switch (state) {
       case AppLifecycleState.paused:
         {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString("pauseTime", DateTime.now().toString());
+          Future.delayed(Duration(seconds: 1), () async {
+            final String screenStatus = prefs.getString("screenStatus");
 
-          NotificationManager(
-            payload: {
-              "id": notificationId,
-              "title": "#DefeatThePhone",
-              "body": "Tap to continue Pauzing. Be quick!",
-              "status": false,
-            },
-            onSelectNotification: onSelectNotification,
-          ).showOngoingNotification();
+            if (screenStatus == "ACTION_SCREEN_ON") {
+              prefs.setString("pauseTime", DateTime.now().toString());
+
+              NotificationManager(
+                payload: {
+                  "id": notificationId,
+                  "title": "#DefeatThePhone",
+                  "body": "Tap to continue Pauzing. Be quick!",
+                },
+                onSelectNotification: onSelectNotification,
+              ).showOngoingNotification();
+            }
+          });
         }
         break;
 
@@ -138,7 +151,6 @@ class _StopPage extends State<StopPage>
               "id": notificationId,
               "title": "#DefeatThePhone",
               "body": "Tap to continue Pauzing. Be quick!",
-              "status": status,
             }),
           );
         }
@@ -150,27 +162,24 @@ class _StopPage extends State<StopPage>
   }
 
   Future onSelectNotification(String payload) async {
-    Map data = json.decode(payload);
-    bool status = data['status'];
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String pauseTimeString = prefs.getString("pauseTime");
 
-    final DateTime currentTime = DateTime.now();
-    final DateTime pauseTime = DateTime.parse(pauseTimeString);
+    if (pauseTimeString != null) {
+      final DateTime currentTime = DateTime.now();
+      final DateTime pauseTime = DateTime.parse(pauseTimeString);
 
-    Duration difference = currentTime.difference(pauseTime);
-    int seconds = difference.inSeconds;
+      Duration difference = currentTime.difference(pauseTime);
+      int seconds = difference.inSeconds;
 
-    if (status != true && seconds > 5) {
+      if (seconds > 5) {
+        onFailure();
+      }
+
       prefs.remove("pauseTime");
-      onFailure();
-    } else {
-      prefs.setString("pauseTime", DateTime.now().toString());
-      print("resumed after $seconds seconds.");
-    }
 
-    NotificationManager.close(notificationId);
+      NotificationManager.close(notificationId);
+    }
   }
 
   @override
