@@ -57,10 +57,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void managePushNotifications() async {
-    firebaseMessaging.getToken().then((token) {
-      print(token);
-    });
-
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage $message");

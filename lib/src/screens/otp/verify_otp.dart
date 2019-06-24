@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -18,6 +19,8 @@ class VerifyOtpPage extends StatefulWidget {
 }
 
 class _VerifyOtpPage extends State<VerifyOtpPage> {
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -112,8 +115,10 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
   }
 
   verifyOtp(OtpBloc otpBloc, UserBloc userBloc) async {
+    final String pushNotificationToken = await firebaseMessaging.getToken();
+
     XsProgressHud.show(context);
-    await otpBloc.verifyOtp(userBloc);
+    await otpBloc.verifyOtp(userBloc, pushNotificationToken);
     XsProgressHud.hide();
 
     if (userBloc.error == null) {

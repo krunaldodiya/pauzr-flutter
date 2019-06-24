@@ -35,10 +35,11 @@ class ApiProvider {
     });
   }
 
-  Future verifyOtp(String mobile, int otp) async {
+  Future verifyOtp(String mobile, int otp, String fcmToken) async {
     return sendRequest(Api.verifyOtp, {
       "mobile": mobile,
       "otp": otp,
+      "fcm_token": fcmToken,
     });
   }
 

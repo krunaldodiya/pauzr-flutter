@@ -13,3 +13,24 @@ storeFile=./pauzr.jks
 
 flutter build apk --release --target-platform=android-arm64
 flutter build apk --release --target-platform=android-arm
+
+
+// topics
+{
+	"to":"/topics/all",
+	"notification": {
+		"title": "hello",
+		"body": "test"
+	},
+	"data":{}
+}
+
+// devices
+{
+	"registration_ids": ["d1Dd23G75Co:APA91bEc5W635MSvX0-rqFfcpeBtyCZXx8WE5G5cixw9m4MOMGnXa7_AfiUqTqfJYqBjpu6kXdm9D8OrSaSyAhST9vmTp4rzkn4_uGmAnQbCQKRnLU3dzAPSVNBt8gOeOzjFsHHfw-fq"],
+	"notification": {
+		"title": "hello",
+		"body": "test"
+	},
+	"data":{}
+}

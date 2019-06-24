@@ -60,11 +60,16 @@ class OtpBloc extends ChangeNotifier {
     }
   }
 
-  verifyOtp(UserBloc userBloc) async {
+  verifyOtp(UserBloc userBloc, String fcmToken) async {
     setState(loading: true, loaded: false);
 
     try {
-      final Response response = await _apiProvider.verifyOtp(mobile, clientOtp);
+      final Response response = await _apiProvider.verifyOtp(
+        mobile,
+        clientOtp,
+        fcmToken,
+      );
+
       final results = response.data;
 
       await userBloc.setAuthToken(results['access_token']);

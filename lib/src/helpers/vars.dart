@@ -7,7 +7,7 @@ String webUrl = "https://www.pauzr.com";
 String emailAddress = "support@pauzr.com";
 
 String baseUrl =
-    kReleaseMode ? "https://api.pauzr.com" : "http://127.0.0.1:8000";
+    kReleaseMode ? "https://api.pauzr.com" : "http://192.168.0.105:8000";
 
 // String baseUrl =
 //     kReleaseMode ? "https://api.pauzr.com" : "https://api.pauzr.com";
