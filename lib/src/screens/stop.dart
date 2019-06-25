@@ -53,6 +53,7 @@ class _StopPage extends State<StopPage>
   int notificationId = 1;
 
   var timer;
+  var ticker;
 
   Map points = {20: 1, 40: 3, 60: 5};
 
@@ -88,20 +89,34 @@ class _StopPage extends State<StopPage>
       if (started == true) {
         if (durationDynamic > 0) {
           setState(() {
-            rotation = rotation - rotateValue;
             durationDynamic--;
-            waterController.changeWaterHeight(durationDynamic * tickValue);
           });
         }
 
         if (durationDynamic == 0) {
           setState(() {
             started = false;
-            rotation = 360;
-            waterController.changeWaterHeight(0);
           });
 
           onSuccess(widget.duration, userBloc, timerBloc);
+        }
+      }
+    });
+
+    ticker = Timer.periodic(Duration(seconds: 1), (ticker) {
+      if (started == true) {
+        if (durationDynamic > 0) {
+          setState(() {
+            rotation = rotation - rotateValue;
+            waterController.changeWaterHeight(durationDynamic * tickValue);
+          });
+        }
+
+        if (durationDynamic == 0) {
+          setState(() {
+            rotation = 360;
+            waterController.changeWaterHeight(0);
+          });
         }
       }
     });
@@ -112,6 +127,8 @@ class _StopPage extends State<StopPage>
     WidgetsBinding.instance.removeObserver(this);
 
     timer.cancel();
+    ticker.cancel();
+
     super.dispose();
   }
 
@@ -431,13 +448,15 @@ class _StopPage extends State<StopPage>
   onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
     await timerBloc.setTimer(timerMinutes, userBloc);
 
-    String pointer = points[durationStatic] > 1 ? 'points' : 'point';
+    int achievedPoints = points[timerMinutes];
+
+    String pointer = achievedPoints > 1 ? 'points' : 'point';
 
     showTimerPop(
       context,
       type: 'success',
       heading: "Congrats! You have won",
-      points: points[timerMinutes].toString(),
+      points: achievedPoints.toString(),
       pointer: pointer,
       navigateAway: () {
         Navigator.popUntil(context, (route) => route.isFirst);
