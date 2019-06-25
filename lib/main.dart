@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/providers/city.dart';
+import 'package:pauzr/src/providers/country.dart';
 import 'package:pauzr/src/providers/group.dart';
-import 'package:pauzr/src/providers/location.dart';
 import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
@@ -38,8 +39,11 @@ void main() async {
         ChangeNotifierProvider<GroupBloc>.value(
           notifier: GroupBloc(),
         ),
-        ChangeNotifierProvider<LocationBloc>.value(
-          notifier: LocationBloc(),
+        ChangeNotifierProvider<CityBloc>.value(
+          notifier: CityBloc(),
+        ),
+        ChangeNotifierProvider<CountryBloc>.value(
+          notifier: CountryBloc(),
         ),
         ChangeNotifierProvider<UserBloc>.value(
           notifier: UserBloc(),

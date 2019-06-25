@@ -17,8 +17,9 @@ import 'package:pauzr/src/screens/stop.dart';
 import 'package:pauzr/src/screens/tabs.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/users/edit_profile.dart';
-import 'package:pauzr/src/screens/users/profile/gender.dart';
-import 'package:pauzr/src/screens/users/profile/location.dart';
+import 'package:pauzr/src/screens/users/profile/choose_country.dart';
+import 'package:pauzr/src/screens/users/profile/choose_gender.dart';
+import 'package:pauzr/src/screens/users/profile/choose_city.dart';
 import 'package:pauzr/src/screens/users/view_profile.dart';
 
 class RouteGenerator {
@@ -185,10 +186,18 @@ class RouteGenerator {
         );
         break;
 
-      case routeList.location:
+      case routeList.city_list:
         return MaterialPageRoute(
           builder: (context) {
-            return ChooseLocation();
+            return ChooseCity();
+          },
+        );
+        break;
+
+      case routeList.country_list:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ChooseCountry();
           },
         );
         break;

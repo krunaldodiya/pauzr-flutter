@@ -473,7 +473,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
               ),
             ),
             subtitle: Text(
-              participant.subscriber.location.city,
+              participant.subscriber.city.name,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black54,

@@ -146,7 +146,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     ListTile(
                       leading: Icon(Icons.edit_location),
                       title: Text(
-                        "${userBloc.user.location.city}",
+                        "${userBloc.user.city.name}",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,

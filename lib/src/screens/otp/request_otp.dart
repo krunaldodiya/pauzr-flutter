@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
+import 'package:pauzr/src/models/country.dart';
 import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
+import 'package:pauzr/src/screens/users/tappable.dart';
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
@@ -17,6 +19,8 @@ class RequestOtpPage extends StatefulWidget {
 }
 
 class _RequestOtpPage extends State<RequestOtpPage> {
+  TextEditingController countryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -47,6 +51,7 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                 ),
                 Container(
                   padding: EdgeInsets.all(20.0),
+                  margin: EdgeInsets.only(bottom: 50.0),
                   child: Text(
                     "Please enter your mobile to receive verifcation code.",
                     maxLines: 2,
@@ -56,6 +61,27 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                       color: Colors.white,
                       fontFamily: Fonts.titilliumWebRegular,
                     ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, routeList.country_list)
+                        .then((location) {
+                      final Country data = location;
+
+                      if (data != null) {
+                        setState(() {
+                          countryController.text = data.name;
+                        });
+                      }
+                    }).catchError((onError) {
+                      print(onError);
+                    });
+                  },
+                  child: TappableFormField(
+                    controller: countryController,
+                    labelText: "Country",
+                    errorText: getErrorText(otpBloc.error, "country_id"),
                   ),
                 ),
                 EditableFormField(

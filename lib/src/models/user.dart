@@ -1,5 +1,6 @@
+import 'package:pauzr/src/models/country.dart';
 import 'package:pauzr/src/models/level.dart';
-import 'package:pauzr/src/models/location.dart';
+import 'package:pauzr/src/models/city.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -11,7 +12,8 @@ class User {
   final String mobile;
   final String dob;
   final String gender;
-  final Location location;
+  final City city;
+  final Country country;
   final Level level;
   final int status;
 
@@ -23,7 +25,8 @@ class User {
     this.mobile,
     this.dob,
     this.gender,
-    this.location,
+    this.city,
+    this.country,
     this.level,
     this.status,
   });
@@ -37,7 +40,8 @@ class User {
       mobile: json["mobile"] ?? this.mobile,
       dob: json["dob"] ?? this.dob,
       gender: json["gender"] ?? this.gender,
-      location: json["location"] ?? this.location,
+      city: json["city"] ?? this.city,
+      country: json["country"] ?? this.country,
       level: json["level"] ?? this.level,
       status: json["status"] ?? this.status,
     );
@@ -51,9 +55,10 @@ class User {
         mobile = json["mobile"],
         dob = json["dob"],
         gender = json["gender"],
-        location = json["location"] is Location
-            ? json["location"]
-            : Location.fromMap(json["location"]),
+        city = json["city"] is City ? json["city"] : City.fromMap(json["city"]),
+        country = json["country"] is Country
+            ? json["country"]
+            : Country.fromMap(json["country"]),
         level = json["level"] is Level
             ? json["level"]
             : Level.fromMap(json["level"]),

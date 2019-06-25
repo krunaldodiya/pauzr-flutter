@@ -100,7 +100,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
                 Container(
                   margin: EdgeInsets.all(10.0),
                   child: Text(
-                    "City: ${userBloc.user.location.city}",
+                    "City: ${userBloc.user.city.name}",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 22.0,

@@ -6,8 +6,8 @@ String appId = "https://play.google.com/store/apps/details?id=com.pauzr.org";
 String webUrl = "https://www.pauzr.com";
 String emailAddress = "support@pauzr.com";
 
-// String baseUrl =
-//     kReleaseMode ? "https://api.pauzr.com" : "http://192.168.0.105:8000";
-
 String baseUrl =
-    kReleaseMode ? "https://api.pauzr.com" : "https://api.pauzr.com";
+    kReleaseMode ? "https://api.pauzr.com" : "http://192.168.1.105:8000";
+
+// String baseUrl =
+//     kReleaseMode ? "https://api.pauzr.com" : "https://api.pauzr.com";

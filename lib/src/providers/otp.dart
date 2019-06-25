@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/models/country.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 
@@ -12,6 +13,7 @@ class OtpBloc extends ChangeNotifier {
   String mobile;
   int clientOtp;
   int serverOtp;
+  Country country;
 
   get isValidMobile {
     return mobile != null && error == null;
@@ -28,6 +30,7 @@ class OtpBloc extends ChangeNotifier {
     String mobile,
     int clientOtp,
     int serverOtp,
+    Country country,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
@@ -35,6 +38,7 @@ class OtpBloc extends ChangeNotifier {
     this.mobile = mobile ?? this.mobile;
     this.clientOtp = clientOtp ?? this.clientOtp;
     this.serverOtp = serverOtp ?? this.serverOtp;
+    this.country = country ?? this.country;
 
     notifyListeners();
   }
@@ -47,11 +51,15 @@ class OtpBloc extends ChangeNotifier {
     setState(clientOtp: otp.length > 0 ? int.parse(otp) : null, error: null);
   }
 
+  onChangeCountry(Country country) {
+    setState(country: country, error: null);
+  }
+
   requestOtp() async {
     setState(loading: true, loaded: false);
 
     try {
-      final Response response = await _apiProvider.requestOtp(mobile);
+      final Response response = await _apiProvider.requestOtp(mobile, country);
       final results = response.data;
 
       setState(serverOtp: results['otp'], loading: false, loaded: true);
@@ -66,6 +74,7 @@ class OtpBloc extends ChangeNotifier {
     try {
       final Response response = await _apiProvider.verifyOtp(
         mobile,
+        country,
         clientOtp,
         fcmToken,
       );

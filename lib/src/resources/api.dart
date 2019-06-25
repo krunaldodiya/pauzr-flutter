@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/country.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/resources/client.dart';
 import 'package:dio/dio.dart';
@@ -29,15 +30,32 @@ class ApiProvider {
     });
   }
 
-  Future requestOtp(String mobile) async {
+  Future requestOtp(String mobile, Country country) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
+      "country": {
+        "id": country.id,
+        "name": country.name,
+        "shortname": country.shortname,
+        "phonecode": country.phonecode,
+      },
     });
   }
 
-  Future verifyOtp(String mobile, int otp, String fcmToken) async {
+  Future verifyOtp(
+    String mobile,
+    Country country,
+    int otp,
+    String fcmToken,
+  ) async {
     return sendRequest(Api.verifyOtp, {
       "mobile": mobile,
+      "country": {
+        "id": country.id,
+        "name": country.name,
+        "shortname": country.shortname,
+        "phonecode": country.phonecode,
+      },
       "otp": otp,
       "fcm_token": fcmToken,
     });
@@ -106,12 +124,18 @@ class ApiProvider {
       "email": user.email,
       "dob": user.dob,
       "gender": user.gender,
-      "location_id": user.location.id,
+      "country_id": user.country.id,
+      "state_id": user.country.id,
+      "city_id": user.city.id,
     });
   }
 
-  Future getLocations() async {
-    return sendRequest(Api.getLocations);
+  Future getCities() async {
+    return sendRequest(Api.getCities);
+  }
+
+  Future getCountries() async {
+    return sendRequest(Api.getCountries);
   }
 
   Future getProfessions() async {
@@ -143,7 +167,8 @@ class Api {
   static String me = "$baseUrl/api/users/me";
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
-  static String getLocations = "$baseUrl/api/home/locations";
+  static String getCities = "$baseUrl/api/home/cities";
+  static String getCountries = "$baseUrl/api/home/countries";
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";
   static String uploadAvatar = "$baseUrl/api/users/avatar/upload";

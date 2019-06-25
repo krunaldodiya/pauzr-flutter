@@ -11,7 +11,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/location.dart';
+import 'package:pauzr/src/models/city.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
@@ -38,7 +38,7 @@ class _EditProfilePage extends State<EditProfilePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController genderController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     emailController.text = userBloc.user.email;
     dobController.text = userBloc.user.dob;
     genderController.text = userBloc.user.gender;
-    locationController.text = userBloc.user.location.city;
+    cityController.text = userBloc.user.city.name;
   }
 
   Widget getLeadingIcon() {
@@ -186,13 +186,13 @@ class _EditProfilePage extends State<EditProfilePage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, routeList.location)
+                  Navigator.pushNamed(context, routeList.city_list)
                       .then((location) {
-                    final Location data = location;
+                    final City data = location;
 
                     if (data != null) {
                       setState(() {
-                        locationController.text = data.city;
+                        cityController.text = data.name;
                       });
                     }
                   }).catchError((onError) {
@@ -200,7 +200,7 @@ class _EditProfilePage extends State<EditProfilePage> {
                   });
                 },
                 child: TappableFormField(
-                  controller: locationController,
+                  controller: cityController,
                   labelText: "Location",
                   errorText: getErrorText(userBloc.error, "location_id"),
                 ),
