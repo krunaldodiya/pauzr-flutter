@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/show_photo.dart';
 import 'package:pauzr/src/screens/group/manage_group.dart';
 import 'package:pauzr/src/screens/group/detail.dart';
 import 'package:pauzr/src/screens/group/add_group_participants.dart';
@@ -89,6 +90,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return VerifyOtpPage();
+          },
+        );
+        break;
+
+      case routeList.show_photo:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ShowPhoto(photo: args['photo']);
           },
         );
         break;

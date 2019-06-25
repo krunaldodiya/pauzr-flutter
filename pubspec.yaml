@@ -20,6 +20,7 @@ dependency_overrides:
   xs_progress_hud: ^1.0.2
   connectivity: any
   image_picker: ^0.6.0+1
+  image_cropper: ^1.0.2
   flip_card: ^0.2.1
   intl: ^0.15.8
   swipedetector: ^1.2.0

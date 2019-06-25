@@ -401,7 +401,9 @@ class _StopPage extends State<StopPage>
     final now = Duration(seconds: durationDynamic);
 
     String twoDigitMinutes = twoDigits(
-      now.inMinutes.remainder(60) == 0 ? 60 : now.inMinutes.remainder(60),
+      now.inMinutes > 0 && now.inMinutes.remainder(60) == 0
+          ? 60
+          : now.inMinutes.remainder(60),
     );
 
     String twoDigitSeconds = twoDigits(now.inSeconds.remainder(60));

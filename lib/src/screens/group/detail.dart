@@ -84,19 +84,30 @@ class _GroupDetailPage extends State<GroupDetailPage> {
                   ),
                 ),
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5),
-                          BlendMode.dstATop,
+                  background: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        routeList.show_photo,
+                        arguments: {
+                          "photo": "$baseUrl/storage/${group.photo}",
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        image: DecorationImage(
+                          colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.5),
+                            BlendMode.dstATop,
+                          ),
+                          image: CachedNetworkImageProvider(
+                            "$baseUrl/storage/${group.photo}",
+                          ),
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
                         ),
-                        image: CachedNetworkImageProvider(
-                          "$baseUrl/storage/${group.photo}",
-                        ),
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
                       ),
                     ),
                   ),

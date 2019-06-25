@@ -19,3 +19,4 @@ const String group_scoreboard = "/group_scoreboard";
 const String add_group_participants = "/add_group_participants";
 const String main_scoreboard = "/main_scoreboard";
 const String manage_theme = "/manage_theme";
+const String show_photo = "/show_photo";

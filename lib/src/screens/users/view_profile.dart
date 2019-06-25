@@ -67,17 +67,30 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                 child: Hero(
                   tag: 'profile-image',
                   child: Container(
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
-                        placeholder: (context, url) {
-                          return CircularProgressIndicator();
-                        },
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        width: 150.0,
-                        height: 150.0,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          routeList.show_photo,
+                          arguments: {
+                            "photo": "$baseUrl/storage/${userBloc.user.avatar}"
+                          },
+                        );
+                      },
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+                          placeholder: (context, url) {
+                            return CircularProgressIndicator();
+                          },
+                          errorWidget: (context, url, error) {
+                            return Icon(Icons.error);
+                          },
+                          width: 150.0,
+                          height: 150.0,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                        ),
                       ),
                     ),
                   ),

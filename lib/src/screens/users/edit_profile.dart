@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -252,7 +254,14 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   void uploadImage(userBloc) async {
-    final file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final File file = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      ratioX: 1.0,
+      ratioY: 1.0,
+      maxWidth: 512,
+      maxHeight: 512,
+    );
 
     setState(() {
       loading = true;
