@@ -65,7 +65,6 @@ class _StopPage extends State<StopPage>
 
   void listenToScreenStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("screenStatus", "ACTION_SCREEN_ON");
 
     eventChannel.receiveBroadcastStream().listen((Object event) async {
       prefs.setString("screenStatus", event);
