@@ -124,9 +124,9 @@ class ApiProvider {
       "email": user.email,
       "dob": user.dob,
       "gender": user.gender,
-      "country_id": user.country.id,
-      "state_id": user.state.id,
-      "city_id": user.city.id,
+      "country_id": user.country != null ? user.country.id : null,
+      "state_id": user.state != null ? user.state.id : null,
+      "city_id": user.city != null ? user.city.id : null,
     });
   }
 

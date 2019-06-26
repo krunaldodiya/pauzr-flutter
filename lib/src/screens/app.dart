@@ -49,7 +49,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.android),
-      home: userBloc.loaded != true || themeBloc.loaded != true
+      home: (userBloc.loaded != true && userBloc.user == null) ||
+              (themeBloc.loaded != true && themeBloc.theme == null)
           ? SplashScreen()
           : InitialScreen(authToken: widget.authToken),
       onGenerateRoute: RouteGenerator.generateRoute,
