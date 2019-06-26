@@ -1,11 +1,10 @@
 import 'package:meta/meta.dart';
-import 'package:pauzr/src/models/city.dart';
 
 @immutable
 class Timer {
   final int id;
   final int userId;
-  final City city;
+  final int cityId;
   final String duration;
   final String createdAt;
   final String updatedAt;
@@ -13,7 +12,7 @@ class Timer {
   Timer({
     this.id,
     this.userId,
-    this.city,
+    this.cityId,
     this.duration,
     this.createdAt,
     this.updatedAt,
@@ -23,7 +22,7 @@ class Timer {
     return Timer(
       id: json["id"] ?? this.id,
       userId: json["user_id"] ?? this.userId,
-      city: json["city"] ?? this.city,
+      cityId: json["city_id"] ?? this.cityId,
       duration: json["duration"] ?? this.duration,
       createdAt: json["created_at"] ?? this.createdAt,
       updatedAt: json["updated_at"] ?? this.updatedAt,
@@ -34,9 +33,7 @@ class Timer {
     return Timer(
       id: json["id"] != null ? json["id"] : null,
       userId: json["user_id"] != null ? json["user_id"] : null,
-      city: json["city"] != null
-          ? json["city"] is City ? json["city"] : City.fromMap(json["city"])
-          : null,
+      cityId: json["city_id"] != null ? json["city_id"] : null,
       duration: json["duration"] != null ? json["duration"] : null,
       createdAt: json["created_at"] != null ? json["created_at"] : null,
       updatedAt: json["updated_at"] != null ? json["updated_at"] : null,
