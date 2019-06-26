@@ -112,6 +112,7 @@ class _ChooseCityState extends State<ChooseCity> {
                         padding: EdgeInsets.all(10.0),
                         child: Text(
                           "${city.name}, ${city.state.name}",
+                          maxLines: 1,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18.0,

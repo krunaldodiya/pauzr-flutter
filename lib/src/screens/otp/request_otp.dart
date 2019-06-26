@@ -67,11 +67,11 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                   onTap: () {
                     Navigator.pushNamed(context, routeList.country_list)
                         .then((location) {
-                      final Country data = location;
+                      final Country country = location;
 
-                      if (data != null) {
+                      if (country != null) {
                         setState(() {
-                          countryController.text = data.name;
+                          countryController.text = country.name;
                         });
                       }
                     }).catchError((onError) {

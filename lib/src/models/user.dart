@@ -58,24 +58,21 @@ class User {
       email: json["email"] != null ? json["email"] : null,
       avatar: json["avatar"] != null ? json["avatar"] : null,
       mobile: json["mobile"] != null ? json["mobile"] : null,
-      dob: json["dob"] != null ? json["id"] : null,
-      gender: json["gender"] != null ? json["id"] : null,
-      // country: json["country"] != null
-      //     ? json["country"] is Country
-      //         ? json["country"]
-      //         : Country.fromMap(json["country"])
-      //     : null,
-      // state: json["state"] != null
-      //     ? json["state"] is State
-      //         ? json["state"]
-      //         : State.fromMap(json["state"])
-      //     : null,
-      // city: json["city"] != null
-      //     ? json["city"] is City ? json["city"] : City.fromMap(json["city"])
-      //     : null,
-      country: null,
-      state: null,
-      city: null,
+      dob: json["dob"] != null ? json["dob"] : null,
+      gender: json["gender"] != null ? json["gender"] : null,
+      country: json["country"] != null
+          ? json["country"] is Country
+              ? json["country"]
+              : Country.fromMap(json["country"])
+          : null,
+      state: json["state"] != null
+          ? json["state"] is State
+              ? json["state"]
+              : State.fromMap(json["state"])
+          : null,
+      city: json["city"] != null
+          ? json["city"] is City ? json["city"] : City.fromMap(json["city"])
+          : null,
       level: json["level"] != null
           ? json["level"] is Level
               ? json["level"]

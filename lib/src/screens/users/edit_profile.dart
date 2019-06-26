@@ -54,7 +54,8 @@ class _EditProfilePage extends State<EditProfilePage> {
     emailController.text = userBloc.user.email;
     dobController.text = userBloc.user.dob;
     genderController.text = userBloc.user.gender;
-    cityController.text = userBloc.user.city.name;
+    cityController.text =
+        userBloc.user.city != null ? userBloc.user.city.name : null;
   }
 
   Widget getLeadingIcon() {
@@ -188,11 +189,11 @@ class _EditProfilePage extends State<EditProfilePage> {
                 onTap: () {
                   Navigator.pushNamed(context, routeList.city_list)
                       .then((location) {
-                    final City data = location;
+                    final City city = location;
 
-                    if (data != null) {
+                    if (city != null) {
                       setState(() {
-                        cityController.text = data.name;
+                        cityController.text = city.name;
                       });
                     }
                   }).catchError((onError) {
@@ -201,8 +202,8 @@ class _EditProfilePage extends State<EditProfilePage> {
                 },
                 child: TappableFormField(
                   controller: cityController,
-                  labelText: "Location",
-                  errorText: getErrorText(userBloc.error, "location_id"),
+                  labelText: "City",
+                  errorText: getErrorText(userBloc.error, "city_id"),
                 ),
               ),
             ],
