@@ -27,14 +27,19 @@ class GroupSubscription {
     );
   }
 
-  GroupSubscription.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        groupId = json != null ? json["groupId"] : null,
-        subscriberId = json != null ? json["subscriberId"] : null,
-        isAdmin = json != null ? json["isAdmin"] : null,
-        subscriber = json["subscriber"] is User
-            ? json["subscriber"]
-            : User.fromMap(json["subscriber"]);
+  static fromMap(Map<String, dynamic> json) {
+    return GroupSubscription(
+      id: json["id"] != null ? json["id"] : null,
+      groupId: json["groupId"] != null ? json["groupId"] : null,
+      subscriberId: json["subscriberId"] != null ? json["subscriberId"] : null,
+      isAdmin: json["isAdmin"] != null ? json["isAdmin"] : null,
+      subscriber: json["subscriber"] != null
+          ? json["subscriber"] is User
+              ? json["subscriber"]
+              : User.fromMap(json["subscriber"])
+          : null,
+    );
+  }
 
   static fromList(List subscriptions) {
     List<GroupSubscription> list = List<GroupSubscription>();

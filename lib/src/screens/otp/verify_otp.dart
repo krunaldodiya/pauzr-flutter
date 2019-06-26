@@ -6,7 +6,7 @@ import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
-import 'package:pauzr/src/routes/list.dart' as routeList;
+// import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
@@ -121,17 +121,17 @@ class _VerifyOtpPage extends State<VerifyOtpPage> {
     await otpBloc.verifyOtp(userBloc, pushNotificationToken);
     XsProgressHud.hide();
 
-    if (userBloc.error == null) {
-      if (userBloc.user.status == 1) {
-        Navigator.of(context).pushReplacementNamed(routeList.tab);
-      }
+    // if (userBloc.error == null) {
+    //   if (userBloc.user.status == 1) {
+    //     Navigator.of(context).pushReplacementNamed(routeList.tab);
+    //   }
 
-      if (userBloc.user.status == 0) {
-        Navigator.of(context).pushReplacementNamed(
-          routeList.edit_profile,
-          arguments: {"shouldPop": false},
-        );
-      }
-    }
+    //   if (userBloc.user.status == 0) {
+    //     Navigator.of(context).pushReplacementNamed(
+    //       routeList.edit_profile,
+    //       arguments: {"shouldPop": false},
+    //     );
+    //   }
+    // }
   }
 }

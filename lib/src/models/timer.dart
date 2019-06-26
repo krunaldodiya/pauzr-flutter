@@ -29,13 +29,16 @@ class Timer {
     );
   }
 
-  Timer.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        userId = json != null ? json["user_id"] : null,
-        locationId = json != null ? json["location_id"] : null,
-        duration = json != null ? json["duration"] : null,
-        createdAt = json != null ? json["created_at"] : null,
-        updatedAt = json != null ? json["updated_at"] : null;
+  static fromMap(Map<String, dynamic> json) {
+    return Timer(
+      id: json["id"] != null ? json["id"] : null,
+      userId: json["user_id"] != null ? json["user_id"] : null,
+      locationId: json["location_id"] != null ? json["location_id"] : null,
+      duration: json["duration"] != null ? json["duration"] : null,
+      createdAt: json["created_at"] != null ? json["created_at"] : null,
+      updatedAt: json["updated_at"] != null ? json["updated_at"] : null,
+    );
+  }
 
   static fromList(List timerHistory) {
     List<Timer> list = List<Timer>();

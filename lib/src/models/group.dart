@@ -37,18 +37,24 @@ class Group {
     );
   }
 
-  Group.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        name = json != null ? json["name"] : null,
-        description = json != null ? json["description"] : null,
-        photo = json != null ? json["photo"] : null,
-        status = json != null ? json["status"] : null,
-        createdAt = json != null ? json["created_at"] : null,
-        owner =
-            json["owner"] is User ? json["owner"] : User.fromMap(json["owner"]),
-        subscriptions = json["subscriptions"] is List<GroupSubscription>
-            ? json["subscriptions"]
-            : GroupSubscription.fromList(json["subscriptions"]);
+  static fromMap(Map<String, dynamic> json) {
+    return Group(
+      id: json["id"] != null ? json["id"] : null,
+      name: json["name"] != null ? json["name"] : null,
+      description: json["description"] != null ? json["description"] : null,
+      photo: json["photo"] != null ? json["photo"] : null,
+      status: json["status"] != null ? json["status"] : null,
+      createdAt: json["created_at"] != null ? json["created_at"] : null,
+      owner: json["owner"] != null
+          ? json["owner"] is User ? json["owner"] : User.fromMap(json["owner"])
+          : null,
+      subscriptions: json["subscriptions"] != null
+          ? json["subscriptions"] is List<GroupSubscription>
+              ? json["subscriptions"]
+              : GroupSubscription.fromList(json["subscriptions"])
+          : null,
+    );
+  }
 
   static fromList(List groups) {
     List<Group> list = List<Group>();

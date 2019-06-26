@@ -32,14 +32,17 @@ class WalletTransaction {
     );
   }
 
-  WalletTransaction.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        userId = json != null ? json["user_id"] : null,
-        walletId = json != null ? json["wallet_id"] : null,
-        amount = json != null ? json["amount"] : null,
-        meta = json != null ? json["meta"] : null,
-        createdAt = json != null ? json["created_at"] : null,
-        updatedAt = json != null ? json["updated_at"] : null;
+  static fromMap(Map<String, dynamic> json) {
+    return WalletTransaction(
+      id: json["id"] != null ? json["id"] : null,
+      userId: json["user_id"] != null ? json["user_id"] : null,
+      walletId: json["wallet_id"] != null ? json["wallet_id"] : null,
+      amount: json["amount"] != null ? json["amount"] : null,
+      meta: json["meta"] != null ? json["meta"] : null,
+      createdAt: json["created_at"] != null ? json["created_at"] : null,
+      updatedAt: json["updated_at"] != null ? json["updated_at"] : null,
+    );
+  }
 
   static fromList(List walletHistory) {
     List<WalletTransaction> list = List<WalletTransaction>();

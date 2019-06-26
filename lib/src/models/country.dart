@@ -18,11 +18,14 @@ class Country {
     );
   }
 
-  Country.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        name = json != null ? json["name"] : null,
-        shortname = json != null ? json["shortname"] : null,
-        phonecode = json != null ? json["phonecode"] : null;
+  static fromMap(Map<String, dynamic> json) {
+    return Country(
+      id: json["id"] != null ? json["id"] : null,
+      name: json["name"] != null ? json["name"] : null,
+      shortname: json["shortname"] != null ? json["shortname"] : null,
+      phonecode: json["phonecode"] != null ? json["phonecode"] : null,
+    );
+  }
 
   static fromList(List countries) {
     List<Country> list = List<Country>();

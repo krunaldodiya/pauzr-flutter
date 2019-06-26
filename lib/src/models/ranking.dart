@@ -17,10 +17,15 @@ class Ranking {
     );
   }
 
-  Ranking.fromMap(Map<String, dynamic> json)
-      : rank = json != null ? json["rank"] : null,
-        duration = json != null ? json["duration"] : null,
-        user = json["user"] is User ? json["user"] : User.fromMap(json["user"]);
+  static fromMap(Map<String, dynamic> json) {
+    return Ranking(
+      rank: json["rank"] != null ? json["rank"] : null,
+      duration: json['duration'] != null ? json["duration"] : null,
+      user: json['user'] != null
+          ? json["user"] is User ? json["user"] : User.fromMap(json["user"])
+          : null,
+    );
+  }
 
   static fromList(List rankings) {
     List<Ranking> list = List<Ranking>();

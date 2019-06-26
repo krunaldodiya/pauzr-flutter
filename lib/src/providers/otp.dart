@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/models/country.dart';
+import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 
@@ -81,11 +82,15 @@ class OtpBloc extends ChangeNotifier {
 
       final results = response.data;
 
-      await userBloc.setAuthToken(results['access_token']);
-      await userBloc.setAuthUser(results['user']);
+      // await userBloc.setAuthToken(results['access_token']);
+      // await userBloc.setAuthUser(results['user']);
+
+      print(User.fromMap(results['user']));
 
       setState(loading: false, loaded: true);
     } catch (error) {
+      print(error);
+
       setState(error: error.response.data, loading: false, loaded: true);
     }
   }

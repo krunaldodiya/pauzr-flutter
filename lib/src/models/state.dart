@@ -14,9 +14,12 @@ class State {
     );
   }
 
-  State.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        name = json != null ? json["name"] : null;
+  static fromMap(Map<String, dynamic> json) {
+    return State(
+      id: json['id'] != null ? json["id"] : null,
+      name: json['name'] != null ? json["name"] : null,
+    );
+  }
 
   static fromList(List states) {
     List<State> list = List<State>();

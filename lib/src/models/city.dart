@@ -19,15 +19,22 @@ class City {
     );
   }
 
-  City.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        name = json != null ? json["name"] : null,
-        state = json["state"] is State
-            ? json["state"]
-            : State.fromMap(json["state"]),
-        country = json["country"] is Country
-            ? json["country"]
-            : Country.fromMap(json["country"]);
+  static fromMap(Map<String, dynamic> json) {
+    return City(
+      id: json["id"] != null ? json["id"] : null,
+      name: json["name"] != null ? json["name"] : null,
+      state: json["state"] != null
+          ? json["state"] is State
+              ? json["state"]
+              : State.fromMap(json["state"])
+          : null,
+      country: json["country"] != null
+          ? json["country"] is Country
+              ? json["country"]
+              : Country.fromMap(json["country"])
+          : null,
+    );
+  }
 
   static fromList(List cities) {
     List<City> list = List<City>();

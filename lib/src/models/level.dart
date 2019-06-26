@@ -16,8 +16,11 @@ class Level {
     );
   }
 
-  Level.fromMap(Map<String, dynamic> json)
-      : id = json != null ? json["id"] : null,
-        level = json != null ? json["level"] : null,
-        points = json != null ? json["points"] : null;
+  static fromMap(Map<String, dynamic> json) {
+    return Level(
+      id: json["id"] != null ? json["id"] : null,
+      level: json['level'] != null ? json["level"] : null,
+      points: json['points'] != null ? json["points"] : null,
+    );
+  }
 }
