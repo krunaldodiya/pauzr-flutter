@@ -238,7 +238,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     }
   }
 
-  void editGroup(groupBloc) async {
+  void editGroup(GroupBloc groupBloc) async {
     String name = nameController.text;
     String description = descriptionController.text;
     String photo = photoController.text;

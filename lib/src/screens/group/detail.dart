@@ -332,7 +332,7 @@ class _GroupDetailPage extends State<GroupDetailPage> {
     data.add(
       InkWell(
         onTap: () {
-          Share.share('check out $appName App $appId').then((data) {
+          Share.share(shareText).then((data) {
             print("data");
           });
         },

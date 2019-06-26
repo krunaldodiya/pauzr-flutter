@@ -110,9 +110,7 @@ class _DrawerPageState extends State<DrawerPage> {
               color: Colors.white,
             ),
             onTap: () async {
-              Share.share(
-                'PauzR app is helping me put down my phone and increase my productivity. I use it everyday. You might like it too! Take the PauzR challenge: $appId',
-              ).then((data) {
+              Share.share(shareText).then((data) {
                 print("data");
               });
             },

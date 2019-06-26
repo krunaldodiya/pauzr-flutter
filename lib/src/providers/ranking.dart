@@ -58,8 +58,6 @@ class RankingBloc extends ChangeNotifier {
       );
       return results;
     } catch (error) {
-      print(error);
-
       setState(error: error.response.data, loading: false, loaded: true);
     }
   }

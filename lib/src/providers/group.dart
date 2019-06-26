@@ -32,7 +32,7 @@ class GroupBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getGroups();
 
       final results = response.data;
-      final groupData = Group.fromList(results['groups']);
+      final List<Group> groupData = Group.fromList(results['groups']);
 
       setState(
         groups: groupData,
@@ -60,9 +60,10 @@ class GroupBloc extends ChangeNotifier {
       );
 
       final results = response.data;
-      final currentGroup = Group.fromMap(results['group']);
 
-      final groupData = groups
+      final Group currentGroup = Group.fromMap(results['group']);
+
+      final List<Group> groupData = groups
           .map((group) => group.id == currentGroup.id ? currentGroup : group)
           .toList();
 
@@ -90,9 +91,9 @@ class GroupBloc extends ChangeNotifier {
           await _apiProvider.createGroup(name, description, photo);
 
       final results = response.data;
-      final currentGroup = Group.fromMap(results['group']);
+      final Group currentGroup = Group.fromMap(results['group']);
 
-      final groupData = groups..add(currentGroup);
+      final List<Group> groupData = groups..add(currentGroup);
 
       setState(
         groups: groupData,
@@ -118,9 +119,9 @@ class GroupBloc extends ChangeNotifier {
           await _apiProvider.editGroup(groupId, name, description, photo);
 
       final results = response.data;
-      final currentGroup = Group.fromMap(results['group']);
+      final Group currentGroup = Group.fromMap(results['group']);
 
-      final groupData = groups
+      final List<Group> groupData = groups
           .map((group) => group.id == currentGroup.id ? currentGroup : group)
           .toList();
 
@@ -146,7 +147,8 @@ class GroupBloc extends ChangeNotifier {
     try {
       await _apiProvider.exitGroup(groupId, userId);
 
-      final groupData = groups..removeWhere((group) => group.id == groupId);
+      final List<Group> groupData = groups
+        ..removeWhere((group) => group.id == groupId);
 
       setState(
         groups: groupData,
@@ -170,7 +172,8 @@ class GroupBloc extends ChangeNotifier {
     try {
       await _apiProvider.deleteGroup(groupId, userId);
 
-      final groupData = groups..removeWhere((group) => group.id == groupId);
+      final List<Group> groupData = groups
+        ..removeWhere((group) => group.id == groupId);
 
       setState(
         groups: groupData,
@@ -198,9 +201,9 @@ class GroupBloc extends ChangeNotifier {
       );
 
       final results = response.data;
-      final currentGroup = Group.fromMap(results['group']);
+      final Group currentGroup = Group.fromMap(results['group']);
 
-      final groupData = groups
+      final List<Group> groupData = groups
           .map((group) => group.id == currentGroup.id ? currentGroup : group)
           .toList();
 

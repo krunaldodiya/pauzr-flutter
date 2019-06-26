@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:countdown/countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -44,23 +45,18 @@ class _StopPage extends State<StopPage>
     this.timerMinutes,
   });
 
-  double waterHeight = 0.9;
-  double rotation = 360;
-
-  WaterController waterController = WaterController();
-
-  bool started;
-  int notificationId = 1;
-
-  var timer;
-  var ticker;
-
   Map points = {20: 1, 40: 3, 60: 5};
+  WaterController waterController = WaterController();
+  double waterHeight = 0.9;
+  int notificationId = 1;
+  var timerSubscription;
 
   @override
   void initState() {
     super.initState();
+
     listenToScreenStatus();
+
     Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
@@ -73,52 +69,30 @@ class _StopPage extends State<StopPage>
   }
 
   getInitialData() async {
+    CountDown cd = CountDown(Duration(seconds: durationStatic));
+
+    timerSubscription = cd.stream.listen(null);
+
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
     WidgetsBinding.instance.addObserver(this);
 
-    setState(() {
-      started = true;
-    });
-
     double tickValue = waterHeight / durationStatic;
-    double rotateValue = 1;
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (started == true) {
-        if (durationDynamic > 0) {
-          setState(() {
-            durationDynamic--;
-          });
-        }
+    timerSubscription.onData((Duration duration) {
+      bool shouldRotate = durationDynamic != duration.inSeconds;
 
-        if (durationDynamic == 0) {
-          setState(() {
-            started = false;
-          });
-
-          onSuccess(widget.duration, userBloc, timerBloc);
-        }
+      if (shouldRotate) {
+        setState(() {
+          durationDynamic = duration.inSeconds;
+          waterController.changeWaterHeight(durationDynamic * tickValue);
+        });
       }
     });
 
-    ticker = Timer.periodic(Duration(seconds: 1), (ticker) {
-      if (started == true) {
-        if (durationDynamic > 0) {
-          setState(() {
-            rotation = rotation - rotateValue;
-            waterController.changeWaterHeight(durationDynamic * tickValue);
-          });
-        }
-
-        if (durationDynamic == 0) {
-          setState(() {
-            rotation = 360;
-            waterController.changeWaterHeight(0);
-          });
-        }
-      }
+    timerSubscription.onDone(() {
+      onSuccess(widget.duration, userBloc, timerBloc);
     });
   }
 
@@ -126,8 +100,7 @@ class _StopPage extends State<StopPage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
 
-    timer.cancel();
-    ticker.cancel();
+    timerSubscription.cancel();
 
     super.dispose();
   }
@@ -141,10 +114,10 @@ class _StopPage extends State<StopPage>
     switch (state) {
       case AppLifecycleState.paused:
         {
-          Future.delayed(Duration(seconds: 1), () async {
+          Future.delayed(Duration(seconds: 2), () async {
             final String screenStatus = prefs.getString("screenStatus");
 
-            if (screenStatus == "ACTION_SCREEN_ON") {
+            if (screenStatus != "ACTION_SCREEN_OFF") {
               prefs.setString("pauseTime", DateTime.now().toString());
 
               NotificationManager(
@@ -211,11 +184,6 @@ class _StopPage extends State<StopPage>
           noText: "No",
           message: "Are you sure ?",
           onPressYes: () {
-            setState(() {
-              started = false;
-              rotation = 360;
-            });
-
             Navigator.pop(context);
           },
         );
@@ -233,7 +201,7 @@ class _StopPage extends State<StopPage>
                     alignment: Alignment.center,
                     children: <Widget>[
                       Transform.rotate(
-                        angle: rotation,
+                        angle: durationDynamic.toDouble(),
                         child: Image.asset(
                           "assets/images/hello.png",
                           height: 310.0,
@@ -279,11 +247,6 @@ class _StopPage extends State<StopPage>
                         noText: "No",
                         message: "Want to stop Pauzing?",
                         onPressYes: () {
-                          setState(() {
-                            started = false;
-                            rotation = 360;
-                          });
-
                           Navigator.pop(context);
                         },
                       );
@@ -396,9 +359,6 @@ class _StopPage extends State<StopPage>
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  started = false;
-                });
                 Navigator.of(context).pop();
                 navigateAway();
               },
@@ -428,10 +388,7 @@ class _StopPage extends State<StopPage>
   }
 
   onFailure() {
-    setState(() {
-      started = false;
-      rotation = 360;
-    });
+    timerSubscription.cancel();
 
     showTimerPop(
       context,
