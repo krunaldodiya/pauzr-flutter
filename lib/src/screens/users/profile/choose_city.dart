@@ -101,8 +101,14 @@ class _ChooseCityState extends State<ChooseCity> {
                     return GestureDetector(
                       onTap: () {
                         userBloc.onChangeData(
-                          "location",
+                          "city",
                           city,
+                          userBloc.user,
+                        );
+
+                        userBloc.onChangeData(
+                          "state",
+                          city.state,
                           userBloc.user,
                         );
 
