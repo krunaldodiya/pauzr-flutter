@@ -243,13 +243,13 @@ class _EditProfilePage extends State<EditProfilePage> {
     await userBloc.updateProfile(userBloc.user);
     XsProgressHud.hide();
 
-    // if (userBloc.loaded == true) {
-    //   if (widget.shouldPop == true) {
-    //     Navigator.of(context).pop();
-    //   } else {
-    //     Navigator.pushReplacementNamed(context, routeList.tab);
-    //   }
-    // }
+    if (userBloc.loaded == true && userBloc.error == null) {
+      if (widget.shouldPop == true) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.pushReplacementNamed(context, routeList.tab);
+      }
+    }
   }
 
   void uploadImage(userBloc) async {
