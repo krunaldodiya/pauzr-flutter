@@ -116,7 +116,7 @@ class _EditProfilePage extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(height: 20.0),
-              if (widget.shouldPop == true) photoUpload(userBloc),
+              photoUpload(userBloc),
               EditableFormField(
                 cursorColor: theme.editProfile.cursorColor,
                 controller: nameController,
@@ -214,26 +214,40 @@ class _EditProfilePage extends State<EditProfilePage> {
   }
 
   photoUpload(userBloc) {
-    return GestureDetector(
-      onTap: () {
-        uploadImage(userBloc);
-      },
-      child: Container(
-        height: 120.0,
-        width: 120.0,
-        margin: EdgeInsets.only(bottom: 20.0),
-        child: ClipOval(
-            child: CachedNetworkImage(
-          imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
-          placeholder: (context, url) {
-            return CircularProgressIndicator();
-          },
-          errorWidget: (context, url, error) => Icon(Icons.error),
-          width: 120.0,
+    if (widget.shouldPop == true) {
+      return GestureDetector(
+        onTap: () {
+          uploadImage(userBloc);
+        },
+        child: Container(
           height: 120.0,
-          fit: BoxFit.cover,
-          alignment: Alignment.center,
-        )),
+          width: 120.0,
+          margin: EdgeInsets.only(bottom: 20.0),
+          child: ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+              placeholder: (context, url) {
+                return CircularProgressIndicator();
+              },
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              width: 120.0,
+              height: 120.0,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: 120.0,
+      height: 120.0,
+      margin: EdgeInsets.only(bottom: 20.0),
+      child: Image.asset(
+        "assets/images/finish.png",
+        width: 120.0,
+        height: 120.0,
       ),
     );
   }

@@ -43,6 +43,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/images/finish.png
     - assets/images/photo_eraser.png
     - assets/images/photo_pencil.png
     - assets/images/photo_ruler.png

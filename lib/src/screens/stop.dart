@@ -81,14 +81,10 @@ class _StopPage extends State<StopPage>
     double tickValue = waterHeight / durationStatic;
 
     timerSubscription.onData((Duration duration) {
-      bool shouldRotate = durationDynamic != duration.inSeconds;
-
-      if (shouldRotate) {
-        setState(() {
-          durationDynamic = duration.inSeconds;
-          waterController.changeWaterHeight(durationDynamic * tickValue);
-        });
-      }
+      setState(() {
+        durationDynamic = duration.inSeconds;
+        waterController.changeWaterHeight(durationDynamic * tickValue);
+      });
     });
 
     timerSubscription.onDone(() {
