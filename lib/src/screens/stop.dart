@@ -45,9 +45,11 @@ class _StopPage extends State<StopPage>
     this.timerMinutes,
   });
 
-  Map points = {20: 1, 40: 3, 60: 5};
+  Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
+
   WaterController waterController = WaterController();
-  double waterHeight = 0.9;
+  double waterHeight = 0.95;
+
   int notificationId = 1;
   var timerSubscription;
 
@@ -69,6 +71,8 @@ class _StopPage extends State<StopPage>
   }
 
   getInitialData() async {
+    WidgetsBinding.instance.addObserver(this);
+
     CountDown cd = CountDown(Duration(seconds: durationStatic));
 
     timerSubscription = cd.stream.listen(null);
@@ -76,15 +80,15 @@ class _StopPage extends State<StopPage>
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
-    WidgetsBinding.instance.addObserver(this);
-
-    double tickValue = waterHeight / durationStatic;
-
     timerSubscription.onData((Duration duration) {
-      setState(() {
-        durationDynamic = duration.inSeconds;
-        waterController.changeWaterHeight(durationDynamic * tickValue);
-      });
+      if (duration.inSeconds < durationDynamic) {
+        setState(() {
+          durationDynamic = duration.inSeconds;
+          waterController.changeWaterHeight(
+            waterHeight * durationDynamic / durationStatic,
+          );
+        });
+      }
     });
 
     timerSubscription.onDone(() {
