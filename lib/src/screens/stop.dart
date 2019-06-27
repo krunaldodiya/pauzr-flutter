@@ -73,7 +73,11 @@ class _StopPage extends State<StopPage>
   getInitialData() async {
     WidgetsBinding.instance.addObserver(this);
 
-    CountDown cd = CountDown(Duration(seconds: durationStatic));
+    CountDown cd = CountDown(
+      Duration(seconds: durationStatic),
+      refresh: Duration(seconds: 1),
+      everyTick: 1,
+    );
 
     timerSubscription = cd.stream.listen(null);
 
@@ -81,14 +85,12 @@ class _StopPage extends State<StopPage>
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
     timerSubscription.onData((Duration duration) {
-      if (duration.inSeconds < durationDynamic) {
-        setState(() {
-          durationDynamic = duration.inSeconds;
-          waterController.changeWaterHeight(
-            waterHeight * durationDynamic / durationStatic,
-          );
-        });
-      }
+      setState(() {
+        durationDynamic = duration.inSeconds;
+        waterController.changeWaterHeight(
+          waterHeight * durationDynamic / durationStatic,
+        );
+      });
     });
 
     timerSubscription.onDone(() {
