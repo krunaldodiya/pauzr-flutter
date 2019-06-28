@@ -126,15 +126,16 @@ class _EditProfilePage extends State<EditProfilePage> {
                   userBloc.onChangeData("name", name, userBloc.user);
                 },
               ),
-              EditableFormField(
-                cursorColor: theme.editProfile.cursorColor,
-                controller: emailController,
-                labelText: "Email Address",
-                errorText: getErrorText(userBloc.error, 'email'),
-                onChanged: (email) {
-                  userBloc.onChangeData("email", email, userBloc.user);
-                },
-              ),
+              if (widget.shouldPop == false)
+                EditableFormField(
+                  cursorColor: theme.editProfile.cursorColor,
+                  controller: emailController,
+                  labelText: "Email Address",
+                  errorText: getErrorText(userBloc.error, 'email'),
+                  onChanged: (email) {
+                    userBloc.onChangeData("email", email, userBloc.user);
+                  },
+                ),
               GestureDetector(
                 onTap: () async {
                   final String userDob = userBloc.user.dob;
@@ -254,7 +255,13 @@ class _EditProfilePage extends State<EditProfilePage> {
 
   onSubmit(UserBloc userBloc) async {
     XsProgressHud.show(context);
-    await userBloc.updateProfile(userBloc.user);
+
+    if (widget.shouldPop == true) {
+      await userBloc.updateProfile(userBloc.user);
+    } else {
+      await userBloc.createProfile(userBloc.user);
+    }
+
     XsProgressHud.hide();
 
     if (userBloc.loaded == true && userBloc.error == null) {

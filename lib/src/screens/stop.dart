@@ -23,11 +23,7 @@ class StopPage extends StatefulWidget {
 
   @override
   _StopPage createState() {
-    return _StopPage(
-      durationStatic: duration,
-      durationDynamic: duration,
-      timerMinutes: duration ~/ 60,
-    );
+    return _StopPage(duration: duration);
   }
 }
 
@@ -35,15 +31,12 @@ class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final EventChannel eventChannel = EventChannel('com.pauzr.org/info');
 
-  int durationStatic;
-  int durationDynamic;
-  int timerMinutes;
+  final int duration;
 
-  _StopPage({
-    this.durationStatic,
-    this.durationDynamic,
-    this.timerMinutes,
-  });
+  _StopPage({this.duration});
+
+  int durationSeconds;
+  int durationMintues;
 
   Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
 
@@ -56,6 +49,11 @@ class _StopPage extends State<StopPage>
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      durationSeconds = widget.duration;
+      durationMintues = widget.duration ~/ 60;
+    });
 
     listenToScreenStatus();
 
@@ -74,9 +72,8 @@ class _StopPage extends State<StopPage>
     WidgetsBinding.instance.addObserver(this);
 
     CountDown cd = CountDown(
-      Duration(seconds: durationStatic),
+      Duration(seconds: widget.duration),
       refresh: Duration(seconds: 1),
-      everyTick: 1,
     );
 
     timerSubscription = cd.stream.listen(null);
@@ -86,11 +83,12 @@ class _StopPage extends State<StopPage>
 
     timerSubscription.onData((Duration duration) {
       setState(() {
-        durationDynamic = duration.inSeconds;
-        waterController.changeWaterHeight(
-          waterHeight * durationDynamic / durationStatic,
-        );
+        durationSeconds = duration.inSeconds;
       });
+
+      waterController.changeWaterHeight(
+        waterHeight * duration.inSeconds / widget.duration,
+      );
     });
 
     timerSubscription.onDone(() {
@@ -203,7 +201,7 @@ class _StopPage extends State<StopPage>
                     alignment: Alignment.center,
                     children: <Widget>[
                       Transform.rotate(
-                        angle: durationDynamic.toDouble(),
+                        angle: durationSeconds.toDouble(),
                         child: Image.asset(
                           "assets/images/hello.png",
                           height: 310.0,
@@ -376,7 +374,7 @@ class _StopPage extends State<StopPage>
   }
 
   String getTimer() {
-    final now = Duration(seconds: durationDynamic);
+    final now = Duration(seconds: durationSeconds);
 
     String twoDigitMinutes = twoDigits(
       now.inMinutes > 0 && now.inMinutes.remainder(60) == 0
@@ -395,7 +393,7 @@ class _StopPage extends State<StopPage>
     showTimerPop(
       context,
       type: 'failed',
-      heading: "Oops! You didn’t Pauz for $timerMinutes mins.",
+      heading: "Oops! You didn’t Pauz for $durationMintues mins.",
       points: "0",
       pointer: "Point",
       navigateAway: () {
@@ -405,9 +403,9 @@ class _StopPage extends State<StopPage>
   }
 
   onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
-    await timerBloc.setTimer(timerMinutes, userBloc);
+    await timerBloc.setTimer(durationMintues, userBloc);
 
-    int achievedPoints = points[timerMinutes];
+    int achievedPoints = points[durationMintues];
 
     String pointer = achievedPoints > 1 ? 'points' : 'point';
 

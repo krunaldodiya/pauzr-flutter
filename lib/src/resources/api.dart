@@ -1,10 +1,9 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/country.dart';
-import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/resources/client.dart';
-import 'package:dio/dio.dart';
 
 class ApiProvider {
   Future getAuthUser() async {
@@ -117,17 +116,8 @@ class ApiProvider {
     });
   }
 
-  Future updateProfile(User user) async {
-    return sendRequest(Api.updateProfile, {
-      "id": user.id,
-      "name": user.name,
-      "email": user.email,
-      "dob": user.dob,
-      "gender": user.gender,
-      "country_id": user.country != null ? user.country.id : null,
-      "state_id": user.state != null ? user.state.id : null,
-      "city_id": user.city != null ? user.city.id : null,
-    });
+  Future updateProfile(Map data) async {
+    return sendRequest(Api.updateProfile, data);
   }
 
   Future getCities() async {

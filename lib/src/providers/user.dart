@@ -36,11 +36,43 @@ class UserBloc extends ChangeNotifier {
     );
   }
 
-  updateProfile(user) async {
+  createProfile(User user) async {
     setState(loading: true, loaded: false);
 
     try {
-      final Response response = await _apiProvider.updateProfile(user);
+      final Response response = await _apiProvider.updateProfile({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "dob": user.dob,
+        "gender": user.gender,
+        "country_id": user.country != null ? user.country.id : null,
+        "state_id": user.state != null ? user.state.id : null,
+        "city_id": user.city != null ? user.city.id : null,
+      });
+
+      final results = response.data;
+
+      setAuthUser(results['user']);
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  updateProfile(User user) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.updateProfile({
+        "id": user.id,
+        "name": user.name,
+        "dob": user.dob,
+        "gender": user.gender,
+        "country_id": user.country != null ? user.country.id : null,
+        "state_id": user.state != null ? user.state.id : null,
+        "city_id": user.city != null ? user.city.id : null,
+      });
+
       final results = response.data;
 
       setAuthUser(results['user']);
