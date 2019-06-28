@@ -14,6 +14,7 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
 
 class StopPage extends StatefulWidget {
   final int duration;
@@ -38,6 +39,9 @@ class _StopPage extends State<StopPage>
   int durationMintues;
 
   Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
+
+  WaterController waterController = WaterController();
+  double waterHeight = 0.95;
 
   int notificationId = 1;
   var timerSubscription;
@@ -78,7 +82,9 @@ class _StopPage extends State<StopPage>
     timerSubscription = cd.stream.listen(null);
 
     timerSubscription.onData((Duration duration) {
-      print(duration.inSeconds);
+      waterController.changeWaterHeight(
+        waterHeight * duration.inSeconds / widget.duration,
+      );
 
       setState(() {
         durationSeconds = duration.inSeconds;
@@ -194,6 +200,20 @@ class _StopPage extends State<StopPage>
                   child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
+                      WaveProgressBar(
+                        flowSpeed: 0.3,
+                        waveDistance: 45.0,
+                        waveHeight: 18.0,
+                        waterColor: theme.stop.waterColor,
+                        strokeCircleColor: theme.stop.strokeCircleColor,
+                        circleStrokeWidth: 2.0,
+                        heightController: waterController,
+                        percentage: waterHeight,
+                        size: Size(220, 220),
+                        textStyle: TextStyle(
+                          fontSize: 0.0,
+                        ),
+                      ),
                       Text(
                         getTimer(),
                         style: TextStyle(

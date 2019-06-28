@@ -82,15 +82,13 @@ class _StopPage extends State<StopPage>
     timerSubscription = cd.stream.listen(null);
 
     timerSubscription.onData((Duration duration) {
-      print(duration.inSeconds);
+      waterController.changeWaterHeight(
+        waterHeight * duration.inSeconds / widget.duration,
+      );
 
       setState(() {
         durationSeconds = duration.inSeconds;
       });
-
-      waterController.changeWaterHeight(
-        waterHeight * duration.inSeconds / widget.duration,
-      );
     });
 
     timerSubscription.onDone(() {
