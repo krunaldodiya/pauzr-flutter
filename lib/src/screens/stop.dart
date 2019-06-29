@@ -206,11 +206,13 @@ class _StopPage extends State<StopPage>
                         width: 240.0,
                         height: 240.0,
                         child: LiquidCircularProgressIndicator(
-                          value: durationSeconds / widget.duration,
-                          valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
-                          backgroundColor: Colors.white,
-                          borderColor: Colors.transparent,
-                          borderWidth: 0.0,
+                          value: 0.95 * durationSeconds / widget.duration,
+                          valueColor: AlwaysStoppedAnimation(
+                            theme.stop.waterColor,
+                          ),
+                          backgroundColor: theme.stop.backgroundColor,
+                          borderColor: theme.stop.strokeCircleColor,
+                          borderWidth: 1.0,
                           direction: Axis.vertical,
                           center: Text(
                             getTimer(),
