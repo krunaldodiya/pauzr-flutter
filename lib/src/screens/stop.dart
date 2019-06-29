@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
+import 'package:countdown/countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -14,7 +14,7 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 class StopPage extends StatefulWidget {
   final int duration;
@@ -39,9 +39,6 @@ class _StopPage extends State<StopPage>
   int durationMintues;
 
   Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
-
-  WaterController waterController = WaterController();
-  double waterHeight = 1.0;
 
   int notificationId = 1;
   var timerSubscription;
@@ -70,25 +67,34 @@ class _StopPage extends State<StopPage>
 
   getInitialData() async {
     WidgetsBinding.instance.addObserver(this);
-    ReceivePort receivePort = ReceivePort();
 
-    await Isolate.spawn(isolateEntry, [receivePort.sendPort, widget.duration]);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
-    receivePort.listen((seconds) {
-      if (seconds >= 0) {
-        waterController.changeWaterHeight(seconds / widget.duration);
-        setState(() => durationSeconds = seconds);
-      }
+    CountDown cd = CountDown(
+      Duration(seconds: widget.duration),
+      refresh: Duration(seconds: 1),
+    );
 
-      if (seconds == 0) {
-        onSuccess();
-      }
+    timerSubscription = cd.stream.listen(null);
+
+    timerSubscription.onData((Duration duration) {
+      setState(() {
+        durationSeconds = duration.inSeconds;
+      });
+    });
+
+    timerSubscription.onDone(() {
+      onSuccess(widget.duration, userBloc, timerBloc);
     });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+
+    timerSubscription.cancel();
+
     super.dispose();
   }
 
@@ -148,7 +154,7 @@ class _StopPage extends State<StopPage>
       Duration difference = currentTime.difference(pauseTime);
       int seconds = difference.inSeconds;
 
-      if (seconds > 5) {
+      if (seconds > 3) {
         onFailure();
       }
 
@@ -191,34 +197,32 @@ class _StopPage extends State<StopPage>
                         angle: durationSeconds.toDouble(),
                         child: Image.asset(
                           "assets/images/hello.png",
-                          height: 310.0,
-                          width: 310.0,
+                          height: 340.0,
+                          width: 340.0,
                           color: theme.stop.handBackgroundColor,
                         ),
                       ),
-                      WaveProgressBar(
-                        flowSpeed: 0.1,
-                        waveDistance: 45.0,
-                        waveHeight: 18.0,
-                        waterColor: theme.stop.waterColor,
-                        strokeCircleColor: theme.stop.strokeCircleColor,
-                        circleStrokeWidth: 2.0,
-                        heightController: waterController,
-                        percentage: waterHeight,
-                        size: Size(220, 220),
-                        textStyle: TextStyle(
-                          fontSize: 0.0,
+                      Container(
+                        width: 240.0,
+                        height: 240.0,
+                        child: LiquidCircularProgressIndicator(
+                          value: durationSeconds / widget.duration,
+                          valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+                          backgroundColor: Colors.white,
+                          borderColor: Colors.transparent,
+                          borderWidth: 0.0,
+                          direction: Axis.vertical,
+                          center: Text(
+                            getTimer(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                              color: theme.stop.timerColor,
+                              fontFamily: Fonts.titilliumWebBold,
+                            ),
+                          ),
                         ),
                       ),
-                      Text(
-                        getTimer(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0,
-                          color: theme.stop.timerColor,
-                          fontFamily: Fonts.titilliumWebBold,
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -389,10 +393,7 @@ class _StopPage extends State<StopPage>
     );
   }
 
-  onSuccess() async {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
-
+  onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
     await timerBloc.setTimer(durationMintues, userBloc);
 
     int achievedPoints = points[durationMintues];
@@ -409,15 +410,5 @@ class _StopPage extends State<StopPage>
         Navigator.popUntil(context, (route) => route.isFirst);
       },
     );
-  }
-
-  static isolateEntry(List commList) async {
-    SendPort sendPort = commList[0];
-    int counter = commList[1];
-
-    Timer.periodic(new Duration(seconds: 1), (Timer timer) {
-      counter--;
-      sendPort.send(counter);
-    });
   }
 }

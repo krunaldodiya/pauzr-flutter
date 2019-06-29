@@ -15,7 +15,6 @@ dependency_overrides:
   cupertino_icons: ^0.1.2
   curved_navigation_bar: ^0.2.20
   flutter_vector_icons: ^0.1.0
-  waveprogressbar_flutter: ^0.1.2
   shared_preferences: ^0.5.2
   xs_progress_hud: ^1.0.2
   connectivity: any
@@ -34,6 +33,7 @@ dependency_overrides:
   url_launcher: ^5.0.3
   firebase_messaging: ^5.0.4
   countdown: ^0.1.0
+  liquid_progress_indicator: ^0.3.1
 
 dev_dependencies:
   flutter_test:

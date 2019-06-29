@@ -14,7 +14,7 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:waveprogressbar_flutter/waveprogressbar_flutter.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 class StopPage extends StatefulWidget {
   final int duration;
@@ -39,9 +39,6 @@ class _StopPage extends State<StopPage>
   int durationMintues;
 
   Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
-
-  WaterController waterController = WaterController();
-  double waterHeight = 0.95;
 
   int notificationId = 1;
   var timerSubscription;
@@ -82,10 +79,6 @@ class _StopPage extends State<StopPage>
     timerSubscription = cd.stream.listen(null);
 
     timerSubscription.onData((Duration duration) {
-      waterController.changeWaterHeight(
-        waterHeight * duration.inSeconds / widget.duration,
-      );
-
       setState(() {
         durationSeconds = duration.inSeconds;
       });
@@ -161,7 +154,7 @@ class _StopPage extends State<StopPage>
       Duration difference = currentTime.difference(pauseTime);
       int seconds = difference.inSeconds;
 
-      if (seconds > 5) {
+      if (seconds > 3) {
         onFailure();
       }
 
@@ -204,34 +197,32 @@ class _StopPage extends State<StopPage>
                         angle: durationSeconds.toDouble(),
                         child: Image.asset(
                           "assets/images/hello.png",
-                          height: 310.0,
-                          width: 310.0,
+                          height: 340.0,
+                          width: 340.0,
                           color: theme.stop.handBackgroundColor,
                         ),
                       ),
-                      WaveProgressBar(
-                        flowSpeed: 0.1,
-                        waveDistance: 45.0,
-                        waveHeight: 18.0,
-                        waterColor: theme.stop.waterColor,
-                        strokeCircleColor: theme.stop.strokeCircleColor,
-                        circleStrokeWidth: 2.0,
-                        heightController: waterController,
-                        percentage: waterHeight,
-                        size: Size(220, 220),
-                        textStyle: TextStyle(
-                          fontSize: 0.0,
+                      Container(
+                        width: 240.0,
+                        height: 240.0,
+                        child: LiquidCircularProgressIndicator(
+                          value: durationSeconds / widget.duration,
+                          valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+                          backgroundColor: Colors.white,
+                          borderColor: Colors.transparent,
+                          borderWidth: 0.0,
+                          direction: Axis.vertical,
+                          center: Text(
+                            getTimer(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                              color: theme.stop.timerColor,
+                              fontFamily: Fonts.titilliumWebBold,
+                            ),
+                          ),
                         ),
                       ),
-                      Text(
-                        getTimer(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0,
-                          color: theme.stop.timerColor,
-                          fontFamily: Fonts.titilliumWebBold,
-                        ),
-                      )
                     ],
                   ),
                 ),
