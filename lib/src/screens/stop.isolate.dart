@@ -144,7 +144,7 @@ class _StopPage extends State<StopPage>
       Duration difference = currentTime.difference(pauseTime);
       int seconds = difference.inSeconds;
 
-      if (seconds > 5) {
+      if (seconds > 3) {
         onFailure();
       }
 
