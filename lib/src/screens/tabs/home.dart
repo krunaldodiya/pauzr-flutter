@@ -68,17 +68,48 @@ class _HomePageState extends State<HomePage> {
 
   Widget createListView(context, groups) {
     if (groups.length == 0) {
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        child: Text(
-          "No groups yet.",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontSize: 18.0,
-            fontFamily: Fonts.titilliumWebSemiBold,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+            child: Text(
+              "No groups yet.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 24.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
           ),
-        ),
+          Container(height: 20.0),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+            child: Text(
+              "Hit the BIG '+' button at down right corner to create group.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                fontSize: 18.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+            child: Text(
+              "Make sure the particpants already have PauzR installed on their devices.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+                fontSize: 14.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+          ),
+        ],
       );
     }
 

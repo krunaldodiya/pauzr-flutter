@@ -119,23 +119,6 @@ class _InvitePageState extends State<InvitePage> {
             ),
           ),
         ),
-        actions: <Widget>[
-          Container(
-            child: IconButton(
-              icon: Icon(
-                Icons.refresh,
-                size: 30.0,
-              ),
-              onPressed: () {
-                setState(() {
-                  reloadContacts = true;
-                });
-
-                loadContacts();
-              },
-            ),
-          ),
-        ],
       ),
       body: loading != false
           ? showLoadingMessage()
@@ -146,6 +129,52 @@ class _InvitePageState extends State<InvitePage> {
   Column showContacts(List filteredContact) {
     return Column(
       children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10.0, top: 5.0),
+                child: TextField(
+                  onChanged: (text) {
+                    setState(() {
+                      keywords = text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.all(10.0),
+                    hintText: "Filter by Name or Mobile",
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5.0),
+              child: IconButton(
+                icon: Icon(
+                  Icons.refresh,
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  setState(() {
+                    reloadContacts = true;
+                  });
+
+                  loadContacts();
+                },
+              ),
+            ),
+          ],
+        ),
         Expanded(
           child: ListView.builder(
             primary: true,
