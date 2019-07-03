@@ -23,6 +23,7 @@ void main() async {
   String defaultTheme = prefs.getString("defaultTheme") ?? "blue";
 
   // prefs.remove("authToken");
+  // prefs.remove("contacts");
 
   runApp(
     MultiProvider(

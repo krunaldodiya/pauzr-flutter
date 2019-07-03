@@ -116,7 +116,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
               GetRanking(
                 user: userBloc.user,
                 rankings: rankingBloc.rankings,
-              ).getList(),
+              ).getList(context),
             ),
           ),
         ],

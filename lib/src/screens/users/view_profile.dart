@@ -4,6 +4,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -11,8 +12,13 @@ import 'package:provider/provider.dart';
 
 class ViewProfilePage extends StatefulWidget {
   final bool shouldPop;
+  final User user;
 
-  ViewProfilePage({Key key, @required this.shouldPop}) : super(key: key);
+  ViewProfilePage({
+    Key key,
+    @required this.shouldPop,
+    @required this.user,
+  }) : super(key: key);
 
   @override
   _ViewProfilePage createState() => _ViewProfilePage();
@@ -32,7 +38,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
         centerTitle: true,
         backgroundColor: theme.viewProfile.backgroundColor,
         title: Text(
-          userBloc.user.name.toUpperCase(),
+          widget.user.name.toUpperCase(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 18.0,
@@ -40,21 +46,22 @@ class _ViewProfilePage extends State<ViewProfilePage> {
           ),
         ),
         actions: <Widget>[
-          Container(
-            child: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  routeList.edit_profile,
-                  arguments: {
-                    "shouldPop": true,
-                  },
-                );
-              },
+          if (widget.user.id == userBloc.user.id)
+            Container(
+              child: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    routeList.edit_profile,
+                    arguments: {
+                      "shouldPop": true,
+                    },
+                  );
+                },
+              ),
+              margin: EdgeInsets.only(right: 10.0),
             ),
-            margin: EdgeInsets.only(right: 10.0),
-          ),
         ],
       ),
       body: SafeArea(
@@ -73,13 +80,13 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                           context,
                           routeList.show_photo,
                           arguments: {
-                            "photo": "$baseUrl/storage/${userBloc.user.avatar}"
+                            "photo": "$baseUrl/storage/${widget.user.avatar}"
                           },
                         );
                       },
                       child: ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
+                          imageUrl: "$baseUrl/storage/${widget.user.avatar}",
                           placeholder: (context, url) {
                             return CircularProgressIndicator();
                           },
@@ -109,7 +116,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     ListTile(
                       leading: Icon(Icons.person),
                       title: Text(
-                        "${userBloc.user.name.toUpperCase()}",
+                        "${widget.user.name.toUpperCase()}",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 24.0,
@@ -119,12 +126,12 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     ),
                     ListTile(
                       leading: Icon(
-                        userBloc.user.gender == 'Male'
+                        widget.user.gender == 'Male'
                             ? FontAwesome.male
                             : FontAwesome.female,
                       ),
                       title: Text(
-                        "${userBloc.user.gender}",
+                        "${widget.user.gender}",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20.0,
@@ -135,7 +142,9 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     ListTile(
                       leading: Icon(Icons.cake),
                       title: Text(
-                        "${userBloc.user.dob}",
+                        widget.user.id == userBloc.user.id
+                            ? "${widget.user.dob}"
+                            : "N/A",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,
@@ -146,7 +155,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     ListTile(
                       leading: Icon(Icons.edit_location),
                       title: Text(
-                        "${userBloc.user.city.name}",
+                        "${widget.user.city.name}",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 18.0,

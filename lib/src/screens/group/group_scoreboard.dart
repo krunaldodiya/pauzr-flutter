@@ -195,7 +195,7 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               GetRanking(
                 user: userBloc.user,
                 rankings: rankingBloc.rankings,
-              ).getList(),
+              ).getList(context),
             ),
           ),
         ],

@@ -7,33 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/launch_url.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/group.dart';
-import 'package:pauzr/src/models/group_subscription.dart';
-import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
-import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:xs_progress_hud/xs_progress_hud.dart';
 
-class AddGroupParticipantsPage extends StatefulWidget {
-  final Group group;
-  final bool shouldPop;
+class InvitePage extends StatefulWidget {
+  InvitePage({Key key}) : super(key: key);
 
-  AddGroupParticipantsPage({
-    Key key,
-    @required this.group,
-    @required this.shouldPop,
-  }) : super(key: key);
-
-  _AddGroupParticipantsPageState createState() =>
-      _AddGroupParticipantsPageState();
+  _InvitePageState createState() => _InvitePageState();
 }
 
-class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
+class _InvitePageState extends State<InvitePage> {
   List _participants = [];
   List _contacts = [];
   bool loading = false;
@@ -86,7 +75,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
@@ -120,39 +108,33 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
           child: ListTile(
             dense: true,
             contentPadding: EdgeInsets.all(0),
-            isThreeLine: true,
+            isThreeLine: false,
             title: Text(
-              "Add Participants",
+              "Invite Friends",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
                 fontFamily: Fonts.titilliumWebSemiBold,
               ),
             ),
-            subtitle: Text(
-              "${_participants.length} of ${_contacts.length} selected",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 13.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
           ),
         ),
         actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              addParticipants(groupBloc);
-            },
-            child: Text(
-              "Submit".toUpperCase(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-                fontFamily: Fonts.titilliumWebRegular,
+          Container(
+            child: IconButton(
+              icon: Icon(
+                Icons.refresh,
+                size: 30.0,
               ),
+              onPressed: () {
+                setState(() {
+                  reloadContacts = true;
+                });
+
+                loadContacts();
+              },
             ),
-          )
+          ),
         ],
       ),
       body: loading != false
@@ -164,52 +146,6 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   Column showContacts(List filteredContact) {
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(left: 10.0, top: 5.0),
-                child: TextField(
-                  onChanged: (text) {
-                    setState(() {
-                      keywords = text;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    contentPadding: EdgeInsets.all(10.0),
-                    hintText: "Filter by Name or Mobile",
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 5.0),
-              child: IconButton(
-                icon: Icon(
-                  Icons.refresh,
-                  size: 30.0,
-                ),
-                onPressed: () {
-                  setState(() {
-                    reloadContacts = true;
-                  });
-
-                  loadContacts();
-                },
-              ),
-            ),
-          ],
-        ),
         Expanded(
           child: ListView.builder(
             primary: true,
@@ -279,43 +215,11 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     );
   }
 
-  addParticipants(GroupBloc groupBloc) async {
-    if (_participants.length == 0) {
-      return Navigator.pop(context);
-    }
-
-    XsProgressHud.show(context);
-
-    final group = await groupBloc.addParticipants(
-      widget.group.id,
-      _participants,
-    );
-
-    XsProgressHud.hide();
-
-    if (widget.shouldPop == true) {
-      Navigator.pop(context);
-    } else {
-      Navigator.pushReplacementNamed(
-        context,
-        routeList.group_scoreboard,
-        arguments: {"group": group},
-      );
-    }
-  }
-
   excludeContacts(contacts) {
     List data = [];
 
-    List<GroupSubscription> subscriptions = widget.group.subscriptions;
-    List subscriberIds = subscriptions
-        .map((subscription) => subscription.subscriber.id)
-        .toList();
-
     contacts.forEach((contact) {
-      bool subscribed = subscriberIds.contains(contact['id']);
-
-      if (subscribed == false && contact['id'] != null) {
+      if (contact['id'] == null) {
         data.add(contact);
       }
     });
@@ -331,14 +235,13 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
     return _participants.contains(contact['id']);
   }
 
-  toggleContact(contact) {
-    setState(() {
-      if (exists(contact)) {
-        _participants.remove(contact['id']);
-      } else {
-        _participants.add(contact['id']);
-      }
-    });
+  toggleContact(contact) async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    String text = "$baseUrl/api/invite?sender_id=${userBloc.user.id}";
+
+    await launchURL(
+      "whatsapp://send?phone=${contact['mobileWithCountryCode']}&text=$text",
+    );
   }
 
   refreshContacts() async {

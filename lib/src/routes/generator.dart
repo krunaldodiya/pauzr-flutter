@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/invite.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/show_photo.dart';
 import 'package:pauzr/src/screens/group/manage_group.dart';
@@ -122,6 +123,7 @@ class RouteGenerator {
           builder: (context) {
             return ViewProfilePage(
               shouldPop: args['shouldPop'],
+              user: args['user'],
             );
           },
         );
@@ -186,6 +188,14 @@ class RouteGenerator {
         );
         break;
 
+      case routeList.invite:
+        return MaterialPageRoute(
+          builder: (context) {
+            return InvitePage();
+          },
+        );
+        break;
+
       case routeList.city_list:
         return MaterialPageRoute(
           builder: (context) {
@@ -198,14 +208,6 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return ChooseCountry();
-          },
-        );
-        break;
-
-      case routeList.verify_otp:
-        return MaterialPageRoute(
-          builder: (context) {
-            return ViewProfilePage(shouldPop: args['shouldPop']);
           },
         );
         break;

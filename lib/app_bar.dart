@@ -44,6 +44,7 @@ AppBar getAppBar(
             routeList.view_profile,
             arguments: {
               "shouldPop": true,
+              "user": userBloc.user,
             },
           );
         },

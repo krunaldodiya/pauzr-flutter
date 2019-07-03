@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/launch_url.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
@@ -9,7 +11,6 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DrawerPage extends StatefulWidget {
   final UserBloc userBloc;
@@ -26,14 +27,6 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
-  launchURL(url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = widget.themeBloc;
@@ -98,6 +91,23 @@ class _DrawerPageState extends State<DrawerPage> {
           Divider(color: Colors.white),
           ListTile(
             title: Text(
+              "Invite & Earn",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Ionicons.logo_whatsapp,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              Navigator.pushNamed(context, routeList.invite);
+            },
+          ),
+          ListTile(
+            title: Text(
               "Share",
               style: TextStyle(
                 color: Colors.white,
@@ -132,6 +142,7 @@ class _DrawerPageState extends State<DrawerPage> {
               launchURL(appId);
             },
           ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "Terms & Conditions",
