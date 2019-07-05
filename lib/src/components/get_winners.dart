@@ -1,34 +1,31 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/ranking.dart';
 import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/models/winners.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class GetWinners {
-  final List<Ranking> rankings;
+  final List<Winner> winners;
   final User user;
 
-  GetWinners({@required this.user, @required this.rankings});
+  GetWinners({@required this.user, @required this.winners});
 
   getList(context) {
     List<Widget> list = [];
 
-    rankings.forEach((ranking) {
-      list.add(getRankCard(ranking, context));
+    winners.forEach((winner) {
+      list.add(getRankCard(winner, context));
     });
 
     return list;
   }
 
-  Card getRankCard(Ranking ranking, BuildContext context) {
-    Color backgroundPrimary = getBackgroundPrimary(ranking);
-    Color textPrimary = getTextPrimary(ranking);
-    Color textSecondary = getTextSecondary(ranking);
+  Card getRankCard(Winner winner, BuildContext context) {
+    Color primaryColor = getPrimaryColor(winner);
 
     return Card(
-      color: backgroundPrimary,
+      shape: Border.all(color: primaryColor, width: 0.5),
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
       child: Container(
@@ -42,66 +39,82 @@ class GetWinners {
               routeList.view_profile,
               arguments: {
                 "shouldPop": true,
-                "user": ranking.user,
+                "user": winner.user,
               },
             );
           },
           child: ListTile(
-            leading: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: CachedNetworkImageProvider(
-                "$baseUrl/storage/${ranking.user.avatar}",
+            leading: ClipOval(
+              child: Image.network(
+                "$baseUrl/storage/${winner.user.avatar}",
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               ),
             ),
             title: Container(
-              margin: EdgeInsets.only(bottom: 5.0),
-              child: Text(
-                ranking.user.name.toUpperCase(),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: textPrimary,
-                  fontSize: 16.0,
-                  fontFamily: Fonts.titilliumWebRegular,
-                ),
-              ),
-            ),
-            subtitle: Container(
-              child: Row(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Rank: ${ranking.rank.toString()}",
+                    winner.user.name.toUpperCase(),
                     style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: textSecondary,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
                       fontSize: 16.0,
                       fontFamily: Fonts.titilliumWebRegular,
                     ),
                   ),
-                  Container(
-                    width: 20,
-                    alignment: Alignment.center,
-                    child: Text("|"),
-                  ),
-                  Text(
-                    "Level: ${ranking.user.level.level}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: textSecondary,
-                      fontSize: 16.0,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 15.0),
+                        child: Text(
+                          "RANK: ${winner.rank.toString()}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black,
+                            fontSize: 14.0,
+                            fontFamily: Fonts.titilliumWebRegular,
+                          ),
+                        ),
+                      ),
+                      if (winner.rank <= 3)
+                        Container(
+                          child: Text(
+                            "👑",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ],
+              ),
+            ),
+            subtitle: Text(
+              winner.user.city.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             trailing: Container(
               child: Column(
                 children: <Widget>[
                   Text(
-                    ranking.duration.toString(),
+                    winner.duration.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
-                      color: textSecondary,
+                      color: Colors.black,
                       fontSize: 22.0,
                       fontFamily: Fonts.titilliumWebSemiBold,
                     ),
@@ -110,7 +123,7 @@ class GetWinners {
                     "Minutes",
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
-                      color: textSecondary,
+                      color: Colors.black,
                       fontSize: 12.0,
                       fontFamily: Fonts.titilliumWebRegular,
                     ),
@@ -124,27 +137,11 @@ class GetWinners {
     );
   }
 
-  Color getBackgroundPrimary(Ranking ranking) {
-    if (ranking.rank == 1) {
-      return Colors.cyanAccent;
+  Color getPrimaryColor(Winner winner) {
+    if (winner.rank <= 3) {
+      return Colors.amber;
     }
 
-    if (ranking.rank == 2) {
-      return Colors.greenAccent;
-    }
-
-    if (ranking.rank == 3) {
-      return Colors.amberAccent;
-    }
-
-    return Colors.white;
-  }
-
-  Color getTextPrimary(Ranking ranking) {
-    return Colors.blue;
-  }
-
-  Color getTextSecondary(Ranking ranking) {
-    return Colors.black;
+    return Colors.transparent;
   }
 }

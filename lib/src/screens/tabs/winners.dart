@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_winners.dart';
 import 'package:pauzr/src/components/switch.dart';
-import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/providers/ranking.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
-import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
-import 'package:swipedetector/swipedetector.dart';
 
 class WinnersPage extends StatefulWidget {
   WinnersPage({Key key}) : super(key: key);
@@ -46,114 +43,38 @@ class _WinnersPage extends State<WinnersPage>
       body: SafeArea(
         child: rankingBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : buildSwipeDetector(rankingBloc, theme, userBloc),
+            : getWinnersList(rankingBloc, theme, userBloc),
       ),
     );
   }
 
-  SwipeDetector buildSwipeDetector(
+  getWinnersList(
     RankingBloc rankingBloc,
     DefaultTheme theme,
     UserBloc userBloc,
   ) {
-    return SwipeDetector(
-      swipeConfiguration: SwipeConfiguration(
-        verticalSwipeMinVelocity: 100.0,
-        verticalSwipeMinDisplacement: 50.0,
-        verticalSwipeMaxWidthThreshold: 100.0,
-        horizontalSwipeMaxHeightThreshold: 50.0,
-        horizontalSwipeMinDisplacement: 50.0,
-        horizontalSwipeMinVelocity: 200.0,
-      ),
-      onSwipeLeft: () {
-        if (period == "Today") {
-          changePeriod("This Week", rankingBloc);
-        } else if (period == "This Week") {
-          changePeriod("This Month", rankingBloc);
-        }
-      },
-      onSwipeRight: () {
-        if (period == "This Month") {
-          changePeriod("This Week", rankingBloc);
-        } else if (period == "This Week") {
-          changePeriod("Today", rankingBloc);
-        }
-      },
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                getSwitch(
-                  items: ["This Week", "This Month"],
-                  selected: period,
-                  onSelect: (index, value) {
-                    changePeriod(value, rankingBloc);
-                  },
-                  theme: theme,
-                ),
-              ],
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              GetWinners(
-                user: userBloc.user,
-                rankings: rankingBloc.rankings,
-              ).getList(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  getCards(RankingBloc rankingBloc, UserBloc userBloc, DefaultTheme theme) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.minutes);
-            },
-            child: getCard(
-              rankingBloc.minutesSaved.toString(),
-              null,
-              "Minutes Saved",
-              80.0,
-              40.0,
-              theme.mainScoreboard,
-            ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              getSwitch(
+                items: ["This Week", "This Month"],
+                selected: period,
+                onSelect: (index, value) {
+                  changePeriod(value, rankingBloc);
+                },
+                theme: theme,
+              ),
+            ],
           ),
         ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.points);
-            },
-            child: getCard(
-              rankingBloc.pointsEarned.toString(),
-              null,
-              "Points Earned",
-              80.0,
-              40.0,
-              theme.mainScoreboard,
-            ),
-          ),
-        ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, routeList.levels);
-            },
-            child: getCard(
-              "${userBloc.user.level.level}/10",
-              null,
-              "Levels Cleared",
-              80.0,
-              40.0,
-              theme.mainScoreboard,
-            ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            GetWinners(
+              user: userBloc.user,
+              winners: rankingBloc.winners,
+            ).getList(context),
           ),
         ),
       ],
@@ -162,6 +83,26 @@ class _WinnersPage extends State<WinnersPage>
 
   void changePeriod(value, RankingBloc rankingBloc) {
     setState(() => period = value);
-    rankingBloc.getRankings(period, null);
+
+    String periodSort;
+
+    switch (period) {
+      case 'Today':
+        periodSort = 'Today';
+        break;
+
+      case 'This Week':
+        periodSort = 'Week';
+        break;
+
+      case 'This Month':
+        periodSort = 'Week';
+        break;
+
+      default:
+        periodSort = 'Week';
+    }
+
+    rankingBloc.getWinners(periodSort);
   }
 }

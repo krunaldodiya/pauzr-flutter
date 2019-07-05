@@ -29,6 +29,12 @@ class ApiProvider {
     });
   }
 
+  Future getWinners(String period) async {
+    return sendRequest(Api.getWinners, {
+      "period": period,
+    });
+  }
+
   Future requestOtp(String mobile, Country country) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -165,6 +171,7 @@ class Api {
   static String getWalletHistory = "$baseUrl/api/timer/points";
   static String getTimerHistory = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";
+  static String getWinners = "$baseUrl/api/timer/winners";
   static String setTimer = "$baseUrl/api/timer/set";
   static String createGroup = "$baseUrl/api/groups/create";
   static String editGroup = "$baseUrl/api/groups/edit";

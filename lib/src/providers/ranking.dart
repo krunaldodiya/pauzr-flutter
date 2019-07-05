@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/models/ranking.dart';
+import 'package:pauzr/src/models/winners.dart';
 import 'package:pauzr/src/resources/api.dart';
 
 class RankingBloc extends ChangeNotifier {
@@ -10,6 +11,7 @@ class RankingBloc extends ChangeNotifier {
   bool loaded;
   Map error;
   List<Ranking> rankings = [];
+  List<Winner> winners = [];
   int minutesSaved;
   int pointsEarned;
 
@@ -18,6 +20,7 @@ class RankingBloc extends ChangeNotifier {
     bool loaded,
     Map error: const {},
     List rankings,
+    List winners,
     int minutesSaved,
     int pointsEarned,
   }) {
@@ -25,6 +28,7 @@ class RankingBloc extends ChangeNotifier {
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.rankings = rankings ?? this.rankings;
+    this.winners = winners ?? this.winners;
     this.minutesSaved = minutesSaved ?? this.minutesSaved;
     this.pointsEarned = pointsEarned ?? this.pointsEarned;
 
@@ -58,6 +62,32 @@ class RankingBloc extends ChangeNotifier {
       );
       return results;
     } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  getWinners(period) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.getWinners(period);
+      final results = response.data;
+
+      final List<Winner> winners = Winner.fromList(results['winners']);
+      final List<Winner> winnersWithRank = [];
+
+      winners.asMap().forEach((index, ranking) {
+        winnersWithRank.add(ranking.copyWith({"rank": index + 1}));
+      });
+
+      setState(
+        winners: winnersWithRank,
+        loading: false,
+        loaded: true,
+      );
+      return results;
+    } catch (error) {
+      print(error);
       setState(error: error.response.data, loading: false, loaded: true);
     }
   }
