@@ -266,7 +266,9 @@ class _InvitePageState extends State<InvitePage> {
 
   toggleContact(contact) async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    String text = "$baseUrl/api/invite?sender_id=${userBloc.user.id}";
+    String mobile = contact['mobile'];
+    String text =
+        "Join me on PauzR, an application that rewards you with free products, just for not using the phone. Download using this link and get 5 points as a kick-start. Join this human revolution! Link: $webUrl/invite/${userBloc.user.id}/$mobile";
 
     await launchURL(
       "whatsapp://send?phone=${contact['mobileWithCountryCode']}&text=$text",

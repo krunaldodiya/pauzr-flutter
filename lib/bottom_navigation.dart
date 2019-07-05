@@ -11,26 +11,36 @@ Container getNavigationBar(UserBloc userBloc, DefaultTheme theme) {
 
   var items = [
     Icon(
+      Ionicons.ios_trophy,
+      color: Colors.white,
+      size: 25.0,
+    ),
+    Icon(
       Ionicons.ios_people,
       color: Colors.white,
-      size: 30.0,
+      size: 25.0,
     ),
     Icon(
       Ionicons.ios_pause,
       color: Colors.white,
-      size: 30.0,
+      size: 25.0,
     ),
     Icon(
       Ionicons.ios_stats,
       color: Colors.white,
-      size: 30.0,
+      size: 25.0,
+    ),
+    Icon(
+      MaterialCommunityIcons.shopping,
+      color: Colors.white,
+      size: 25.0,
     ),
   ];
 
   return Container(
     color: Colors.transparent,
     child: CurvedNavigationBar(
-      height: 60.0,
+      height: 55.0,
       index: userBloc.tabIndex,
       color: data.navigationColor,
       backgroundColor: data.navigationBackgroundColor,

@@ -5,7 +5,6 @@ import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/generator.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
-import 'package:pauzr/src/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -43,16 +42,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.android),
-      home: (userBloc.loaded != true && userBloc.user == null) ||
-              (themeBloc.loaded != true && themeBloc.theme == null)
-          ? SplashScreen()
-          : InitialScreen(authToken: widget.authToken),
+      home: InitialScreen(authToken: widget.authToken),
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

@@ -11,7 +11,7 @@ class UserBloc extends ChangeNotifier {
   bool loaded;
   Map error;
   User user;
-  int tabIndex = 1;
+  int tabIndex = 2;
 
   setState({
     bool loading,

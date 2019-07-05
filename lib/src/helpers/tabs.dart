@@ -4,20 +4,30 @@ import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/screens/tabs/home.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
+import 'package:pauzr/src/screens/tabs/store.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
+import 'package:pauzr/src/screens/tabs/winners.dart';
 
 getTabsPage(int showTabIndex) {
   switch (showTabIndex) {
     case 0:
-      return HomePage();
+      return WinnersPage();
       break;
 
     case 1:
-      return TimerPage();
+      return HomePage();
       break;
 
     case 2:
+      return TimerPage();
+      break;
+
+    case 3:
       return MainScoreboardPage();
+      break;
+
+    case 4:
+      return StorePage();
       break;
 
     default:
@@ -32,14 +42,22 @@ getTabsTheme(int showTabIndex, DefaultTheme theme) {
 
   switch (showTabIndex) {
     case 0:
-      return home;
+      return mainScoreboard;
       break;
 
     case 1:
-      return timer;
+      return home;
       break;
 
     case 2:
+      return timer;
+      break;
+
+    case 3:
+      return mainScoreboard;
+      break;
+
+    case 4:
       return mainScoreboard;
       break;
 

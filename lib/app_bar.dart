@@ -28,7 +28,7 @@ AppBar getAppBar(
       color: Colors.white,
     ),
     title: Text(
-      getTitle(userBloc),
+      getTitle(userBloc.tabIndex),
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: Colors.white,
@@ -73,19 +73,27 @@ AppBar getAppBar(
   );
 }
 
-String getTitle(UserBloc userBloc) {
+String getTitle(int tabIndex) {
   String title;
 
-  if (userBloc.tabIndex == 0) {
+  if (tabIndex == 0) {
+    title = "Winners";
+  }
+
+  if (tabIndex == 1) {
     title = "Groups";
   }
 
-  if (userBloc.tabIndex == 1) {
+  if (tabIndex == 2) {
     title = appName;
   }
 
-  if (userBloc.tabIndex == 2) {
+  if (tabIndex == 3) {
     title = "Scoreboard";
+  }
+
+  if (tabIndex == 4) {
+    title = "BazaaR";
   }
 
   return title;

@@ -142,6 +142,23 @@ class _DrawerPageState extends State<DrawerPage> {
               launchURL(appId);
             },
           ),
+          ListTile(
+            title: Text(
+              "Like us on Facebook",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.star,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              launchURL("https://www.facebook.com/pauzrapp");
+            },
+          ),
           Divider(color: Colors.white),
           ListTile(
             title: Text(
@@ -175,6 +192,23 @@ class _DrawerPageState extends State<DrawerPage> {
             ),
             onTap: () async {
               launchURL("mailto:$emailAddress");
+            },
+          ),
+          ListTile(
+            title: Text(
+              "FAQs",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.mail,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              launchURL("$webUrl/faqs");
             },
           ),
           Divider(color: Colors.white),
