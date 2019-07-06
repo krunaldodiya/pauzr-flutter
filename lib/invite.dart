@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
-import 'package:pauzr/src/helpers/launch_url.dart';
+import 'package:pauzr/src/helpers/invite.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -76,6 +76,7 @@ class _InvitePageState extends State<InvitePage> {
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -122,11 +123,11 @@ class _InvitePageState extends State<InvitePage> {
       ),
       body: loading != false
           ? showLoadingMessage()
-          : showContacts(filteredContact),
+          : showContacts(filteredContact, userBloc),
     );
   }
 
-  Column showContacts(List filteredContact) {
+  Column showContacts(List filteredContact, UserBloc userBloc) {
     return Column(
       children: <Widget>[
         Row(
@@ -186,7 +187,7 @@ class _InvitePageState extends State<InvitePage> {
               return Container(
                 color: exists(contact) ? Colors.green.shade50 : Colors.white,
                 child: ListTile(
-                  onTap: () => toggleContact(contact),
+                  onTap: () => inviteUser(contact, userBloc),
                   leading: CircleAvatar(
                     radius: 20.0,
                     backgroundImage: CachedNetworkImageProvider(
@@ -262,17 +263,6 @@ class _InvitePageState extends State<InvitePage> {
 
   exists(contact) {
     return _participants.contains(contact['id']);
-  }
-
-  toggleContact(contact) async {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
-    String mobile = contact['mobile'];
-    String text =
-        "Join me on PauzR, an application that rewards you with free products, just for not using the phone. Download using this link and get 5 points as a kick-start. Join this human revolution! Link: $webUrl/invite/${userBloc.user.id}/$mobile";
-
-    await launchURL(
-      "whatsapp://send?phone=${contact['mobileWithCountryCode']}&text=$text",
-    );
   }
 
   refreshContacts() async {

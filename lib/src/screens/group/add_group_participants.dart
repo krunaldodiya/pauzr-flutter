@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/invite.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/models/group_subscription.dart';
 import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:permission_handler/permission_handler.dart';
@@ -88,6 +90,7 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   Widget build(BuildContext context) {
     final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -157,11 +160,11 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
       ),
       body: loading != false
           ? showLoadingMessage()
-          : showContacts(filteredContact),
+          : showContacts(filteredContact, userBloc),
     );
   }
 
-  Column showContacts(List filteredContact) {
+  Column showContacts(List filteredContact, UserBloc userBloc) {
     return Column(
       children: <Widget>[
         Row(
@@ -244,9 +247,23 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
                       fontFamily: Fonts.titilliumWebRegular,
                     ),
                   ),
-                  trailing: exists(contact)
-                      ? Icon(Icons.check_circle, color: Colors.green)
-                      : null,
+                  trailing: contact['id'] == null
+                      ? GestureDetector(
+                          onTap: () => inviteUser(contact, userBloc),
+                          child: Container(
+                            child: Text(
+                              "Invite".toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 12.0,
+                                fontFamily: Fonts.titilliumWebSemiBold,
+                              ),
+                            ),
+                          ),
+                        )
+                      : exists(contact)
+                          ? Icon(Icons.check_circle, color: Colors.green)
+                          : Icon(Icons.person_add, color: Colors.grey),
                 ),
               );
             },
@@ -305,7 +322,8 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   excludeContacts(contacts) {
-    List data = [];
+    List registeredContacts = [];
+    List allContacts = [];
 
     List<GroupSubscription> subscriptions = widget.group.subscriptions;
     List subscriberIds = subscriptions
@@ -313,15 +331,19 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
         .toList();
 
     contacts.forEach((contact) {
-      bool subscribed = subscriberIds.contains(contact['id']);
+      if (contact['id'] != null) {
+        bool subscribed = subscriberIds.contains(contact['id']);
 
-      if (subscribed == false && contact['id'] != null) {
-        data.add(contact);
+        if (subscribed == false) {
+          registeredContacts.add(contact);
+        }
+      } else {
+        allContacts.add(contact);
       }
     });
 
     setState(() {
-      _contacts = data;
+      _contacts = registeredContacts..addAll(allContacts);
       loading = false;
       reloadContacts = false;
     });
@@ -332,13 +354,15 @@ class _AddGroupParticipantsPageState extends State<AddGroupParticipantsPage> {
   }
 
   toggleContact(contact) {
-    setState(() {
-      if (exists(contact)) {
-        _participants.remove(contact['id']);
-      } else {
-        _participants.add(contact['id']);
-      }
-    });
+    if (contact['id'] != null) {
+      setState(() {
+        if (exists(contact)) {
+          _participants.remove(contact['id']);
+        } else {
+          _participants.add(contact['id']);
+        }
+      });
+    }
   }
 
   refreshContacts() async {
