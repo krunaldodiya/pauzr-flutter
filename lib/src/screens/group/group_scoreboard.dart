@@ -4,6 +4,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/swipe.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/group.dart';
 import 'package:pauzr/src/providers/group.dart';
@@ -144,22 +145,18 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
       body: SafeArea(
         child: rankingBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : buildSwipeDetector(rankingBloc, theme, userBloc),
+            : getRankersList(rankingBloc, theme, userBloc),
       ),
     );
   }
 
-  SwipeDetector buildSwipeDetector(
-      RankingBloc rankingBloc, DefaultTheme theme, UserBloc userBloc) {
+  SwipeDetector getRankersList(
+    RankingBloc rankingBloc,
+    DefaultTheme theme,
+    UserBloc userBloc,
+  ) {
     return SwipeDetector(
-      swipeConfiguration: SwipeConfiguration(
-        verticalSwipeMinVelocity: 100.0,
-        verticalSwipeMinDisplacement: 50.0,
-        verticalSwipeMaxWidthThreshold: 100.0,
-        horizontalSwipeMaxHeightThreshold: 50.0,
-        horizontalSwipeMinDisplacement: 50.0,
-        horizontalSwipeMinVelocity: 200.0,
-      ),
+      swipeConfiguration: swipeConfiguration,
       onSwipeLeft: () {
         if (period == "Today") {
           changePeriod("This Week", rankingBloc);

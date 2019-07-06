@@ -157,6 +157,17 @@ class _PointsPage extends State<PointsPage>
           ),
           subtitle: Container(
             child: Text(
+              item.meta['description'],
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+                fontSize: 14.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+          ),
+          trailing: Container(
+            child: Text(
               "${separtedDateTime(item.createdAt, 'time')}",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
