@@ -31,7 +31,7 @@ class Intro2 {
     return Intro2(
       backgroundColor: Colors.black87,
       title: "Earn Points",
-      description: "Earn points for not using the phone",
+      description: "Use points to get freebies/gifts",
       pathImage: "assets/images/intro/2.png",
       titleFontFamily: Fonts.titilliumWebRegular,
       titleFontSize: 28.0,

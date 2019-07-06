@@ -152,7 +152,7 @@ class _DrawerPageState extends State<DrawerPage> {
               ),
             ),
             trailing: Icon(
-              Icons.star,
+              Ionicons.logo_facebook,
               color: Colors.white,
             ),
             onTap: () async {
@@ -204,7 +204,7 @@ class _DrawerPageState extends State<DrawerPage> {
               ),
             ),
             trailing: Icon(
-              Icons.mail,
+              Icons.question_answer,
               color: Colors.white,
             ),
             onTap: () async {
