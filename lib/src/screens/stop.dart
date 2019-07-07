@@ -93,7 +93,7 @@ class _StopPage extends State<StopPage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
 
-    timerSubscription.cancel();
+    onFailure();
 
     super.dispose();
   }
@@ -381,6 +381,8 @@ class _StopPage extends State<StopPage>
   }
 
   onFailure() {
+    print("failure");
+
     timerSubscription.cancel();
 
     showTimerPop(
@@ -396,6 +398,9 @@ class _StopPage extends State<StopPage>
   }
 
   onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("pauseTime");
+
     await timerBloc.setTimer(durationMintues, userBloc);
 
     int achievedPoints = points[durationMintues];

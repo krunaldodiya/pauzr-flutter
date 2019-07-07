@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_winners.dart';
 import 'package:pauzr/src/components/switch.dart';
+import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/swipe.dart';
 import 'package:pauzr/src/providers/ranking.dart';
 import 'package:pauzr/src/providers/theme.dart';
@@ -79,6 +80,17 @@ class _WinnersPage extends State<WinnersPage>
                     changePeriod(value, rankingBloc);
                   },
                   theme: theme,
+                ),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: Text(
+                    "Country: ${userBloc.user.country.name}",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22.0,
+                      fontFamily: Fonts.titilliumWebRegular,
+                    ),
+                  ),
                 ),
               ],
             ),

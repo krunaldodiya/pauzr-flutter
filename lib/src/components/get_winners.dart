@@ -25,7 +25,7 @@ class GetWinners {
     Color primaryColor = getPrimaryColor(winner);
 
     return Card(
-      shape: Border.all(color: primaryColor, width: 0.5),
+      shape: Border.all(color: primaryColor, width: 1.0),
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
       child: Container(
