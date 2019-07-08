@@ -123,7 +123,7 @@ class _WinnersPage extends State<WinnersPage>
         break;
 
       case 'This Month':
-        periodSort = 'Week';
+        periodSort = 'Month';
         break;
 
       default:
