@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'src/providers/ranking.dart';
 
 void main() async {
-  Screen.keepOn(true);
+  Screen.keepOn(false);
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
