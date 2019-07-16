@@ -1,5 +1,4 @@
-flutter create --org com.pauzr -i objc -a java --description 'A time saver app' pauzr
-flutter create --org com.pauzr -i swift -a kotlin --description 'A time saver app' pauzr
+flutter create --androidx --org com.pauzr --description 'A time saver app' pauzr
 flutter build apk --release
 
 keytool -genkey -v -keystore ./pauzr.jks -keyalg RSA -keysize 2048 -validity 20000 -alias pauzr
@@ -14,6 +13,7 @@ storeFile=./pauzr.jks
 flutter build apk --release --target-platform=android-arm64
 flutter build apk --release --target-platform=android-arm
 
+change com.android.tools.build:gradle:3.2.1 to com.android.tools.build:gradle:3.3.2 in android/build.gradle
 
 // topics
 {

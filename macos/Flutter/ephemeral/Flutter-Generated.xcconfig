@@ -4,4 +4,4 @@ FLUTTER_APPLICATION_PATH=/Volumes/Softwares/Code/pauzr-flutter
 FLUTTER_BUILD_DIR=build
 FLUTTER_FRAMEWORK_DIR=/Volumes/Softwares/sdk/flutter/bin/cache/artifacts/engine/darwin-x64
 FLUTTER_BUILD_NAME=1.0.18
-FLUTTER_BUILD_NUMBER=18
+FLUTTER_BUILD_NUMBER=19

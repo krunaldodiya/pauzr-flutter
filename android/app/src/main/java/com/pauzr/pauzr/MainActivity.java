@@ -20,6 +20,8 @@ import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.util.Log;
 
+import android.view.WindowManager.LayoutParams;
+
 public class MainActivity extends FlutterActivity {
   private static final String CHANNEL = "com.pauzr.org/info";
 
@@ -27,6 +29,8 @@ public class MainActivity extends FlutterActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     GeneratedPluginRegistrant.registerWith(this);
+
+    getWindow().addFlags(LayoutParams.FLAG_SECURE);
 
     new EventChannel(getFlutterView(), CHANNEL).setStreamHandler(new EventChannel.StreamHandler() {
       private BroadcastReceiver screenStateChangeReceiver;
