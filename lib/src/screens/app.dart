@@ -1,11 +1,12 @@
-// import 'package:firebase_analytics/firebase_analytics.dart';
-// import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/generator.dart';
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
 import 'package:pauzr/src/screens/notifications.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  // final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
+  final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -35,7 +36,22 @@ class _MyAppState extends State<MyApp> {
   }
 
   getInitialData() async {
-    managePushNotifications();
+    managePushNotifications((message) {
+      showConfirmationPopup(
+        context,
+        yesText: "Show",
+        noText: "Dismiss",
+        message: "New Notification",
+        onPressYes: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NotificationsScreen(message: message),
+            ),
+          );
+        },
+      );
+    });
 
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
@@ -50,33 +66,23 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.android),
       home: InitialScreen(authToken: widget.authToken),
-      // navigatorObservers: [
-      //   FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
-      // ],
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
+      ],
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 
-  void managePushNotifications() async {
+  void managePushNotifications(Function showNotifications) async {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationsScreen(message: message),
-          ),
-        );
+        showNotifications(message);
       },
       onResume: (Map<String, dynamic> message) async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationsScreen(message: message),
-          ),
-        );
+        showNotifications(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        showNotifications(message);
       },
     );
 

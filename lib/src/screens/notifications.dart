@@ -18,7 +18,7 @@ class _NotificationsScreen extends State<NotificationsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-          "Notifications",
+          widget.message['notification']['title'],
           style: TextStyle(
             color: Colors.white,
             fontSize: 22.0,
@@ -29,7 +29,7 @@ class _NotificationsScreen extends State<NotificationsScreen> {
       body: SafeArea(
         child: Center(
           child: Text(
-            widget.message,
+            widget.message['notification']['body'],
             style: TextStyle(
               color: Colors.white,
               fontSize: 22.0,

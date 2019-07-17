@@ -45,6 +45,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="PauzR"
         android:icon="@drawable/icon">
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -75,6 +76,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
