@@ -6,9 +6,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/generator.dart';
-import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
-import 'package:pauzr/src/screens/notifications.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -36,23 +34,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   getInitialData() async {
-    managePushNotifications((message) {
-      showConfirmationPopup(
-        context,
-        yesText: "Show",
-        noText: "Dismiss",
-        message: "New Notification",
-        onPressYes: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NotificationsScreen(message: message),
-            ),
-          );
-        },
-      );
-    });
-
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
 
@@ -70,24 +51,6 @@ class _MyAppState extends State<MyApp> {
         FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
       ],
       onGenerateRoute: RouteGenerator.generateRoute,
-    );
-  }
-
-  void managePushNotifications(Function showNotifications) async {
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        showNotifications(message);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        showNotifications(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        showNotifications(message);
-      },
-    );
-
-    firebaseMessaging.requestNotificationPermissions(
-      IosNotificationSettings(sound: true, badge: true, alert: true),
     );
   }
 }

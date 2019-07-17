@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/providers/city.dart';
 import 'package:pauzr/src/providers/country.dart';
@@ -21,6 +24,8 @@ void main() async {
 
   String authToken = prefs.getString("authToken");
   String defaultTheme = prefs.getString("defaultTheme") ?? "blue";
+
+  managePushNotifications();
 
   // prefs.remove("authToken");
   // prefs.remove("contacts");
@@ -61,5 +66,26 @@ void main() async {
         defaultTheme: defaultTheme,
       ),
     ),
+  );
+}
+
+void managePushNotifications() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
+  firebaseMessaging.configure(
+    onMessage: (Map<String, dynamic> message) async {
+      prefs.setString("newPushMessage", json.encode(message));
+    },
+    onResume: (Map<String, dynamic> message) async {
+      prefs.setString("newPushMessage", json.encode(message));
+    },
+    onLaunch: (Map<String, dynamic> message) async {
+      prefs.setString("newPushMessage", json.encode(message));
+    },
+  );
+
+  firebaseMessaging.requestNotificationPermissions(
+    IosNotificationSettings(sound: true, badge: true, alert: true),
   );
 }
