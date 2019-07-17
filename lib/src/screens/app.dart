@@ -60,12 +60,7 @@ class _MyAppState extends State<MyApp> {
   void managePushNotifications() async {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NotificationsScreen(message: message),
-          ),
-        );
+        print(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         Navigator.push(
