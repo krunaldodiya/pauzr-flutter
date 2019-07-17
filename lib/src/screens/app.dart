@@ -1,5 +1,5 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
+  // final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -50,9 +50,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.android),
       home: InitialScreen(authToken: widget.authToken),
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
-      ],
+      // navigatorObservers: [
+      //   FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
+      // ],
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
