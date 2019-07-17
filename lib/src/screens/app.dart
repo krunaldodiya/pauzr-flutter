@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
@@ -5,6 +7,7 @@ import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/generator.dart';
 import 'package:pauzr/src/screens/initial_screen.dart';
+import 'package:pauzr/src/screens/notifications.dart';
 import 'package:provider/provider.dart';
 
 class MyApp extends StatefulWidget {
@@ -22,6 +25,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -46,6 +50,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(platform: TargetPlatform.android),
       home: InitialScreen(authToken: widget.authToken),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: firebaseAnalytics),
+      ],
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
@@ -53,13 +60,28 @@ class _MyAppState extends State<MyApp> {
   void managePushNotifications() async {
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage $message");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationsScreen(message: message),
+          ),
+        );
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch $message");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationsScreen(message: message),
+          ),
+        );
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume $message");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NotificationsScreen(message: message),
+          ),
+        );
       },
     );
 
