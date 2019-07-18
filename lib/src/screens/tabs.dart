@@ -31,9 +31,10 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   getInitialData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String newPushMessage = prefs.getString("newPushMessage");
-    final Map message = json.decode(newPushMessage);
 
     if (newPushMessage != null) {
+      final Map message = json.decode(newPushMessage);
+
       showConfirmationPopup(
         context,
         yesText: "Show",
