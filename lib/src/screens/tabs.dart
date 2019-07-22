@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/app_bar.dart';
 import 'package:pauzr/bottom_navigation.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/tabs.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/drawer.dart';
@@ -21,9 +23,30 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
+  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    keywords: <String>['insurance', 'shopping'],
+    testDevices: <String>['FBD5A4FE639B651322908CE1EC03A61C'],
+  );
+
+  InterstitialAd _interstitialAd;
+
+  createInterstitialAd() {
+    return InterstitialAd(
+      // adUnitId: admobUnitId,
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+
+    _interstitialAd = createInterstitialAd()
+      ..load()
+      ..show();
 
     Future.delayed(Duration(microseconds: 1), getInitialData);
   }
@@ -52,6 +75,13 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
 
       prefs.remove("newPushMessage");
     }
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+
+    super.dispose();
   }
 
   @override

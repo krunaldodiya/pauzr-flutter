@@ -30,7 +30,7 @@ public class MainActivity extends FlutterActivity {
     super.onCreate(savedInstanceState);
     GeneratedPluginRegistrant.registerWith(this);
 
-    getWindow().addFlags(LayoutParams.FLAG_SECURE);
+    // getWindow().addFlags(LayoutParams.FLAG_SECURE);
 
     new EventChannel(getFlutterView(), CHANNEL).setStreamHandler(new EventChannel.StreamHandler() {
       private BroadcastReceiver screenStateChangeReceiver;
