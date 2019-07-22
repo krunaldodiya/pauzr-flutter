@@ -32,8 +32,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
 
   createInterstitialAd() {
     return InterstitialAd(
-      // adUnitId: admobUnitId,
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: admobUnitId,
       targetingInfo: targetingInfo,
     );
   }

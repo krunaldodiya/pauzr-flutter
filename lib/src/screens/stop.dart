@@ -54,8 +54,7 @@ class _StopPage extends State<StopPage>
 
   createInterstitialAd() {
     return InterstitialAd(
-      // adUnitId: admobUnitId,
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: admobUnitId,
       targetingInfo: targetingInfo,
     );
   }
