@@ -21,4 +21,5 @@ const String add_group_participants = "/add_group_participants";
 const String invite = "/invite";
 const String main_scoreboard = "/main_scoreboard";
 const String manage_theme = "/manage_theme";
+const String lottery = "/lottery";
 const String show_photo = "/show_photo";

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:pauzr/src/helpers/vars.dart';
@@ -45,19 +46,7 @@ class _StopPage extends State<StopPage>
   int notificationId = 1;
   var timerSubscription;
 
-  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: <String>['insurance', 'shopping'],
-    testDevices: <String>['FBD5A4FE639B651322908CE1EC03A61C'],
-  );
-
   InterstitialAd _interstitialAd;
-
-  createInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: admobUnitId,
-      targetingInfo: targetingInfo,
-    );
-  }
 
   @override
   void initState() {

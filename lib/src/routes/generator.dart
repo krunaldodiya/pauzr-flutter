@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/invite.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/lottery_page.dart';
 import 'package:pauzr/src/screens/show_photo.dart';
 import 'package:pauzr/src/screens/group/manage_group.dart';
 import 'package:pauzr/src/screens/group/detail.dart';
@@ -192,6 +193,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return InvitePage();
+          },
+        );
+        break;
+
+      case routeList.lottery:
+        return MaterialPageRoute(
+          builder: (context) {
+            return LotteryPage();
           },
         );
         break;
