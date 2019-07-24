@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/lottery.dart';
@@ -53,6 +54,7 @@ class _LotteryPageState extends State<LotteryPage> {
       ),
       body: SafeArea(
         child: Container(
+          padding: EdgeInsets.all(2.0),
           alignment: Alignment.center,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -71,9 +73,12 @@ class _LotteryPageState extends State<LotteryPage> {
                   }
                 },
                 child: Container(
-                  color: selectedLotteryIndex == index
-                      ? Colors.greenAccent
-                      : Colors.white,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    color: selectedLotteryIndex == index
+                        ? Colors.greenAccent
+                        : Colors.white,
+                  ),
                   margin: EdgeInsets.all(1.0),
                   alignment: Alignment.center,
                   child: revealed
@@ -86,7 +91,11 @@ class _LotteryPageState extends State<LotteryPage> {
                             fontFamily: Fonts.titilliumWebSemiBold,
                           ),
                         )
-                      : Icon(Icons.star),
+                      : Icon(
+                          Ionicons.ios_gift,
+                          color: Colors.grey,
+                          size: 42.0,
+                        ),
                 ),
               );
             },
