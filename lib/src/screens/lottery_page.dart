@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class LotteryPage extends StatefulWidget {
   LotteryPage({Key key}) : super(key: key);
@@ -11,10 +14,13 @@ class LotteryPage extends StatefulWidget {
 }
 
 class _LotteryPageState extends State<LotteryPage> {
-  int selectedLotteryNumber;
+  int selectedLotteryIndex;
+  bool revealed = false;
 
   @override
   Widget build(BuildContext context) {
+    final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -29,10 +35,10 @@ class _LotteryPageState extends State<LotteryPage> {
           ),
         ),
         actions: <Widget>[
-          if (selectedLotteryNumber != null)
+          if (selectedLotteryIndex != null)
             FlatButton(
               onPressed: () {
-                print("object");
+                getLotteries(lotteryBloc);
               },
               child: Text(
                 "OK",
@@ -52,31 +58,33 @@ class _LotteryPageState extends State<LotteryPage> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 5,
             ),
-            itemCount: 100,
+            itemCount: lotteryBloc.lotteries.length,
             itemBuilder: (BuildContext context, int index) {
-              int number = index + 1;
+              int amount = lotteryBloc.lotteries[index];
 
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    selectedLotteryNumber = number;
+                    selectedLotteryIndex = index;
                   });
                 },
                 child: Container(
-                  color: selectedLotteryNumber == number
+                  color: selectedLotteryIndex == index
                       ? Colors.greenAccent
                       : Colors.white,
                   margin: EdgeInsets.all(1.0),
                   alignment: Alignment.center,
-                  child: Text(
-                    number.toString(),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18.0,
-                      color: Colors.black,
-                      fontFamily: Fonts.titilliumWebSemiBold,
-                    ),
-                  ),
+                  child: revealed
+                      ? Text(
+                          amount.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18.0,
+                            color: amount == 5 ? Colors.red : Colors.grey,
+                            fontFamily: Fonts.titilliumWebSemiBold,
+                          ),
+                        )
+                      : Icon(Icons.star),
                 ),
               );
             },
@@ -84,6 +92,18 @@ class _LotteryPageState extends State<LotteryPage> {
         ),
       ),
     );
+  }
+
+  getLotteries(LotteryBloc lotteryBloc) async {
+    XsProgressHud.show(context);
+
+    await lotteryBloc.getLotteries(selectedLotteryIndex);
+
+    setState(() {
+      revealed = true;
+    });
+
+    XsProgressHud.hide();
   }
 
   InkWell getLable({

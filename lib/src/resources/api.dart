@@ -130,6 +130,12 @@ class ApiProvider {
     return sendRequest(Api.getCities);
   }
 
+  Future getLotteries(int selectedLotteryIndex) async {
+    return sendRequest(Api.getLotteries, {
+      "selectedLotteryIndex": selectedLotteryIndex,
+    });
+  }
+
   Future getCountries() async {
     return sendRequest(Api.getCountries);
   }
@@ -164,6 +170,7 @@ class Api {
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
   static String getCities = "$baseUrl/api/home/cities";
+  static String getLotteries = "$baseUrl/api/lotteries/get";
   static String getCountries = "$baseUrl/api/home/countries";
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";

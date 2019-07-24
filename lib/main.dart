@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/providers/city.dart';
 import 'package:pauzr/src/providers/country.dart';
 import 'package:pauzr/src/providers/group.dart';
+import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/otp.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
@@ -33,6 +34,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<LotteryBloc>.value(
+          notifier: LotteryBloc(),
+        ),
         ChangeNotifierProvider<WalletBloc>.value(
           notifier: WalletBloc(),
         ),
