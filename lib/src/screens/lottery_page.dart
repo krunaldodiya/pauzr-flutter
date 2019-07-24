@@ -35,7 +35,7 @@ class _LotteryPageState extends State<LotteryPage> {
           ),
         ),
         actions: <Widget>[
-          if (selectedLotteryIndex != null)
+          if (selectedLotteryIndex != null && revealed == false)
             FlatButton(
               onPressed: () {
                 getLotteries(lotteryBloc);
@@ -64,9 +64,11 @@ class _LotteryPageState extends State<LotteryPage> {
 
               return GestureDetector(
                 onTap: () {
-                  setState(() {
-                    selectedLotteryIndex = index;
-                  });
+                  if (revealed == false) {
+                    setState(() {
+                      selectedLotteryIndex = index;
+                    });
+                  }
                 },
                 child: Container(
                   color: selectedLotteryIndex == index
