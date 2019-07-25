@@ -108,23 +108,26 @@ class _LotteryPageState extends State<LotteryPage> {
                     borderRadius: BorderRadius.circular(5.0),
                     color: selectedLotteryIndex == index
                         ? Colors.greenAccent
-                        : Colors.white,
+                        : revealed ? Colors.white : Color(0xffFFD700),
                   ),
                   margin: EdgeInsets.all(1.0),
                   alignment: Alignment.center,
                   child: revealed
                       ? Text(
-                          amount.toString(),
+                          amount == 0
+                              ? "Better Luck Next Time"
+                              : "₹${amount.toString()}",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 18.0,
+                            fontSize: amount == 0 ? 16.0 : 18.0,
                             color: getColor(amount),
                             fontFamily: Fonts.titilliumWebSemiBold,
                           ),
                         )
                       : Icon(
                           Ionicons.ios_gift,
-                          color: Colors.grey,
+                          color: Color(0xff0D62A2),
                           size: 42.0,
                         ),
                 ),
