@@ -8,7 +8,9 @@ String shareText =
 String webUrl = "https://www.pauzr.com";
 String emailAddress = "support@pauzr.com";
 String admobAppId = "ca-app-pub-8693156356265683~5180433123";
-String admobUnitId = "ca-app-pub-8693156356265683/1297916487";
+String admobBannerAdUnitId = "ca-app-pub-8693156356265683/1297916487";
+String admobInterstitialAdUnitId = "ca-app-pub-8693156356265683/1411652465";
+String admobVideoAdUnitId = "ca-app-pub-8693156356265683/7019202363";
 
 // String baseUrl =
 //     kReleaseMode ? "https://api.pauzr.com" : "http://192.168.1.103:8000";

@@ -17,7 +17,7 @@ import 'package:pauzr/src/screens/otp/verify_otp.dart';
 import 'package:pauzr/src/screens/points/info.dart';
 import 'package:pauzr/src/screens/stop.dart';
 import 'package:pauzr/src/screens/tabs.dart';
-import 'package:pauzr/src/screens/tabs/home.dart';
+import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/users/edit_profile.dart';
 import 'package:pauzr/src/screens/users/profile/choose_country.dart';
 import 'package:pauzr/src/screens/users/profile/choose_gender.dart';

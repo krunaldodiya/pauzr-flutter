@@ -9,9 +9,10 @@ class Group {
   final String photo;
   final String description;
   final int status;
-  final String createdAt;
   final User owner;
   final List<GroupSubscription> subscriptions;
+  final String createdAt;
+  final String updatedAt;
 
   Group({
     this.id,
@@ -19,9 +20,10 @@ class Group {
     this.description,
     this.photo,
     this.status,
-    this.createdAt,
     this.owner,
     this.subscriptions,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Group copyWith(Map<String, dynamic> json) {
@@ -31,9 +33,10 @@ class Group {
       description: json["description"] ?? this.description,
       photo: json["photo"] ?? this.photo,
       status: json["status"] ?? this.status,
-      createdAt: json["created_at"] ?? this.createdAt,
       owner: json["owner"] ?? this.owner,
       subscriptions: json["subscriptions"] ?? this.subscriptions,
+      createdAt: json["created_at"] ?? this.createdAt,
+      updatedAt: json["updated_at"] ?? this.updatedAt,
     );
   }
 
@@ -44,7 +47,6 @@ class Group {
       description: json["description"] != null ? json["description"] : null,
       photo: json["photo"] != null ? json["photo"] : null,
       status: json["status"] != null ? json["status"] : null,
-      createdAt: json["created_at"] != null ? json["created_at"] : null,
       owner: json["owner"] != null
           ? json["owner"] is User ? json["owner"] : User.fromMap(json["owner"])
           : null,
@@ -53,6 +55,8 @@ class Group {
               ? json["subscriptions"]
               : GroupSubscription.fromList(json["subscriptions"])
           : null,
+      createdAt: json["created_at"] != null ? json["created_at"] : null,
+      updatedAt: json["updated_at"] != null ? json["updated_at"] : null,
     );
   }
 

@@ -58,7 +58,7 @@ class _LotteryPageState extends State<LotteryPage> {
           alignment: Alignment.center,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
+              crossAxisCount: 4,
             ),
             itemCount: lotteryBloc.lotteries.length,
             itemBuilder: (BuildContext context, int index) {
@@ -87,7 +87,7 @@ class _LotteryPageState extends State<LotteryPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 18.0,
-                            color: amount == 5 ? Colors.red : Colors.grey,
+                            color: getColor(amount),
                             fontFamily: Fonts.titilliumWebSemiBold,
                           ),
                         )
@@ -105,10 +105,37 @@ class _LotteryPageState extends State<LotteryPage> {
     );
   }
 
+  getColor(amount) {
+    Color color = Colors.grey;
+
+    if (amount == 5) {
+      color = Colors.red;
+    }
+
+    if (amount == 10) {
+      color = Colors.purple;
+    }
+
+    if (amount == 20) {
+      color = Colors.blue;
+    }
+
+    if (amount == 50) {
+      color = Colors.green;
+    }
+
+    if (amount == 100) {
+      color = Colors.black;
+    }
+
+    return color;
+  }
+
   getLotteries(LotteryBloc lotteryBloc) async {
     XsProgressHud.show(context);
 
     await lotteryBloc.getLotteries(selectedLotteryIndex);
+    await lotteryBloc.getLotteryWinners();
 
     setState(() {
       revealed = true;

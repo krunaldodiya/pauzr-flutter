@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_winners.dart';
-import 'package:pauzr/src/components/switch.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
-import 'package:pauzr/src/helpers/swipe.dart';
-import 'package:pauzr/src/providers/ranking.dart';
+import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
-import 'package:swipedetector/swipedetector.dart';
 
 class WinnersPage extends StatefulWidget {
   WinnersPage({Key key}) : super(key: key);
@@ -29,107 +28,78 @@ class _WinnersPage extends State<WinnersPage>
   }
 
   getInitialData() async {
-    final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
-    changePeriod("This Week", rankingBloc);
+    final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+
+    lotteryBloc.setLotteries(60);
+    lotteryBloc.getLotteryWinners();
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final RankingBloc rankingBloc = Provider.of<RankingBloc>(context);
+    final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
       backgroundColor: theme.mainScoreboard.backgroundColor,
+      floatingActionButton: SizedBox(
+        width: 50.0,
+        height: 50.0,
+        child: FloatingActionButton(
+          backgroundColor: theme.home.fabBackgroundColor,
+          onPressed: () {
+            Navigator.pushNamed(context, routeList.lottery);
+          },
+          child: Icon(
+            Ionicons.ios_gift,
+            color: theme.home.fabIconColor,
+            size: 24.0,
+          ),
+        ),
+      ),
       body: SafeArea(
-        child: rankingBloc.loaded != true
+        child: lotteryBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : getWinnersList(rankingBloc, theme, userBloc),
+            : getWinnersList(lotteryBloc, theme, userBloc),
       ),
     );
   }
 
-  SwipeDetector getWinnersList(
-    RankingBloc rankingBloc,
+  getWinnersList(
+    LotteryBloc lotteryBloc,
     DefaultTheme theme,
     UserBloc userBloc,
   ) {
-    return SwipeDetector(
-      swipeConfiguration: swipeConfiguration,
-      onSwipeLeft: () {
-        if (period == "This Week") {
-          changePeriod("This Month", rankingBloc);
-        }
-      },
-      onSwipeRight: () {
-        if (period == "This Month") {
-          changePeriod("This Week", rankingBloc);
-        }
-      },
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                getSwitch(
-                  items: ["This Week", "This Month"],
-                  selected: period,
-                  onSelect: (index, value) {
-                    changePeriod(value, rankingBloc);
-                  },
-                  theme: theme,
-                ),
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Text(
-                    "Country: ${userBloc.user.country.name}",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22.0,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Container(
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  "Country: ${userBloc.user.country.name}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22.0,
+                    fontFamily: Fonts.titilliumWebRegular,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              GetWinners(
-                user: userBloc.user,
-                winners: rankingBloc.winners,
-              ).getList(context),
-            ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            GetWinners(
+              user: userBloc.user,
+              lotteryWinners: lotteryBloc.lotteryWinners,
+            ).getList(context),
           ),
-        ],
-      ),
+        ),
+      ],
     );
-  }
-
-  void changePeriod(value, RankingBloc rankingBloc) {
-    setState(() => period = value);
-
-    String periodSort;
-
-    switch (period) {
-      case 'Today':
-        periodSort = 'Today';
-        break;
-
-      case 'This Week':
-        periodSort = 'Week';
-        break;
-
-      case 'This Month':
-        periodSort = 'Month';
-        break;
-
-      default:
-        periodSort = 'Week';
-    }
-
-    rankingBloc.getWinners(periodSort);
   }
 }

@@ -25,13 +25,13 @@ MobileAdTargetingInfo getTargetingInfo() {
       "Treatment",
       "Cord Blood",
     ],
-    testDevices: <String>['FBD5A4FE639B651322908CE1EC03A61C'],
+    testDevices: <String>[],
   );
 }
 
 createInterstitialAd() {
   return InterstitialAd(
-    adUnitId: admobUnitId,
+    adUnitId: admobInterstitialAdUnitId,
     targetingInfo: getTargetingInfo(),
   );
 }

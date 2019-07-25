@@ -88,23 +88,6 @@ class _DrawerPageState extends State<DrawerPage> {
               Navigator.pushNamed(context, routeList.manage_theme);
             },
           ),
-          ListTile(
-            title: Text(
-              "Lottery",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.0,
-                fontFamily: Fonts.titilliumWebRegular,
-              ),
-            ),
-            trailing: Icon(
-              Ionicons.ios_gift,
-              color: Colors.white,
-            ),
-            onTap: () async {
-              Navigator.pushNamed(context, routeList.lottery);
-            },
-          ),
           Divider(color: Colors.white),
           ListTile(
             title: Text(

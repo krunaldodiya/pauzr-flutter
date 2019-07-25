@@ -2,7 +2,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
 import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
-import 'package:pauzr/src/screens/tabs/home.dart';
+import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/store.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';

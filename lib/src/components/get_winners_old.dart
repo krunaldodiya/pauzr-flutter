@@ -1,35 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/lottery.dart';
 import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/models/winners.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 
 class GetWinners {
-  final List<Lottery> lotteryWinners;
+  final List<Winner> winners;
   final User user;
 
-  GetWinners({@required this.user, @required this.lotteryWinners});
+  GetWinners({@required this.user, @required this.winners});
 
   getList(context) {
     List<Widget> list = [];
 
-    lotteryWinners.forEach((lotteryWinner) {
-      list.add(getRankCard(lotteryWinner, context));
+    winners.forEach((winner) {
+      list.add(getRankCard(winner, context));
     });
 
     return list;
   }
 
-  Card getRankCard(Lottery lotteryWinner, BuildContext context) {
-    DateTime now = DateTime.parse(lotteryWinner.createdAt);
-
-    String formattedDate = DateFormat('dd-MM-yyyy').format(now);
-    String formattedTime = DateFormat('hh:mm a').format(now);
+  Card getRankCard(Winner winner, BuildContext context) {
+    Color primaryColor = getPrimaryColor(winner);
 
     return Card(
-      shape: Border.all(color: Colors.transparent, width: 1.0),
+      shape: Border.all(color: primaryColor, width: 1.0),
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
       child: Container(
@@ -43,14 +39,14 @@ class GetWinners {
               routeList.view_profile,
               arguments: {
                 "shouldPop": true,
-                "user": lotteryWinner.user,
+                "user": winner.user,
               },
             );
           },
           child: ListTile(
             leading: ClipOval(
               child: Image.network(
-                "$baseUrl/storage/${lotteryWinner.user.avatar}",
+                "$baseUrl/storage/${winner.user.avatar}",
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
@@ -63,7 +59,7 @@ class GetWinners {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    lotteryWinner.user.name.toUpperCase(),
+                    winner.user.name.toUpperCase(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
@@ -76,7 +72,7 @@ class GetWinners {
                       Container(
                         margin: EdgeInsets.only(right: 15.0),
                         child: Text(
-                          "Won ₹${lotteryWinner.amount}",
+                          "RANK: ${winner.rank.toString()}",
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.black,
@@ -85,13 +81,25 @@ class GetWinners {
                           ),
                         ),
                       ),
+                      if (winner.rank <= 3)
+                        Container(
+                          child: Text(
+                            "👑",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ],
               ),
             ),
             subtitle: Text(
-              lotteryWinner.user.city.name,
+              winner.user.city.name,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
@@ -103,16 +111,16 @@ class GetWinners {
               child: Column(
                 children: <Widget>[
                   Text(
-                    formattedDate,
+                    winner.duration.toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
-                      fontSize: 12.0,
+                      fontSize: 22.0,
                       fontFamily: Fonts.titilliumWebSemiBold,
                     ),
                   ),
                   Text(
-                    formattedTime,
+                    "Minutes",
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
@@ -127,5 +135,13 @@ class GetWinners {
         ),
       ),
     );
+  }
+
+  Color getPrimaryColor(Winner winner) {
+    if (winner.rank <= 3) {
+      return Colors.amber;
+    }
+
+    return Colors.transparent;
   }
 }
