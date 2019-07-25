@@ -98,7 +98,7 @@ class _DrawerPageState extends State<DrawerPage> {
               ),
             ),
             trailing: Icon(
-              Icons.brush,
+              Ionicons.ios_gift,
               color: Colors.white,
             ),
             onTap: () async {
