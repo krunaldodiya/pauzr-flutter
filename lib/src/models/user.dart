@@ -3,6 +3,7 @@ import 'package:pauzr/src/models/level.dart';
 import 'package:pauzr/src/models/city.dart';
 import 'package:meta/meta.dart';
 import 'package:pauzr/src/models/state.dart';
+import 'package:pauzr/src/models/wallet.dart';
 
 @immutable
 class User {
@@ -17,6 +18,7 @@ class User {
   final State state;
   final City city;
   final Level level;
+  final Wallet wallet;
   final int status;
 
   User({
@@ -31,6 +33,7 @@ class User {
     this.state,
     this.city,
     this.level,
+    this.wallet,
     this.status,
   });
 
@@ -47,6 +50,7 @@ class User {
       state: json["state"] ?? this.state,
       city: json["city"] ?? this.city,
       level: json["level"] ?? this.level,
+      wallet: json["wallet"] ?? this.wallet,
       status: json["status"] ?? this.status,
     );
   }
@@ -77,6 +81,11 @@ class User {
           ? json["level"] is Level
               ? json["level"]
               : Level.fromMap(json["level"])
+          : null,
+      wallet: json["wallet"] != null
+          ? json["wallet"] is Wallet
+              ? json["wallet"]
+              : Wallet.fromMap(json["wallet"])
           : null,
       status: json["status"] != null ? json["status"] : null,
     );

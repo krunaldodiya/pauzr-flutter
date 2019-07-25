@@ -1,9 +1,14 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
@@ -19,15 +24,39 @@ class _LotteryPageState extends State<LotteryPage> {
   bool revealed = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(microseconds: 1), getInitialData);
+  }
+
+  getInitialData() async {
+    RewardedVideoAd.instance.listener = getRewardedVideoAd;
+  }
+
+  getRewardedVideoAd(
+    RewardedVideoAdEvent event, {
+    String rewardType,
+    int rewardAmount,
+  }) {
+    if (event == RewardedVideoAdEvent.loaded) {
+      RewardedVideoAd.instance
+          .load(adUnitId: admobVideoAdUnitId, targetingInfo: getTargetingInfo())
+          .then((status) => RewardedVideoAd.instance.show());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
         backgroundColor: Color(0xff0D62A2),
         title: Text(
-          "Lottery",
+          "Lottery - ${userBloc.user.wallet.balance} points",
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18.0,
@@ -39,7 +68,9 @@ class _LotteryPageState extends State<LotteryPage> {
           if (selectedLotteryIndex != null && revealed == false)
             FlatButton(
               onPressed: () {
-                getLotteries(lotteryBloc);
+                showConfirmationPopup(context, onPressYes: () {
+                  getLotteries(lotteryBloc, userBloc);
+                });
               },
               child: Text(
                 "OK",
@@ -131,17 +162,21 @@ class _LotteryPageState extends State<LotteryPage> {
     return color;
   }
 
-  getLotteries(LotteryBloc lotteryBloc) async {
+  getLotteries(LotteryBloc lotteryBloc, UserBloc userBloc) async {
     XsProgressHud.show(context);
 
-    await lotteryBloc.getLotteries(selectedLotteryIndex);
-    await lotteryBloc.getLotteryWinners();
+    try {
+      await lotteryBloc.getLotteries(selectedLotteryIndex);
+      await lotteryBloc.getLotteryWinners();
 
-    setState(() {
-      revealed = true;
-    });
+      setState(() {
+        revealed = true;
+      });
 
-    XsProgressHud.hide();
+      XsProgressHud.hide();
+    } catch (e) {
+      XsProgressHud.hide();
+    }
   }
 
   InkWell getLable({
