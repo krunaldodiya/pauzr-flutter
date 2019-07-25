@@ -48,13 +48,14 @@ class _WinnersPage extends State<WinnersPage>
         width: 50.0,
         height: 50.0,
         child: FloatingActionButton(
-          backgroundColor: theme.home.fabBackgroundColor,
+          backgroundColor: Color(0xffFFD700),
           onPressed: () {
             Navigator.pushNamed(context, routeList.lottery);
           },
           child: Icon(
             Ionicons.ios_gift,
-            color: theme.home.fabIconColor,
+            color: Color(0xff0D62A2),
+            // color: theme.home.fabIconColor,
             size: 24.0,
           ),
         ),
