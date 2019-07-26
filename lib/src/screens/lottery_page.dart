@@ -60,7 +60,7 @@ class _LotteryPageState extends State<LotteryPage> {
       appBar: AppBar(
         backgroundColor: Color(0xff0D62A2),
         title: Text(
-          "Lottery - ${userBloc.user.wallet.balance} points",
+          "Lottery",
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 18.0,
@@ -72,9 +72,13 @@ class _LotteryPageState extends State<LotteryPage> {
           if (selectedLotteryIndex != null && revealed == false)
             FlatButton(
               onPressed: () {
-                showConfirmationPopup(context, onPressYes: () {
-                  getLotteries(lotteryBloc, userBloc);
-                });
+                showConfirmationPopup(
+                  context,
+                  message: "1 card = 20 points. Are you sure ?",
+                  onPressYes: () {
+                    getLotteries(lotteryBloc, userBloc);
+                  },
+                );
               },
               child: Text(
                 "OK",
@@ -88,56 +92,78 @@ class _LotteryPageState extends State<LotteryPage> {
         ],
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(2.0),
-          alignment: Alignment.center,
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-            ),
-            itemCount: lotteryBloc.lotteries.length,
-            itemBuilder: (BuildContext context, int index) {
-              int amount = lotteryBloc.lotteries[index];
-
-              return GestureDetector(
-                onTap: () {
-                  if (revealed == false) {
-                    setState(() {
-                      selectedLotteryIndex = index;
-                    });
-                  }
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    color: selectedLotteryIndex == index
-                        ? Colors.greenAccent
-                        : revealed ? Colors.white : Color(0xffFFD700),
-                  ),
-                  margin: EdgeInsets.all(1.0),
-                  alignment: Alignment.center,
-                  child: revealed
-                      ? Text(
-                          amount == 0
-                              ? "Better Luck Next Time"
-                              : "₹${amount.toString()}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: amount == 0 ? 16.0 : 18.0,
-                            color: getColor(amount),
-                            fontFamily: Fonts.titilliumWebSemiBold,
-                          ),
-                        )
-                      : Icon(
-                          Ionicons.ios_gift,
-                          color: Color(0xff0D62A2),
-                          size: 42.0,
-                        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10.0),
+              color: Colors.white,
+              width: double.infinity,
+              child: Text(
+                "Available Points: ${userBloc.user.wallet.balance}",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18.0,
+                  color: Colors.black,
+                  fontFamily: Fonts.titilliumWebSemiBold,
                 ),
-              );
-            },
-          ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(2.0),
+                alignment: Alignment.center,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                  ),
+                  itemCount: lotteryBloc.lotteries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    int amount = lotteryBloc.lotteries[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        if (revealed == false) {
+                          setState(() {
+                            selectedLotteryIndex = index;
+                          });
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: selectedLotteryIndex == index
+                              ? Colors.greenAccent
+                              : revealed ? Colors.white : Color(0xffFFD700),
+                        ),
+                        margin: EdgeInsets.all(1.0),
+                        alignment: Alignment.center,
+                        child: revealed
+                            ? Text(
+                                amount == 0
+                                    ? "Better Luck Next Time"
+                                    : "₹${amount.toString()}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: amount == 0 ? 16.0 : 18.0,
+                                  color: getColor(amount),
+                                  fontFamily: Fonts.titilliumWebSemiBold,
+                                ),
+                              )
+                            : Icon(
+                                Ionicons.ios_gift,
+                                color: Color(0xff0D62A2),
+                                size: 42.0,
+                              ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -178,7 +204,10 @@ class _LotteryPageState extends State<LotteryPage> {
       XsProgressHud.hide();
 
       if (results['lotteries'] == null) {
-        showErrorPopup(context, message: "Insufficient Balance");
+        showErrorPopup(
+          context,
+          message: "You don't have enough points, 1 card = 20 points.",
+        );
       } else {
         final User userData = userBloc.user.copyWith({
           "wallet": Wallet.fromMap(results['wallet']),

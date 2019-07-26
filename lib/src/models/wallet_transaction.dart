@@ -5,6 +5,7 @@ class WalletTransaction {
   final int id;
   final int userId;
   final int walletId;
+  final String transactionType;
   final int amount;
   final Map meta;
   final String createdAt;
@@ -14,6 +15,7 @@ class WalletTransaction {
     this.id,
     this.userId,
     this.walletId,
+    this.transactionType,
     this.amount,
     this.meta,
     this.createdAt,
@@ -25,6 +27,7 @@ class WalletTransaction {
       id: json["id"] ?? this.id,
       userId: json["user_id"] ?? this.userId,
       walletId: json["wallet_id"] ?? this.walletId,
+      transactionType: json["transaction_type"] ?? this.transactionType,
       amount: json["amount"] ?? this.amount,
       meta: json["meta"] ?? this.meta,
       createdAt: json["created_at"] ?? this.createdAt,
@@ -37,6 +40,8 @@ class WalletTransaction {
       id: json["id"] != null ? json["id"] : null,
       userId: json["user_id"] != null ? json["user_id"] : null,
       walletId: json["wallet_id"] != null ? json["wallet_id"] : null,
+      transactionType:
+          json["transaction_type"] != null ? json["transaction_type"] : null,
       amount: json["amount"] != null ? json["amount"] : null,
       meta: json["meta"] != null ? json["meta"] : null,
       createdAt: json["created_at"] != null ? json["created_at"] : null,

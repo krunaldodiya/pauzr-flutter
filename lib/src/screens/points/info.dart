@@ -130,6 +130,8 @@ class _PointsPage extends State<PointsPage>
   }
 
   Card getRankCard(WalletTransaction item) {
+    String tt = getTTString(item.transactionType);
+
     return Card(
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
@@ -146,7 +148,7 @@ class _PointsPage extends State<PointsPage>
           title: Container(
             margin: EdgeInsets.only(bottom: 5.0),
             child: Text(
-              "${item.amount} Points",
+              "${item.amount} Points $tt",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
@@ -180,6 +182,14 @@ class _PointsPage extends State<PointsPage>
         ),
       ),
     );
+  }
+
+  getTTString(tt) {
+    if (tt == 'withdraw') {
+      return "Debited.";
+    }
+
+    return "Credited.";
   }
 
   separtedDateTime(dateTime, output) {
