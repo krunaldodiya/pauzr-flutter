@@ -29,9 +29,29 @@ MobileAdTargetingInfo getTargetingInfo() {
   );
 }
 
+createBannerAd() {
+  return BannerAd(
+    size: AdSize.banner,
+    adUnitId: admobBannerAdUnitId,
+    targetingInfo: getTargetingInfo(),
+  );
+}
+
 createInterstitialAd() {
   return InterstitialAd(
     adUnitId: admobInterstitialAdUnitId,
     targetingInfo: getTargetingInfo(),
   );
+}
+
+createRewardedVideoAd(
+  RewardedVideoAdEvent event, {
+  String rewardType,
+  int rewardAmount,
+}) {
+  if (event == RewardedVideoAdEvent.loaded) {
+    RewardedVideoAd.instance
+        .load(adUnitId: admobVideoAdUnitId, targetingInfo: getTargetingInfo())
+        .then((status) => RewardedVideoAd.instance.show());
+  }
 }

@@ -49,10 +49,12 @@ class LotteryBloc extends ChangeNotifier {
       final results = response.data;
 
       setState(
-        lotteries: results['lotteries'],
+        lotteries: results['lotteries'] ?? lotteries,
         loading: false,
         loaded: true,
       );
+
+      return results;
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
     }

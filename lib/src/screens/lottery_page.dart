@@ -5,10 +5,13 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/user.dart';
+import 'package:pauzr/src/models/wallet.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
+import 'package:pauzr/src/screens/helpers/error.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
@@ -23,6 +26,8 @@ class _LotteryPageState extends State<LotteryPage> {
   int selectedLotteryIndex;
   bool revealed = false;
 
+  InterstitialAd _interstitialAd;
+
   @override
   void initState() {
     super.initState();
@@ -31,19 +36,18 @@ class _LotteryPageState extends State<LotteryPage> {
   }
 
   getInitialData() async {
-    RewardedVideoAd.instance.listener = getRewardedVideoAd;
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+
+    _interstitialAd = createInterstitialAd()
+      ..load()
+      ..show();
   }
 
-  getRewardedVideoAd(
-    RewardedVideoAdEvent event, {
-    String rewardType,
-    int rewardAmount,
-  }) {
-    if (event == RewardedVideoAdEvent.loaded) {
-      RewardedVideoAd.instance
-          .load(adUnitId: admobVideoAdUnitId, targetingInfo: getTargetingInfo())
-          .then((status) => RewardedVideoAd.instance.show());
-    }
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -169,15 +173,20 @@ class _LotteryPageState extends State<LotteryPage> {
     XsProgressHud.show(context);
 
     try {
-      await lotteryBloc.getLotteries(selectedLotteryIndex);
+      Map results = await lotteryBloc.getLotteries(selectedLotteryIndex);
       await lotteryBloc.getLotteryWinners();
-
-      setState(() {
-        revealed = true;
-      });
-
       XsProgressHud.hide();
-    } catch (e) {
+
+      if (results['lotteries'] == null) {
+        showErrorPopup(context, message: "Insufficient Balance");
+      } else {
+        final User userData = userBloc.user.copyWith({
+          "wallet": Wallet.fromMap(results['wallet']),
+        });
+        userBloc.setState(user: userData);
+        setState(() => revealed = true);
+      }
+    } catch (error) {
       XsProgressHud.hide();
     }
   }
