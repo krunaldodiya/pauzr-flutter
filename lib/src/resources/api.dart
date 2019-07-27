@@ -39,6 +39,10 @@ class ApiProvider {
     return sendRequest(Api.getLotteryWinners);
   }
 
+  Future getLotteryHistory() async {
+    return sendRequest(Api.getLotteryHistory);
+  }
+
   Future requestOtp(String mobile, Country country) async {
     return sendRequest(Api.requestOtp, {
       "mobile": mobile,
@@ -176,6 +180,7 @@ class Api {
   static String getCities = "$baseUrl/api/home/cities";
   static String getLotteries = "$baseUrl/api/lotteries/get";
   static String getLotteryWinners = "$baseUrl/api/lotteries/winners";
+  static String getLotteryHistory = "$baseUrl/api/lotteries/history";
   static String getCountries = "$baseUrl/api/home/countries";
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";

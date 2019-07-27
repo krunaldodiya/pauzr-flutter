@@ -11,6 +11,8 @@ class LotteryBloc extends ChangeNotifier {
   Map error;
   List lotteries = [];
   List<Lottery> lotteryWinners = [];
+  List<Lottery> lotteryHistory = [];
+  int total;
 
   setState({
     bool loading,
@@ -18,12 +20,16 @@ class LotteryBloc extends ChangeNotifier {
     Map error: const {},
     List lotteries,
     List<Lottery> lotteryWinners,
+    List<Lottery> lotteryHistory,
+    int total,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.lotteries = lotteries ?? this.lotteries;
     this.lotteryWinners = lotteryWinners ?? this.lotteryWinners;
+    this.lotteryHistory = lotteryHistory ?? this.lotteryHistory;
+    this.total = total ?? this.total;
 
     notifyListeners();
   }
@@ -73,6 +79,30 @@ class LotteryBloc extends ChangeNotifier {
 
       setState(
         lotteryWinners: lotteryWinners,
+        loading: false,
+        loaded: true,
+      );
+
+      return results;
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  getLotteryHistory() async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.getLotteryHistory();
+      final results = response.data;
+
+      final List<Lottery> lotteryHistory = Lottery.fromList(
+        results['lottery_history'],
+      );
+
+      setState(
+        lotteryHistory: lotteryHistory,
+        total: results['total'],
         loading: false,
         loaded: true,
       );

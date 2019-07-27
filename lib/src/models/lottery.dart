@@ -6,12 +6,14 @@ class Lottery {
   final int id;
   final int amount;
   final User user;
+  final String type;
   final String createdAt;
   final String updatedAt;
 
   Lottery({
     this.id,
     this.amount,
+    this.type,
     this.user,
     this.createdAt,
     this.updatedAt,
@@ -21,6 +23,7 @@ class Lottery {
     return Lottery(
       id: json["id"] ?? this.id,
       amount: json["amount"] ?? this.amount,
+      type: json["type"] ?? this.type,
       user: json["user"] ?? this.user,
       createdAt: json["created_at"] ?? this.createdAt,
       updatedAt: json["updated_at"] ?? this.updatedAt,
@@ -31,6 +34,7 @@ class Lottery {
     return Lottery(
       id: json["id"] != null ? json["id"] : null,
       amount: json["amount"] != null ? json["amount"] : null,
+      type: json["type"] != null ? json["type"] : null,
       user: json["user"] != null
           ? json["user"] is User ? json["user"] : User.fromMap(json["user"])
           : null,

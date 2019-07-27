@@ -36,6 +36,10 @@ class _LotteryPageState extends State<LotteryPage> {
   }
 
   getInitialData() async {
+    final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+
+    lotteryBloc.setLotteries(60);
+
     FirebaseAdMob.instance.initialize(appId: admobAppId);
 
     _interstitialAd = createInterstitialAd()
@@ -209,10 +213,21 @@ class _LotteryPageState extends State<LotteryPage> {
           message: "You don't have enough points, 1 card = 20 points.",
         );
       } else {
+        final int amount = results['lotteries'][selectedLotteryIndex];
+
         final User userData = userBloc.user.copyWith({
           "wallet": Wallet.fromMap(results['wallet']),
         });
+
         userBloc.setState(user: userData);
+
+        showErrorPopup(
+          context,
+          message: amount > 0
+              ? "Congratulations! You have won ₹$amount."
+              : "Sorry! Better luck next time.",
+        );
+
         setState(() => revealed = true);
       }
     } catch (error) {

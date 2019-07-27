@@ -30,7 +30,6 @@ class _WinnersPage extends State<WinnersPage>
   getInitialData() async {
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
 
-    lotteryBloc.setLotteries(60);
     lotteryBloc.getLotteryWinners();
   }
 
