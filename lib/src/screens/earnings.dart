@@ -70,17 +70,44 @@ class _EarningsPage extends State<EarningsPage>
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(10.0),
-          margin: EdgeInsets.only(bottom: 5.0),
+          margin: EdgeInsets.only(bottom: 10.0),
           color: Colors.white,
           width: double.infinity,
-          child: Text(
-            "Balance: ${lotteryBloc.total}",
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 18.0,
-              color: Colors.black,
-              fontFamily: Fonts.titilliumWebSemiBold,
-            ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Balance: ₹${lotteryBloc.total}",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18.0,
+                  color: Colors.black,
+                  fontFamily: Fonts.titilliumWebSemiBold,
+                ),
+              ),
+              RaisedButton(
+                color: Color(0xff0D62A2),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 0.0,
+                ),
+                textColor: Colors.white,
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                ),
+                onPressed: () {},
+                child: Text(
+                  "Redeem",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.0,
+                    color: Colors.white,
+                    fontFamily: Fonts.titilliumWebSemiBold,
+                  ),
+                ),
+              )
+            ],
           ),
         ),
         Expanded(

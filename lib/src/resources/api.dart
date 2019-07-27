@@ -22,9 +22,10 @@ class ApiProvider {
     return sendRequest(Api.getTimerHistory);
   }
 
-  Future getRankings(String period, [int groupId]) async {
+  Future getRankings(String period, String location, [int groupId]) async {
     return sendRequest(Api.getRankings, {
       "period": period,
+      "location": location,
       "groupId": groupId,
     });
   }

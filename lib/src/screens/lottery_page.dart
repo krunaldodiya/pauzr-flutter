@@ -10,6 +10,7 @@ import 'package:pauzr/src/models/wallet.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:pauzr/src/screens/helpers/error.dart';
 import 'package:provider/provider.dart';
@@ -97,21 +98,50 @@ class _LotteryPageState extends State<LotteryPage> {
       ),
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(10.0),
               color: Colors.white,
               width: double.infinity,
-              child: Text(
-                "Available Points: ${userBloc.user.wallet.balance}",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18.0,
-                  color: Colors.black,
-                  fontFamily: Fonts.titilliumWebSemiBold,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "My Points: ${userBloc.user.wallet.balance}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18.0,
+                      color: Colors.black,
+                      fontFamily: Fonts.titilliumWebSemiBold,
+                    ),
+                  ),
+                  RaisedButton(
+                    color: Color(0xff0D62A2),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 0.0,
+                    ),
+                    textColor: Colors.white,
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, routeList.earnings);
+                    },
+                    child: Text(
+                      "My Earnings",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontFamily: Fonts.titilliumWebSemiBold,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             Expanded(

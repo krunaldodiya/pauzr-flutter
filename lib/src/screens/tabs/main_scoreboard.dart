@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/components/get_rankings.dart';
 import 'package:pauzr/src/components/switch.dart';
@@ -21,6 +22,7 @@ class MainScoreboardPage extends StatefulWidget {
 class _MainScoreboardPage extends State<MainScoreboardPage>
     with SingleTickerProviderStateMixin {
   String period;
+  String location = "city";
 
   @override
   void initState() {
@@ -98,14 +100,47 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
                   child: getCards(rankingBloc, userBloc, theme),
                 ),
                 Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Text(
-                    "City: ${userBloc.user.city.name}",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22.0,
-                      fontFamily: Fonts.titilliumWebRegular,
-                    ),
+                  margin: EdgeInsets.all(15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          String newLocation =
+                              location == "city" ? "country" : "city";
+                          changeLocation(newLocation, rankingBloc);
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              location.toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 18.0,
+                                fontFamily: Fonts.titilliumWebRegular,
+                              ),
+                            ),
+                            Container(width: 5.0),
+                            Icon(
+                              FontAwesome.sort,
+                              color: Colors.blue,
+                              size: 20.0,
+                            )
+                          ],
+                        ),
+                      ),
+                      Text(
+                        location == "city"
+                            ? userBloc.user.city.name.toUpperCase()
+                            : userBloc.user.country.name.toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.0,
+                          fontFamily: Fonts.titilliumWebRegular,
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -178,6 +213,11 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
 
   void changePeriod(value, RankingBloc rankingBloc) {
     setState(() => period = value);
-    rankingBloc.getRankings(period, null);
+    rankingBloc.getRankings(period, location, null);
+  }
+
+  void changeLocation(String value, RankingBloc rankingBloc) {
+    setState(() => location = value);
+    rankingBloc.getRankings(period, location, null);
   }
 }

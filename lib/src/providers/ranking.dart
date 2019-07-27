@@ -35,11 +35,12 @@ class RankingBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  getRankings(period, groupId) async {
+  getRankings(period, location, groupId) async {
     setState(loading: true, loaded: false);
 
     try {
-      final Response response = await _apiProvider.getRankings(period, groupId);
+      final Response response =
+          await _apiProvider.getRankings(period, location, groupId);
       final results = response.data;
 
       final List<Ranking> rankings = Ranking.fromList(results['rankings']);
