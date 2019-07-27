@@ -44,6 +44,17 @@ class LotteryBloc extends ChangeNotifier {
     setState(lotteries: lotteries);
   }
 
+  withdrawAmount(amount) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      await _apiProvider.withdrawAmount(amount);
+      setState(loading: false, loaded: true);
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
   getLotteries(selectedLotteryIndex) async {
     setState(loading: true, loaded: false);
 

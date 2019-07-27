@@ -149,6 +149,12 @@ class ApiProvider {
     });
   }
 
+  Future withdrawAmount(int amount) async {
+    return sendRequest(Api.withdrawAmount, {
+      "amount": amount,
+    });
+  }
+
   Future getCountries() async {
     return sendRequest(Api.getCountries);
   }
@@ -184,6 +190,7 @@ class Api {
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
   static String getCities = "$baseUrl/api/home/cities";
   static String getLotteries = "$baseUrl/api/lotteries/get";
+  static String withdrawAmount = "$baseUrl/api/lotteries/withdraw";
   static String getLotteryWinners = "$baseUrl/api/lotteries/winners";
   static String getLotteryHistory = "$baseUrl/api/lotteries/history";
   static String getCountries = "$baseUrl/api/home/countries";

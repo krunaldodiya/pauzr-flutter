@@ -5,7 +5,9 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/screens/helpers/error.dart';
 import 'package:provider/provider.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class EarningsPage extends StatefulWidget {
   EarningsPage({Key key}) : super(key: key);
@@ -96,7 +98,9 @@ class _EarningsPage extends State<EarningsPage>
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  withdrawAmount(lotteryBloc);
+                },
                 child: Text(
                   "Redeem",
                   style: TextStyle(
@@ -126,5 +130,23 @@ class _EarningsPage extends State<EarningsPage>
         ),
       ],
     );
+  }
+
+  withdrawAmount(LotteryBloc lotteryBloc) async {
+    int minimumBalance = 50;
+
+    if (lotteryBloc.total < minimumBalance) {
+      return showErrorPopup(
+        context,
+        message: "To redeem, your minimum balance should be ₹$minimumBalance.",
+      );
+    }
+
+    XsProgressHud.show(context);
+
+    await lotteryBloc.withdrawAmount(lotteryBloc.total);
+    await lotteryBloc.getLotteryHistory();
+
+    XsProgressHud.hide();
   }
 }

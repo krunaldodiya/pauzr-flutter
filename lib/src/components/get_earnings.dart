@@ -55,7 +55,9 @@ class GetEarnings {
                     Container(
                       margin: EdgeInsets.only(right: 15.0),
                       child: Text(
-                        "Won Lottery",
+                        lotteryHistory.type == "credited"
+                            ? "Won Lottery"
+                            : "Amount Withdraw",
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.black,
@@ -70,7 +72,7 @@ class GetEarnings {
             ),
           ),
           subtitle: Text(
-            lotteryHistory.type,
+            "${lotteryHistory.type} | ${lotteryHistory.status}",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.grey,
