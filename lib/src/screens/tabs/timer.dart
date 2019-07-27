@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/cards.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
-import 'package:pauzr/src/screens/helpers/quotes.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
@@ -17,7 +19,7 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
-  int currentQuote = 0;
+  int quoteIndex = 0;
   var timer;
 
   Map points = {20: 1, 40: 3, 60: 5};
@@ -26,9 +28,16 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    Future.delayed(Duration(microseconds: 1), getInitialData);
+  }
+
+  getInitialData() async {
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+    final int totalQuotes = timerBloc.quotes.length;
+
     timer = Timer.periodic(Duration(seconds: 10), (timer) {
       setState(() {
-        currentQuote = currentQuote == 13 ? 0 : currentQuote + 1;
+        quoteIndex = quoteIndex == totalQuotes - 1 ? 0 : quoteIndex + 1;
       });
     });
   }
@@ -41,85 +50,89 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final DefaultTheme theme = themeBloc.theme;
+    final List quotes = timerBloc.quotes;
 
     return Scaffold(
       backgroundColor: theme.timer.backgroundColor,
-      body: Stack(
-        children: [
-          Card(
-            margin: EdgeInsets.all(20.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                color: theme.timer.quoteBackgroundColor,
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.2),
-                    BlendMode.dstATop,
+      body: timerBloc.loaded != true
+          ? Center(child: CircularProgressIndicator())
+          : Stack(
+              children: [
+                Card(
+                  margin: EdgeInsets.all(20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  image: AssetImage(
-                    quotes[currentQuote]['image'],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: theme.timer.quoteBackgroundColor,
+                      image: DecorationImage(
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2),
+                          BlendMode.dstATop,
+                        ),
+                        image: CachedNetworkImageProvider(
+                          "$baseUrl/storage/${quotes[quoteIndex]['image']}",
+                        ),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20.0),
+                          width: double.infinity,
+                          child: Text(
+                            quotes[quoteIndex]['title'],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.only(top: 20.0, right: 20.0),
+                          child: Text(
+                            quotes[quoteIndex]['author'].toUpperCase(),
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.lime,
+                              fontWeight: FontWeight.normal,
+                              fontFamily: Fonts.titilliumWebSemiBold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                    width: double.infinity,
-                    child: Text(
-                      quotes[currentQuote]['title'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: Fonts.titilliumWebRegular,
-                      ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 50.0),
+                    child: Row(
+                      children: <Widget>[
+                        getTimerCard(20, "Minutes", theme),
+                        getTimerCard(40, "Minutes", theme),
+                        getTimerCard(60, "Minutes", theme),
+                      ],
                     ),
                   ),
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(top: 20.0, right: 20.0),
-                    child: Text(
-                      "- ${quotes[currentQuote]['author'].toUpperCase()}",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.lime,
-                        fontWeight: FontWeight.normal,
-                        fontFamily: Fonts.titilliumWebSemiBold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: EdgeInsets.only(bottom: 50.0),
-              child: Row(
-                children: <Widget>[
-                  getTimerCard(20, "Minutes", theme),
-                  getTimerCard(40, "Minutes", theme),
-                  getTimerCard(60, "Minutes", theme),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

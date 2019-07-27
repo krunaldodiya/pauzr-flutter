@@ -102,7 +102,7 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
                 Container(
                   margin: EdgeInsets.all(15.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
@@ -123,13 +123,14 @@ class _MainScoreboardPage extends State<MainScoreboardPage>
                             ),
                             Container(width: 5.0),
                             Icon(
-                              FontAwesome.sort,
+                              Ionicons.md_arrow_dropdown_circle,
                               color: Colors.blue,
                               size: 20.0,
                             )
                           ],
                         ),
                       ),
+                      Container(width: 10.0),
                       Text(
                         location == "city"
                             ? userBloc.user.city.name.toUpperCase()

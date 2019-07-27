@@ -58,20 +58,6 @@ flutter:
     - assets/images/intro/2.png
     - assets/images/intro/3.png
     - assets/images/intro/4.png
-    - assets/images/quotes/APJ-Abdul-Kalam.jpg
-    - assets/images/quotes/Swami-Vivekananda.jpg
-    - assets/images/quotes/Jack-Ma.png
-    - assets/images/quotes/Barack-Obama.jpg
-    - assets/images/quotes/Steve-Job.jpg
-    - assets/images/quotes/Elon-Musk.jpg
-    - assets/images/quotes/Ratan-Tata.jpg
-    - assets/images/quotes/Bruce-Lee.jpg
-    - assets/images/quotes/Dalai-Lama.jpg
-    - assets/images/quotes/Abraham-Lincoln.jpg
-    - assets/images/quotes/Sachin-Tendulkar.jpg
-    - assets/images/quotes/Bill-Gates.jpg
-    - assets/images/quotes/Mother-Teresa.jpg
-    - assets/images/quotes/Dwayne-Johnson.jpg
 
   fonts:
     - family: TitilliumWeb-Black

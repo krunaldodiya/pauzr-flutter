@@ -85,9 +85,8 @@ class _RequestOtpPage extends State<RequestOtpPage> {
                   ),
                 ),
                 EditableFormField(
-                  maxLength: 10,
                   keyboardType: TextInputType.number,
-                  labelText: "Mobile Number",
+                  labelText: "Mobile Number ( Without Country Code )",
                   errorText: getErrorText(otpBloc.error, 'mobile'),
                   onChanged: otpBloc.onChangeMobile,
                 ),

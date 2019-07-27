@@ -13,6 +13,7 @@ class TimerBloc extends ChangeNotifier {
   int sum;
   int avg;
   List<Timer> timerHistory = [];
+  List quotes = [];
 
   setState({
     bool loading,
@@ -21,6 +22,7 @@ class TimerBloc extends ChangeNotifier {
     int sum,
     int avg,
     List<Timer> timerHistory,
+    List quotes,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
@@ -28,6 +30,7 @@ class TimerBloc extends ChangeNotifier {
     this.sum = sum ?? this.sum;
     this.avg = avg ?? this.avg;
     this.timerHistory = timerHistory ?? this.timerHistory;
+    this.quotes = quotes ?? this.quotes;
 
     notifyListeners();
   }
@@ -68,6 +71,19 @@ class TimerBloc extends ChangeNotifier {
       await userBloc.setAuthUser(results['user']);
 
       setState(loading: false, loaded: true);
+    } catch (error) {
+      setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  getQuotes() async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.getQuotes();
+      final results = response.data;
+
+      setState(quotes: results['quotes'], loading: false, loaded: true);
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
     }

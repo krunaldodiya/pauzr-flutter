@@ -81,6 +81,10 @@ class ApiProvider {
     });
   }
 
+  Future getQuotes() async {
+    return sendRequest(Api.getQuotes);
+  }
+
   Future createGroup(String name, String description, String photo) async {
     return sendRequest(Api.createGroup, {
       "name": name,
@@ -191,6 +195,7 @@ class Api {
   static String getRankings = "$baseUrl/api/timer/rankings";
   static String getWinners = "$baseUrl/api/timer/winners";
   static String setTimer = "$baseUrl/api/timer/set";
+  static String getQuotes = "$baseUrl/api/home/quotes";
   static String createGroup = "$baseUrl/api/groups/create";
   static String editGroup = "$baseUrl/api/groups/edit";
   static String exitGroup = "$baseUrl/api/groups/exit";
