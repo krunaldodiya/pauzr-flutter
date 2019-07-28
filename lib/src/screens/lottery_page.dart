@@ -151,6 +151,7 @@ class _LotteryPageState extends State<LotteryPage> {
               child: Container(
                 padding: EdgeInsets.all(2.0),
                 alignment: Alignment.center,
+                color: Colors.grey,
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
