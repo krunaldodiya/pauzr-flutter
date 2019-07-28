@@ -34,3 +34,5 @@ change com.android.tools.build:gradle:3.2.1 to com.android.tools.build:gradle:3.
 	},
 	"data":{}
 }
+
+// add themes for invite, lottery, earnings

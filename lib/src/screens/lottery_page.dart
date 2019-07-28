@@ -60,10 +60,13 @@ class _LotteryPageState extends State<LotteryPage> {
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
 
+    final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final DefaultTheme theme = themeBloc.theme;
+
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: theme.addGroupParticipants.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xff0D62A2),
+        backgroundColor: theme.addGroupParticipants.appBackgroundColor,
         title: Text(
           "Lottery",
           style: TextStyle(
@@ -119,7 +122,7 @@ class _LotteryPageState extends State<LotteryPage> {
                     ),
                   ),
                   RaisedButton(
-                    color: Color(0xff0D62A2),
+                    color: theme.addGroupParticipants.appBackgroundColor,
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.0,
                       vertical: 0.0,

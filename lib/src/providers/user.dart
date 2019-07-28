@@ -9,14 +9,14 @@ class UserBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   User user;
   int tabIndex = 2;
 
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     User user,
     int tabIndex,
   }) {

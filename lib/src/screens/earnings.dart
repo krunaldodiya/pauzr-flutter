@@ -42,9 +42,9 @@ class _EarningsPage extends State<EarningsPage>
     final DefaultTheme theme = themeBloc.theme;
 
     return Scaffold(
-      backgroundColor: theme.mainScoreboard.backgroundColor,
+      backgroundColor: theme.addGroupParticipants.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Color(0xff0D62A2),
+        backgroundColor: theme.addGroupParticipants.appBackgroundColor,
         title: Text(
           "Earnings",
           style: TextStyle(
@@ -89,7 +89,7 @@ class _EarningsPage extends State<EarningsPage>
                 ),
               ),
               RaisedButton(
-                color: Color(0xff0D62A2),
+                color: theme.addGroupParticipants.appBackgroundColor,
                 padding: EdgeInsets.symmetric(
                   horizontal: 20.0,
                   vertical: 0.0,

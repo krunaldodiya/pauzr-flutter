@@ -8,13 +8,13 @@ class CityBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   List<City> cities = [];
 
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     List<City> cities,
   }) {
     this.loading = loading ?? this.loading;

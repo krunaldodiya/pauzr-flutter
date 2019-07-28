@@ -9,7 +9,7 @@ class RankingBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   List<Ranking> rankings = [];
   List<Winner> winners = [];
   int minutesSaved;
@@ -18,7 +18,7 @@ class RankingBloc extends ChangeNotifier {
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     List rankings,
     List winners,
     int minutesSaved,

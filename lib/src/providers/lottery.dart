@@ -6,23 +6,32 @@ import 'package:pauzr/src/resources/api.dart';
 class LotteryBloc extends ChangeNotifier {
   final ApiProvider _apiProvider = ApiProvider();
 
+  int lastPage;
+  int page = 1;
+  bool busy;
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   List lotteries = [];
   List<Lottery> lotteryWinners = [];
   List<Lottery> lotteryHistory = [];
   int total;
 
   setState({
+    int lastPage,
+    int page,
+    bool busy,
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     List lotteries,
     List<Lottery> lotteryWinners,
     List<Lottery> lotteryHistory,
     int total,
   }) {
+    this.lastPage = lastPage ?? this.lastPage;
+    this.page = page ?? this.page;
+    this.busy = busy ?? this.busy;
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
@@ -77,26 +86,39 @@ class LotteryBloc extends ChangeNotifier {
     }
   }
 
-  getLotteryWinners() async {
-    setState(loading: true, loaded: false);
+  getLotteryWinners({reload: false}) async {
+    if (busy == true) return false;
+    if (page == lastPage) return false;
+
+    if (reload == false) {
+      setState(loading: true, loaded: false);
+    } else {
+      setState(busy: true, page: page + 1);
+    }
 
     try {
-      final Response response = await _apiProvider.getLotteryWinners();
+      final Response response = await _apiProvider.getLotteryWinners(page);
       final results = response.data;
 
-      final List<Lottery> lotteryWinners = Lottery.fromList(
-        results['lottery_winners'],
-      );
+      final Map lwData = results['lottery_winners'];
 
       setState(
-        lotteryWinners: lotteryWinners,
+        lotteryWinners: lotteryWinners
+          ..addAll(Lottery.fromList(lwData['data'])),
+        lastPage: lwData['last_page'],
         loading: false,
         loaded: true,
+        busy: false,
       );
 
       return results;
     } catch (error) {
-      setState(error: error.response.data, loading: false, loaded: true);
+      setState(
+        error: error.response.data,
+        loading: false,
+        loaded: true,
+        busy: false,
+      );
     }
   }
 

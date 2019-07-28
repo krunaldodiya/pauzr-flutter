@@ -91,7 +91,7 @@ class _MinutesPage extends State<MinutesPage>
                       ),
                       margin: EdgeInsets.all(10.0),
                     ),
-                  getRankCard(item),
+                  getRankCard(item, context),
                 ],
               );
             },
@@ -128,7 +128,7 @@ class _MinutesPage extends State<MinutesPage>
     );
   }
 
-  Card getRankCard(Timer item) {
+  Card getRankCard(Timer item, BuildContext context) {
     return Card(
       elevation: 1.0,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),

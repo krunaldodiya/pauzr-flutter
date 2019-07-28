@@ -8,13 +8,13 @@ class CountryBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   List<Country> countries = [];
 
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     List<Country> countries,
   }) {
     this.loading = loading ?? this.loading;

@@ -71,14 +71,34 @@ class GetEarnings {
               ],
             ),
           ),
-          subtitle: Text(
-            "${lotteryHistory.type} | ${lotteryHistory.status}",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontFamily: Fonts.titilliumWebRegular,
-            ),
+          subtitle: Row(
+            children: <Widget>[
+              Text(
+                lotteryHistory.type.toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontSize: 12.0,
+                  fontFamily: Fonts.titilliumWebRegular,
+                ),
+              ),
+              Container(
+                child: Text(" | "),
+              ),
+              Text(
+                lotteryHistory.status.toUpperCase(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: lotteryHistory.status == "success"
+                      ? Colors.green
+                      : lotteryHistory.status == "pending"
+                          ? Colors.orange
+                          : Colors.red,
+                  fontSize: 12.0,
+                  fontFamily: Fonts.titilliumWebRegular,
+                ),
+              ),
+            ],
           ),
           trailing: Container(
             child: Column(

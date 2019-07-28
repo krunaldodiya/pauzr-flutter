@@ -9,7 +9,7 @@ class OtpBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   String mobile;
   int clientOtp;
   int serverOtp;
@@ -26,7 +26,7 @@ class OtpBloc extends ChangeNotifier {
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     String mobile,
     int clientOtp,
     int serverOtp,

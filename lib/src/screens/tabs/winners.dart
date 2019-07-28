@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/components/get_winners.dart';
+import 'package:pauzr/src/components/get_winners_card.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/models/lottery.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -20,6 +21,8 @@ class _WinnersPage extends State<WinnersPage>
     with SingleTickerProviderStateMixin {
   String period;
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -29,8 +32,20 @@ class _WinnersPage extends State<WinnersPage>
 
   getInitialData() async {
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+    lotteryBloc.getLotteryWinners(reload: false);
 
-    lotteryBloc.getLotteryWinners();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        lotteryBloc.getLotteryWinners(reload: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -62,43 +77,88 @@ class _WinnersPage extends State<WinnersPage>
       body: SafeArea(
         child: lotteryBloc.loaded != true
             ? Center(child: CircularProgressIndicator())
-            : getWinnersList(lotteryBloc, theme, userBloc),
+            : createListView(
+                context,
+                lotteryBloc,
+                userBloc,
+                _scrollController,
+                theme,
+              ),
       ),
     );
   }
 
-  getWinnersList(
+  createListView(
+    BuildContext context,
     LotteryBloc lotteryBloc,
-    DefaultTheme theme,
     UserBloc userBloc,
+    ScrollController scrollController,
+    DefaultTheme theme,
   ) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: Text(
-                  "Country: ${userBloc.user.country.name}",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 22.0,
-                    fontFamily: Fonts.titilliumWebRegular,
-                  ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.all(10.0),
+          child: Text(
+            "Country: ${userBloc.user.country.name}",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22.0,
+              fontFamily: Fonts.titilliumWebRegular,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            controller: scrollController,
+            shrinkWrap: true,
+            itemCount: lotteryBloc.lotteryWinners.length,
+            itemBuilder: (BuildContext context, int index) {
+              final Lottery item = lotteryBloc.lotteryWinners[index];
+
+              bool lastPage = lotteryBloc.page == lotteryBloc.lastPage;
+              bool lastItem = index == lotteryBloc.lotteryWinners.length - 1;
+
+              return Column(
+                children: <Widget>[
+                  getRankCard(item, context),
+                  if (lastPage && lastItem)
+                    Container(
+                      margin: EdgeInsets.all(20.0),
+                      child: Center(
+                        child: Text(
+                          "No more results.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                            fontFamily: Fonts.titilliumWebRegular,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ),
+        if (lotteryBloc.busy)
+          Container(
+            margin: EdgeInsets.all(20.0),
+            child: Center(
+              child: Text(
+                "Loading...",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontFamily: Fonts.titilliumWebRegular,
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            GetWinners(
-              user: userBloc.user,
-              lotteryWinners: lotteryBloc.lotteryWinners,
-            ).getList(context),
-          ),
-        ),
       ],
     );
   }

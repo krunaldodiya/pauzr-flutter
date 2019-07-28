@@ -36,8 +36,8 @@ class ApiProvider {
     });
   }
 
-  Future getLotteryWinners() async {
-    return sendRequest(Api.getLotteryWinners);
+  Future getLotteryWinners(page) async {
+    return sendRequest(Api.getLotteryWinners, {"page": page});
   }
 
   Future getLotteryHistory() async {

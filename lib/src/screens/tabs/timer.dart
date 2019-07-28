@@ -33,18 +33,23 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
 
   getInitialData() async {
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
-    final int totalQuotes = timerBloc.quotes.length;
+    final int lastQuoteIndex = timerBloc.quotes.length - 1;
 
-    timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      setState(() {
-        quoteIndex = quoteIndex == totalQuotes - 1 ? 0 : quoteIndex + 1;
+    if (timerBloc.quotes.length > 0) {
+      timer = Timer.periodic(Duration(seconds: 5), (timer) {
+        setState(() {
+          quoteIndex = quoteIndex == lastQuoteIndex ? 0 : quoteIndex + 1;
+        });
       });
-    });
+    }
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    if (timer != null) {
+      timer.cancel();
+    }
+
     super.dispose();
   }
 
@@ -72,7 +77,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
                       color: theme.timer.quoteBackgroundColor,
                       image: DecorationImage(
                         colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.2),
+                          Colors.black.withOpacity(0.95),
                           BlendMode.dstATop,
                         ),
                         image: CachedNetworkImageProvider(
@@ -82,40 +87,42 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
                         alignment: Alignment.topCenter,
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 20.0),
-                          width: double.infinity,
-                          child: Text(
-                            quotes[quoteIndex]['title'],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 22.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: Fonts.titilliumWebRegular,
-                            ),
+                    child: quotes[quoteIndex]['type'] == "ad"
+                        ? Container()
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 20.0),
+                                width: double.infinity,
+                                child: Text(
+                                  quotes[quoteIndex]['title'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 22.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: Fonts.titilliumWebRegular,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.only(top: 20.0, right: 20.0),
+                                child: Text(
+                                  quotes[quoteIndex]['author'].toUpperCase(),
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.lime,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: Fonts.titilliumWebSemiBold,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.only(top: 20.0, right: 20.0),
-                          child: Text(
-                            quotes[quoteIndex]['author'].toUpperCase(),
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.lime,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: Fonts.titilliumWebSemiBold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
                 Align(

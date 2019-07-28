@@ -8,13 +8,13 @@ class GroupBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   List<Group> groups = [];
 
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     List<Group> groups,
   }) {
     this.loading = loading ?? this.loading;

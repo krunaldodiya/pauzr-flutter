@@ -9,7 +9,7 @@ class TimerBloc extends ChangeNotifier {
 
   bool loading;
   bool loaded;
-  Map error;
+  Map error = const {};
   int sum;
   int avg;
   List<Timer> timerHistory = [];
@@ -18,7 +18,7 @@ class TimerBloc extends ChangeNotifier {
   setState({
     bool loading,
     bool loaded,
-    Map error: const {},
+    Map error,
     int sum,
     int avg,
     List<Timer> timerHistory,
