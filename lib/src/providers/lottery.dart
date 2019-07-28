@@ -88,10 +88,10 @@ class LotteryBloc extends ChangeNotifier {
 
   getLotteryWinners({reload: false}) async {
     if (busy == true) return false;
-    if (page == lastPage) return false;
+    if (reload == true && page == lastPage) return false;
 
     if (reload == false) {
-      setState(loading: true, loaded: false);
+      setState(loading: true, loaded: false, page: 1, lotteryWinners: []);
     } else {
       setState(busy: true, page: page + 1);
     }
@@ -99,13 +99,14 @@ class LotteryBloc extends ChangeNotifier {
     try {
       final Response response = await _apiProvider.getLotteryWinners(page);
       final results = response.data;
-
-      final Map lwData = results['lottery_winners'];
+      final List<Lottery> lotteryWinnersData = Lottery.fromList(
+        results['lottery_winners']['data'],
+      );
+      final int lastPage = results['lottery_winners']['last_page'];
 
       setState(
-        lotteryWinners: lotteryWinners
-          ..addAll(Lottery.fromList(lwData['data'])),
-        lastPage: lwData['last_page'],
+        lotteryWinners: lotteryWinners..addAll(lotteryWinnersData),
+        lastPage: lastPage,
         loading: false,
         loaded: true,
         busy: false,

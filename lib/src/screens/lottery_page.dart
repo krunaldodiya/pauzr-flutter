@@ -237,7 +237,7 @@ class _LotteryPageState extends State<LotteryPage> {
 
     try {
       Map results = await lotteryBloc.getLotteries(selectedLotteryIndex);
-      await lotteryBloc.getLotteryWinners();
+      await lotteryBloc.getLotteryWinners(reload: false);
       XsProgressHud.hide();
 
       if (results['lotteries'] == null) {
