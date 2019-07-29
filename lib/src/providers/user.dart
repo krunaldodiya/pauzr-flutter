@@ -12,6 +12,7 @@ class UserBloc extends ChangeNotifier {
   Map error = const {};
   User user;
   int tabIndex = 2;
+  List<String> adsKeywords = [];
 
   setState({
     bool loading,
@@ -19,12 +20,14 @@ class UserBloc extends ChangeNotifier {
     Map error,
     User user,
     int tabIndex,
+    int adsKeywords,
   }) {
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.user = user ?? this.user;
     this.tabIndex = tabIndex ?? this.tabIndex;
+    this.adsKeywords = adsKeywords ?? this.adsKeywords;
 
     notifyListeners();
   }
@@ -78,6 +81,17 @@ class UserBloc extends ChangeNotifier {
       setAuthUser(results['user']);
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  getAdsKeywords() async {
+    try {
+      final Response response = await _apiProvider.getAdsKeywords();
+      final results = response.data;
+
+      await setState(adsKeywords: results['keywords']);
+    } catch (error) {
+      setState(loading: false, loaded: true);
     }
   }
 

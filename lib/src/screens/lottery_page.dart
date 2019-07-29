@@ -38,12 +38,13 @@ class _LotteryPageState extends State<LotteryPage> {
 
   getInitialData() async {
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
     lotteryBloc.setLotteries(60);
 
     FirebaseAdMob.instance.initialize(appId: admobAppId);
 
-    _interstitialAd = createInterstitialAd()
+    _interstitialAd = createInterstitialAd(userBloc.adsKeywords)
       ..load()
       ..show();
   }

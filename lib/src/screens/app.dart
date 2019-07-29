@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
 
     await themeBloc.setTheme(DefaultTheme.defaultTheme(widget.defaultTheme));
     await userBloc.getAuthUser();
+    await userBloc.getAdsKeywords();
   }
 
   @override

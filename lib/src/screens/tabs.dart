@@ -26,18 +26,20 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-
-    _interstitialAd = createInterstitialAd()
-      ..load()
-      ..show();
-
     Future.delayed(Duration(microseconds: 1), getInitialData);
   }
 
   getInitialData() async {
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
     timerBloc.getQuotes();
+
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+
+    _interstitialAd = createInterstitialAd(userBloc.adsKeywords)
+      ..load()
+      ..show();
   }
 
   @override

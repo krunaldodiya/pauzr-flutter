@@ -1,46 +1,25 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 
-MobileAdTargetingInfo getTargetingInfo() {
+MobileAdTargetingInfo getTargetingInfo(List<String> keywords) {
   return MobileAdTargetingInfo(
-    keywords: <String>[
-      "Insurance",
-      "Loans",
-      "Mortgage",
-      "Attorney",
-      "Credit",
-      "Lawyer",
-      "Donate",
-      "Degree",
-      "Hosting",
-      "Claim",
-      "Conference Call",
-      "Trading",
-      "Software",
-      "Recovery",
-      "Transfer",
-      "Gas/Electicity",
-      "Classes",
-      "Rehab",
-      "Treatment",
-      "Cord Blood",
-    ],
+    keywords: keywords,
     testDevices: <String>[],
   );
 }
 
-createBannerAd() {
+createBannerAd(List<String> keywords) {
   return BannerAd(
     size: AdSize.banner,
     adUnitId: admobBannerAdUnitId,
-    targetingInfo: getTargetingInfo(),
+    targetingInfo: getTargetingInfo(keywords),
   );
 }
 
-createInterstitialAd() {
+createInterstitialAd(List<String> keywords) {
   return InterstitialAd(
     adUnitId: admobInterstitialAdUnitId,
-    targetingInfo: getTargetingInfo(),
+    targetingInfo: getTargetingInfo(keywords),
   );
 }
 
@@ -48,10 +27,14 @@ createRewardedVideoAd(
   RewardedVideoAdEvent event, {
   String rewardType,
   int rewardAmount,
+  List<String> keywords,
 }) {
   if (event == RewardedVideoAdEvent.loaded) {
     RewardedVideoAd.instance
-        .load(adUnitId: admobVideoAdUnitId, targetingInfo: getTargetingInfo())
+        .load(
+          adUnitId: admobVideoAdUnitId,
+          targetingInfo: getTargetingInfo(keywords),
+        )
         .then((status) => RewardedVideoAd.instance.show());
   }
 }

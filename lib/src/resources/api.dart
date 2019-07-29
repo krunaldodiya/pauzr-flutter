@@ -10,6 +10,10 @@ class ApiProvider {
     return sendRequest(Api.me);
   }
 
+  Future getAdsKeywords() async {
+    return sendRequest(Api.getAdsKeywords);
+  }
+
   Future getGroups() async {
     return sendRequest(Api.getGroups);
   }
@@ -186,6 +190,7 @@ class ApiProvider {
 
 class Api {
   static String me = "$baseUrl/api/users/me";
+  static String getAdsKeywords = "$baseUrl/api/home/keywords";
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
   static String getCities = "$baseUrl/api/home/cities";

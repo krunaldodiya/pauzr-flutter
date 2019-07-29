@@ -6,6 +6,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -17,7 +18,6 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 class StopPage extends StatefulWidget {
   final int duration;
@@ -26,7 +26,10 @@ class StopPage extends StatefulWidget {
 
   @override
   _StopPage createState() {
-    return _StopPage(duration: duration);
+    return _StopPage(
+      durationSeconds: duration,
+      durationMintues: duration ~/ 60,
+    );
   }
 }
 
@@ -34,12 +37,10 @@ class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final EventChannel eventChannel = EventChannel('com.pauzr.org/info');
 
-  final int duration;
-
-  _StopPage({this.duration});
-
   int durationSeconds;
   int durationMintues;
+
+  _StopPage({this.durationSeconds, this.durationMintues});
 
   Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
 
@@ -51,17 +52,6 @@ class _StopPage extends State<StopPage>
   @override
   void initState() {
     super.initState();
-
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-
-    _interstitialAd = createInterstitialAd()
-      ..load()
-      ..show();
-
-    setState(() {
-      durationSeconds = widget.duration;
-      durationMintues = widget.duration ~/ 60;
-    });
 
     listenToScreenStatus();
 
@@ -81,6 +71,12 @@ class _StopPage extends State<StopPage>
 
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+
+    _interstitialAd = createInterstitialAd(userBloc.adsKeywords)
+      ..load()
+      ..show();
 
     CountDown cd = CountDown(
       Duration(seconds: widget.duration),
