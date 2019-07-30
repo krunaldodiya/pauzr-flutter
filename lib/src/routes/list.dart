@@ -24,3 +24,4 @@ const String manage_theme = "/manage_theme";
 const String lottery = "/lottery";
 const String earnings = "/earnings";
 const String show_photo = "/show_photo";
+const String show_post = "/show_post";

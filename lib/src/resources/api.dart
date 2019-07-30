@@ -40,8 +40,12 @@ class ApiProvider {
     });
   }
 
-  Future getLotteryWinners(page) async {
+  Future getLotteryWinners(int page) async {
     return sendRequest(Api.getLotteryWinners, {"page": page});
+  }
+
+  Future getUserGallery(int page, int userId) async {
+    return sendRequest(Api.getUserGallery, {"page": page, 'user_id': userId});
   }
 
   Future getLotteryHistory() async {
@@ -191,6 +195,7 @@ class ApiProvider {
 class Api {
   static String me = "$baseUrl/api/users/me";
   static String getAdsKeywords = "$baseUrl/api/home/keywords";
+  static String getUserGallery = "$baseUrl/api/users/gallery";
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
   static String getCities = "$baseUrl/api/home/cities";

@@ -16,6 +16,7 @@ import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/otp/verify_otp.dart';
 import 'package:pauzr/src/screens/points/info.dart';
 import 'package:pauzr/src/screens/show_photo.dart';
+import 'package:pauzr/src/screens/show_post.dart';
 import 'package:pauzr/src/screens/stop.dart';
 import 'package:pauzr/src/screens/tabs.dart';
 import 'package:pauzr/src/screens/tabs/group.dart';
@@ -102,6 +103,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return ShowPhoto(photo: args['photo']);
+          },
+        );
+        break;
+
+      case routeList.show_post:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ShowPost(gallery: args['gallery']);
           },
         );
         break;

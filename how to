@@ -1,5 +1,6 @@
 flutter create --androidx --org com.pauzr --description 'A time saver app' pauzr
 flutter build apk --release
+flutter build apk --release --split-per-abi
 
 keytool -genkey -v -keystore ./pauzr.jks -keyalg RSA -keysize 2048 -validity 20000 -alias pauzr
 
