@@ -95,6 +95,17 @@ class UserBloc extends ChangeNotifier {
     }
   }
 
+  uploadAvatar(formdata) async {
+    try {
+      final Response response = await _apiProvider.uploadAvatar(formdata);
+      final results = response.data;
+
+      await setAuthUser(results['user']);
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
+  }
+
   getAuthUser() async {
     try {
       final Response response = await _apiProvider.getAuthUser();

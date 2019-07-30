@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/models/gallery.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
 
 class GalleryBloc extends ChangeNotifier {
@@ -32,6 +33,20 @@ class GalleryBloc extends ChangeNotifier {
     this.images = images ?? this.images;
 
     notifyListeners();
+  }
+
+  createPost(UserBloc userBloc, GalleryBloc galleryBloc, formdata) async {
+    try {
+      final Response response = await _apiProvider.createPost(formdata);
+      final results = response.data;
+
+      Gallery post = Gallery.fromMap(results['post']);
+      List<Gallery> galleryList = galleryBloc.images..insert(0, post);
+
+      setState(images: galleryList);
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
   }
 
   getUserGallery({reload: false, @required int userId}) async {

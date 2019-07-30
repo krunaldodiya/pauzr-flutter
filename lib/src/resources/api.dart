@@ -175,6 +175,10 @@ class ApiProvider {
     return sendRequest(Api.uploadAvatar, image);
   }
 
+  Future createPost(FormData image) async {
+    return sendRequest(Api.createPost, image);
+  }
+
   Future uploadGroupImage(FormData image) async {
     return sendRequest(Api.uploadGroupImage, image);
   }
@@ -207,6 +211,7 @@ class Api {
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";
   static String uploadAvatar = "$baseUrl/api/users/avatar/upload";
+  static String createPost = "$baseUrl/api/posts/create";
   static String getWalletHistory = "$baseUrl/api/timer/points";
   static String getTimerHistory = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";

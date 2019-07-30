@@ -12,9 +12,9 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/city.dart';
+import 'package:pauzr/src/providers/gallery.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
-import 'package:pauzr/src/resources/api.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
 import 'package:pauzr/src/screens/users/tappable.dart';
@@ -31,9 +31,6 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePage extends State<EditProfilePage> {
-  ApiProvider _apiProvider = ApiProvider();
-  bool loading = false;
-
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController dobController = TextEditingController();
@@ -75,6 +72,7 @@ class _EditProfilePage extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -116,7 +114,7 @@ class _EditProfilePage extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(height: 20.0),
-              photoUpload(userBloc),
+              photoUpload(userBloc, galleryBloc),
               EditableFormField(
                 cursorColor: theme.editProfile.cursorColor,
                 controller: nameController,
@@ -214,11 +212,11 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
   }
 
-  photoUpload(userBloc) {
+  photoUpload(UserBloc userBloc, GalleryBloc galleryBloc) {
     if (widget.shouldPop == true) {
       return GestureDetector(
         onTap: () {
-          uploadImage(userBloc);
+          uploadImage(userBloc, galleryBloc);
         },
         child: Container(
           height: 120.0,
@@ -273,7 +271,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     }
   }
 
-  void uploadImage(userBloc) async {
+  void uploadImage(UserBloc userBloc, GalleryBloc galleryBloc) async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     final File file = await ImageCropper.cropImage(
       sourcePath: image.path,
@@ -283,27 +281,14 @@ class _EditProfilePage extends State<EditProfilePage> {
       maxHeight: 512,
     );
 
-    setState(() {
-      loading = true;
-    });
-
     FormData formdata = FormData.from({
       "image": UploadFileInfo(file, file.path),
     });
 
-    try {
-      final response = await _apiProvider.uploadAvatar(formdata);
-      final results = response.data;
+    XsProgressHud.show(context);
+    await userBloc.uploadAvatar(formdata);
+    await galleryBloc.getUserGallery(reload: false, userId: userBloc.user.id);
 
-      await userBloc.setAuthUser(results['user']);
-
-      setState(() {
-        loading = false;
-      });
-    } catch (e) {
-      setState(() {
-        loading = false;
-      });
-    }
+    XsProgressHud.hide();
   }
 }
