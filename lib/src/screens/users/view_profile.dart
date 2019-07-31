@@ -42,8 +42,11 @@ class _ViewProfilePage extends State<ViewProfilePage> {
   }
 
   getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
     final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
-    galleryBloc.getUserGallery(reload: false, userId: widget.user.id);
+
+    await userBloc.getGuestUser(widget.user.id);
+    await galleryBloc.getUserGallery(reload: false, userId: widget.user.id);
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -66,6 +69,8 @@ class _ViewProfilePage extends State<ViewProfilePage> {
     final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
+
+    final User guest = userBloc.guest;
 
     return Scaffold(
       backgroundColor: theme.viewProfile.backgroundColor,
@@ -100,7 +105,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
         ],
       ),
       body: SafeArea(
-        child: galleryBloc.loading == true
+        child: userBloc.loading == true
             ? Container(
                 color: Colors.white,
                 alignment: Alignment.center,
@@ -108,6 +113,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
               )
             : Container(
                 color: Colors.white,
+                padding: EdgeInsets.all(5.0),
                 child: CustomScrollView(
                   controller: _scrollController,
                   slivers: <Widget>[
@@ -116,15 +122,16 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                         Container(
                           color: Colors.white,
                           padding: EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 20.0),
+                            horizontal: 5.0,
+                            vertical: 10.0,
+                          ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               ClipOval(
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      "$baseUrl/storage/${widget.user.avatar}",
+                                  imageUrl: "$baseUrl/storage/${guest.avatar}",
                                   placeholder: (context, url) {
                                     return CircularProgressIndicator();
                                   },
@@ -160,51 +167,69 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "302",
-                                      style: TextStyle(
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    routeList.follow_page,
+                                    arguments: {"type": "followers"},
+                                  );
+                                },
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        guest.followers.length.toString(),
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    Container(height: 10.0),
-                                    Text(
-                                      "Followers",
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                      Container(height: 10.0),
+                                      Text(
+                                        "Followers",
+                                        style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(right: 5.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "15K",
-                                      style: TextStyle(
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    routeList.follow_page,
+                                    arguments: {"type": "followings"},
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 5.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        guest.followings.length.toString(),
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                    Container(height: 10.0),
-                                    Text(
-                                      "Following",
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                      Container(height: 10.0),
+                                      Text(
+                                        "Following",
+                                        style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -212,9 +237,12 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                         ),
                         Container(
                           color: Colors.white,
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 3.0,
+                            vertical: 5.0,
+                          ),
                           width: double.infinity,
-                          child: userBloc.user.id == widget.user.id
+                          child: userBloc.user.id == guest.id
                               ? RaisedButton(
                                   child: Text(
                                     "Create Post",
@@ -228,17 +256,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                                     createPost(userBloc, galleryBloc);
                                   },
                                 )
-                              : RaisedButton(
-                                  child: Text(
-                                    "Follow",
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                ),
+                              : getFollowButton(userBloc),
                         ),
                       ]),
                     ),
@@ -250,13 +268,61 @@ class _ViewProfilePage extends State<ViewProfilePage> {
     );
   }
 
+  getFollowButton(UserBloc userBloc) {
+    List followingIds = userBloc.user.followings
+        .map((following) => following["following_user"]['id'])
+        .toList();
+
+    List followerIds = userBloc.user.followers
+        .map((follower) => follower["follower_user"]['id'])
+        .toList();
+
+    bool alreadyFollowing = followingIds.contains(widget.user.id);
+
+    bool isFollower = followerIds.contains(widget.user.id);
+
+    return FlatButton(
+      color: alreadyFollowing ? Colors.grey.shade300 : Colors.blue,
+      child: Text(
+        alreadyFollowing ? "Following" : isFollower ? "Follow Back" : "Follow",
+        style: TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+          color: alreadyFollowing ? Colors.black : Colors.white,
+        ),
+      ),
+      onPressed: () {
+        alreadyFollowing
+            ? unfollowUser(userBloc, userBloc.guest.id, userBloc.guest.id)
+            : followUser(userBloc, userBloc.guest.id, userBloc.guest.id);
+      },
+    );
+  }
+
   getGridView(GalleryBloc galleryBloc) {
+    if (galleryBloc.loading == true) {
+      return SliverList(
+        delegate: SliverChildListDelegate([
+          Container(
+            margin: EdgeInsets.all(15.0),
+            child: Text(
+              "Loading...",
+              style: TextStyle(
+                fontSize: 28.0,
+                fontWeight: FontWeight.normal,
+                color: Colors.black45,
+              ),
+            ),
+          ),
+        ]),
+      );
+    }
+
     if (galleryBloc.images.length == 0) {
       return SliverList(
         delegate: SliverChildListDelegate([
           Container(
-            alignment: Alignment.center,
-            height: 300.0,
+            margin: EdgeInsets.all(15.0),
             child: Text(
               "No posts yet.",
               style: TextStyle(
@@ -287,7 +353,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
               );
             },
             child: Container(
-              margin: EdgeInsets.all(2.0),
+              margin: EdgeInsets.all(3.0),
               alignment: Alignment.center,
               child: CachedNetworkImage(
                 imageUrl: "$baseUrl/storage/${gallery.url}",
@@ -324,6 +390,18 @@ class _ViewProfilePage extends State<ViewProfilePage> {
 
     XsProgressHud.show(context);
     await galleryBloc.createPost(userBloc, galleryBloc, formdata);
+    XsProgressHud.hide();
+  }
+
+  void followUser(UserBloc userBloc, int followingId, int guestId) async {
+    XsProgressHud.show(context);
+    await userBloc.followUser(followingId, guestId);
+    XsProgressHud.hide();
+  }
+
+  void unfollowUser(UserBloc userBloc, int followingId, int guestId) async {
+    XsProgressHud.show(context);
+    await userBloc.unfollowUser(followingId, guestId);
     XsProgressHud.hide();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/providers/user.dart';
 
 MobileAdTargetingInfo getTargetingInfo(List<String> keywords) {
   return MobileAdTargetingInfo(
@@ -8,18 +9,24 @@ MobileAdTargetingInfo getTargetingInfo(List<String> keywords) {
   );
 }
 
-createBannerAd(List<String> keywords) {
+createBannerAd(UserBloc userBloc) {
   return BannerAd(
     size: AdSize.banner,
     adUnitId: admobBannerAdUnitId,
-    targetingInfo: getTargetingInfo(keywords),
+    targetingInfo: getTargetingInfo(userBloc.adsKeywords),
+    listener: (MobileAdEvent event) {
+      userBloc.setAdImpression('Banner');
+    },
   );
 }
 
-createInterstitialAd(List<String> keywords) {
+createInterstitialAd(UserBloc userBloc) {
   return InterstitialAd(
     adUnitId: admobInterstitialAdUnitId,
-    targetingInfo: getTargetingInfo(keywords),
+    targetingInfo: getTargetingInfo(userBloc.adsKeywords),
+    listener: (MobileAdEvent event) {
+      userBloc.setAdImpression('Interstitial');
+    },
   );
 }
 

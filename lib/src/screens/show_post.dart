@@ -1,7 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/gallery.dart';
+import 'package:pauzr/src/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class ShowPost extends StatefulWidget {
   final Gallery gallery;
@@ -13,6 +18,32 @@ class ShowPost extends StatefulWidget {
 }
 
 class _ShowPost extends State<ShowPost> {
+  InterstitialAd _interstitialAd;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(microseconds: 1), getInitialData);
+  }
+
+  getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+
+    _interstitialAd = createInterstitialAd(userBloc)
+      ..load()
+      ..show();
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

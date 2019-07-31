@@ -2,16 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:countdown/countdown.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
-import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -47,8 +44,6 @@ class _StopPage extends State<StopPage>
   int notificationId = 1;
   var timerSubscription;
 
-  InterstitialAd _interstitialAd;
-
   @override
   void initState() {
     super.initState();
@@ -72,12 +67,6 @@ class _StopPage extends State<StopPage>
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
-
-    _interstitialAd = createInterstitialAd(userBloc.adsKeywords)
-      ..load()
-      ..show();
-
     CountDown cd = CountDown(
       Duration(seconds: widget.duration),
       refresh: Duration(seconds: 1),
@@ -99,8 +88,6 @@ class _StopPage extends State<StopPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-
-    _interstitialAd.dispose();
 
     onFailure();
 

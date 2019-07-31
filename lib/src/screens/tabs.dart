@@ -37,7 +37,7 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
 
     FirebaseAdMob.instance.initialize(appId: admobAppId);
 
-    _interstitialAd = createInterstitialAd(userBloc.adsKeywords)
+    _interstitialAd = createInterstitialAd(userBloc)
       ..load()
       ..show();
   }

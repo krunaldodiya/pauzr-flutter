@@ -10,8 +10,34 @@ class ApiProvider {
     return sendRequest(Api.me);
   }
 
+  Future getGuestUser(int userId) async {
+    return sendRequest(Api.getGuestUser, {
+      "user_id": userId,
+    });
+  }
+
   Future getAdsKeywords() async {
     return sendRequest(Api.getAdsKeywords);
+  }
+
+  Future followUser(int followingId, int guestId) async {
+    return sendRequest(Api.followUser, {
+      "following_id": followingId,
+      "guest_id": guestId,
+    });
+  }
+
+  Future unfollowUser(int followingId, int guestId) async {
+    return sendRequest(Api.unfollowUser, {
+      "following_id": followingId,
+      "guest_id": guestId,
+    });
+  }
+
+  Future setAdImpression(String type) async {
+    return sendRequest(Api.setAdImpression, {
+      "type": type,
+    });
   }
 
   Future getGroups() async {
@@ -198,7 +224,11 @@ class ApiProvider {
 
 class Api {
   static String me = "$baseUrl/api/users/me";
+  static String followUser = "$baseUrl/api/users/follow";
+  static String unfollowUser = "$baseUrl/api/users/unfollow";
+  static String getGuestUser = "$baseUrl/api/users/guest";
   static String getAdsKeywords = "$baseUrl/api/home/keywords";
+  static String setAdImpression = "$baseUrl/api/ads/impression";
   static String getUserGallery = "$baseUrl/api/users/gallery";
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";

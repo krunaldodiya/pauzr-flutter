@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pauzr/follow.dart';
 import 'package:pauzr/invite.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/earnings.dart';
@@ -51,6 +52,16 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return IntroPage();
+          },
+        );
+        break;
+
+      case routeList.follow_page:
+        return MaterialPageRoute(
+          builder: (context) {
+            return FollowPage(
+              type: args['type'],
+            );
           },
         );
         break;

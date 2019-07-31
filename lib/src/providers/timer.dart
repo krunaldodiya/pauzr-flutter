@@ -68,7 +68,7 @@ class TimerBloc extends ChangeNotifier {
       final Response response = await _apiProvider.setTimer(duration);
       final results = response.data;
 
-      await userBloc.setAuthUser(results['user']);
+      await userBloc.setUser(results['user']);
 
       setState(loading: false, loaded: true);
     } catch (error) {

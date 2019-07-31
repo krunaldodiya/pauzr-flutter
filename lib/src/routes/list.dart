@@ -25,3 +25,4 @@ const String lottery = "/lottery";
 const String earnings = "/earnings";
 const String show_photo = "/show_photo";
 const String show_post = "/show_post";
+const String follow_page = "/follow_page";

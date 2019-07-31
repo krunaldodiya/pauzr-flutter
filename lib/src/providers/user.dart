@@ -11,6 +11,7 @@ class UserBloc extends ChangeNotifier {
   bool loaded;
   Map error = const {};
   User user;
+  User guest;
   int tabIndex = 2;
   List<String> adsKeywords = [];
 
@@ -19,6 +20,7 @@ class UserBloc extends ChangeNotifier {
     bool loaded,
     Map error,
     User user,
+    User guest,
     int tabIndex,
     int adsKeywords,
   }) {
@@ -26,6 +28,7 @@ class UserBloc extends ChangeNotifier {
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.user = user ?? this.user;
+    this.guest = guest ?? this.guest;
     this.tabIndex = tabIndex ?? this.tabIndex;
     this.adsKeywords = adsKeywords ?? this.adsKeywords;
 
@@ -56,7 +59,7 @@ class UserBloc extends ChangeNotifier {
 
       final results = response.data;
 
-      setAuthUser(results['user']);
+      setUser(results['user']);
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
     }
@@ -78,9 +81,55 @@ class UserBloc extends ChangeNotifier {
 
       final results = response.data;
 
-      setAuthUser(results['user']);
+      setUser(results['user']);
     } catch (error) {
       setState(error: error.response.data, loading: false, loaded: true);
+    }
+  }
+
+  setAdImpression(String type) async {
+    await _apiProvider.setAdImpression(type);
+  }
+
+  followUser(followingId, guestId) async {
+    try {
+      final Response response = await _apiProvider.followUser(
+        followingId,
+        guestId,
+      );
+
+      final results = response.data;
+
+      setState(
+        user: User.fromMap(results['user']),
+        guest: User.fromMap(results['guest']),
+        error: null,
+        loading: false,
+        loaded: true,
+      );
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
+  }
+
+  unfollowUser(followingId, guestId) async {
+    try {
+      final Response response = await _apiProvider.unfollowUser(
+        followingId,
+        guestId,
+      );
+
+      final results = response.data;
+
+      setState(
+        user: User.fromMap(results['user']),
+        guest: User.fromMap(results['guest']),
+        error: null,
+        loading: false,
+        loaded: true,
+      );
+    } catch (error) {
+      setState(loading: false, loaded: true);
     }
   }
 
@@ -89,7 +138,7 @@ class UserBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getAdsKeywords();
       final results = response.data;
 
-      await setState(adsKeywords: results['keywords']);
+      setUser(results['user']);
     } catch (error) {
       setState(loading: false, loaded: true);
     }
@@ -100,7 +149,7 @@ class UserBloc extends ChangeNotifier {
       final Response response = await _apiProvider.uploadAvatar(formdata);
       final results = response.data;
 
-      await setAuthUser(results['user']);
+      setUser(results['user']);
     } catch (error) {
       setState(loading: false, loaded: true);
     }
@@ -111,7 +160,25 @@ class UserBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getAuthUser();
       final results = response.data;
 
-      await setAuthUser(results['user']);
+      setUser(results['user']);
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
+  }
+
+  getGuestUser(int userId) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.getGuestUser(userId);
+      final results = response.data;
+
+      setState(
+        guest: User.fromMap(results['user']),
+        error: null,
+        loading: false,
+        loaded: true,
+      );
     } catch (error) {
       setState(loading: false, loaded: true);
     }
@@ -124,7 +191,7 @@ class UserBloc extends ChangeNotifier {
     }
   }
 
-  setAuthUser(Map userData) {
+  setUser(Map userData) {
     setState(
       user: User.fromMap(userData),
       error: null,

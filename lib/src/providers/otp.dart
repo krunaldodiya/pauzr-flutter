@@ -82,7 +82,7 @@ class OtpBloc extends ChangeNotifier {
       final results = response.data;
 
       await userBloc.setAuthToken(results['access_token']);
-      await userBloc.setAuthUser(results['user']);
+      await userBloc.setUser(results['user']);
 
       setState(loading: false, loaded: true);
     } catch (error) {
