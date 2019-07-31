@@ -85,5 +85,13 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-8693156356265683~5180433123"/>
+            
+        <meta-data 
+            android:name="com.facebook.sdk.ApplicationId" 
+            android:value="@string/facebook_app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.CodelessDebugLogEnabled"
+            android:value="true" />
     </application>
 </manifest>
