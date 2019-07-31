@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
@@ -20,7 +22,6 @@ class _FollowPageState extends State<FollowPage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
   String keywords;
-  String type;
 
   TextEditingController nameController = TextEditingController();
 
@@ -30,7 +31,11 @@ class _FollowPageState extends State<FollowPage>
 
     tabController = TabController(vsync: this, length: 2);
 
-    tabController.animateTo(type == 'followers' ? 0 : 1);
+    tabController.animateTo(
+      widget.type == 'followers' ? 0 : 1,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
 
     tabController.addListener(() {
       setState(() {
@@ -169,7 +174,16 @@ class _FollowPageState extends State<FollowPage>
               return Container(
                 color: Colors.white,
                 child: ListTile(
-                  onTap: () => null,
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      routeList.view_profile,
+                      arguments: {
+                        "shouldPop": true,
+                        "user": User.fromMap(user),
+                      },
+                    );
+                  },
                   leading: CircleAvatar(
                     radius: 20.0,
                     backgroundImage: CachedNetworkImageProvider(
