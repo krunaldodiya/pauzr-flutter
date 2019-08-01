@@ -22,6 +22,12 @@ class ApiProvider {
     });
   }
 
+  Future redeemPoints(int postId) async {
+    return sendRequest(Api.redeemPoints, {
+      "post_id": postId,
+    });
+  }
+
   Future getAdsKeywords() async {
     return sendRequest(Api.getAdsKeywords);
   }
@@ -283,6 +289,7 @@ class Api {
   static String deletePost = "$baseUrl/api/posts/delete";
   static String editPost = "$baseUrl/api/posts/edit";
   static String toggleFavorite = "$baseUrl/api/posts/like";
+  static String redeemPoints = "$baseUrl/api/posts/redeem";
   static String getWalletHistory = "$baseUrl/api/timer/points";
   static String getTimerHistory = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";

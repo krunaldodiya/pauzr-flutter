@@ -213,9 +213,15 @@ class _ManagePostPageState extends State<ManagePostPage> {
     String photo = photoController.text;
 
     XsProgressHud.show(context);
-    await postBloc.editPost(widget.post.id, description, photo);
+
+    final Post post = await postBloc.editPost(
+      widget.post.id,
+      description,
+      photo,
+    );
+
     XsProgressHud.hide();
 
-    Navigator.pop(context);
+    Navigator.of(context).pop(post);
   }
 }

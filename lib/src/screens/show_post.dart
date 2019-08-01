@@ -27,7 +27,6 @@ class ShowPost extends StatefulWidget {
 class _ShowPost extends State<ShowPost> {
   InterstitialAd _interstitialAd;
 
-  List<int> likes = [];
   Post post;
 
   @override
@@ -83,183 +82,156 @@ class _ShowPost extends State<ShowPost> {
       body: SafeArea(
         child: post == null
             ? Center(child: CircularProgressIndicator())
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 22.0,
-                        backgroundImage: CachedNetworkImageProvider(
-                          "$baseUrl/storage/${post.owner.avatar}",
-                        ),
-                      ),
-                      title: Text(
-                        post.owner.name.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontFamily: Fonts.titilliumWebSemiBold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        post.when,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.0,
-                          fontFamily: Fonts.titilliumWebRegular,
-                        ),
-                      ),
-                      trailing: post.owner.id == userBloc.user.id
-                          ? PopupMenuButton(
-                              padding: EdgeInsets.all(10.0),
-                              onSelected: (choice) {
-                                choiceActions(choice, postBloc);
-                              },
-                              itemBuilder: (context) {
-                                return ["Edit Post", "Delete Post"]
-                                    .map((choice) {
-                                  return PopupMenuItem(
-                                    value: choice,
-                                    child: Text(
-                                      choice,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14.0,
-                                        fontFamily: Fonts.titilliumWebRegular,
-                                      ),
-                                    ),
-                                  );
-                                }).toList();
-                              },
-                              icon: Icon(Icons.more_vert),
-                            )
-                          : null,
-                    ),
-                  ),
-                  if (post.description != null)
-                    Container(
-                      padding: EdgeInsets.only(left: 10.0),
-                      alignment: Alignment.center,
-                      child: ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.all(0),
-                        isThreeLine: false,
-                        title: Text(
-                          post.description,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                            fontFamily: Fonts.titilliumWebRegular,
-                          ),
-                        ),
-                      ),
-                    ),
-                  InkWell(
-                    onDoubleTap: () {
-                      return isLiked(userBloc)
-                          ? null
-                          : likePost(userBloc, postBloc);
-                    },
-                    child: Container(
-                      child: CachedNetworkImage(
-                        imageUrl: post.url,
-                        placeholder: (context, url) {
-                          return Image.asset(
-                            "assets/images/loading.gif",
-                          );
-                        },
-                        errorWidget: (context, url, error) {
-                          return Icon(Icons.error);
-                        },
-                        fit: BoxFit.cover,
-                        alignment: Alignment.center,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            isLiked(userBloc)
-                                ? unlikePost(userBloc, postBloc)
-                                : likePost(userBloc, postBloc);
-                          },
-                          child: Container(
-                            child: Icon(
-                              Icons.favorite,
-                              color:
-                                  isLiked(userBloc) ? Colors.pink : Colors.grey,
-                              size: 26.0,
-                            ),
-                          ),
-                        ),
-                        Container(width: 5.0),
-                        Container(
-                          child: Text(
-                            likes.length.toString(),
-                            style: TextStyle(
-                              fontFamily: Fonts.titilliumWebRegular,
-                              fontSize: 18.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        Container(
-                          child: RaisedButton(
-                            color: Colors.blue,
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              int minPoints = 0;
-
-                              if (likes.length < minPoints) {
-                                showErrorPopup(
-                                  context,
-                                  message:
-                                      "Minimum $minPoints points required to redeem",
-                                );
-                              } else {
-                                showConfirmationPopup(
-                                  context,
-                                  message:
-                                      "You can only redeem once, are you sure ?",
-                                  onPressYes: () {
-                                    redeemPoints();
-                                  },
-                                );
-                              }
-                            },
-                            child: Text(
-                              "Redeem",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: Fonts.titilliumWebSemiBold,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Text("1 Like = 1 Point"),
-                  ),
-                ],
+            : SingleChildScrollView(
+                child: getBody(userBloc, postBloc, context),
               ),
       ),
     );
   }
 
-  isLiked(UserBloc userBloc) {
-    return likes.contains(userBloc.user.id);
+  Column getBody(UserBloc userBloc, PostBloc postBloc, BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 22.0,
+              backgroundImage: CachedNetworkImageProvider(
+                "$baseUrl/storage/${post.owner.avatar}",
+              ),
+            ),
+            title: Text(
+              post.owner.name.toUpperCase(),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebSemiBold,
+              ),
+            ),
+            subtitle: Text(
+              post.when,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 12.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: post.owner.id == userBloc.user.id
+                ? PopupMenuButton(
+                    padding: EdgeInsets.all(10.0),
+                    onSelected: (choice) {
+                      choiceActions(choice, postBloc);
+                    },
+                    itemBuilder: (context) {
+                      return ["Edit Post", "Delete Post"].map((choice) {
+                        return PopupMenuItem(
+                          value: choice,
+                          child: Text(
+                            choice,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontFamily: Fonts.titilliumWebRegular,
+                            ),
+                          ),
+                        );
+                      }).toList();
+                    },
+                    icon: Icon(Icons.more_vert),
+                  )
+                : null,
+          ),
+        ),
+        if (post.description != null)
+          Container(
+            padding: EdgeInsets.only(left: 10.0),
+            alignment: Alignment.center,
+            child: ListTile(
+              dense: true,
+              contentPadding: EdgeInsets.all(0),
+              isThreeLine: false,
+              title: Text(
+                post.description,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontFamily: Fonts.titilliumWebRegular,
+                ),
+              ),
+            ),
+          ),
+        InkWell(
+          onDoubleTap: () {
+            return isLiked(userBloc, post.likes)
+                ? null
+                : likePost(userBloc, postBloc);
+          },
+          child: Container(
+            child: CachedNetworkImage(
+              imageUrl: post.url,
+              placeholder: (context, url) {
+                return Image.asset(
+                  "assets/images/loading.gif",
+                );
+              },
+              errorWidget: (context, url, error) {
+                return Icon(Icons.error);
+              },
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  isLiked(userBloc, post.likes)
+                      ? unlikePost(userBloc, postBloc)
+                      : likePost(userBloc, postBloc);
+                },
+                child: Container(
+                  child: Icon(
+                    Icons.favorite,
+                    color: isLiked(userBloc, post.likes)
+                        ? Colors.pink
+                        : Colors.grey,
+                    size: 26.0,
+                  ),
+                ),
+              ),
+              Container(width: 5.0),
+              Container(
+                child: Text(
+                  post.likes.length.toString(),
+                  style: TextStyle(
+                    fontFamily: Fonts.titilliumWebRegular,
+                    fontSize: 18.0,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+              Expanded(child: Container()),
+              getRedeemButton(userBloc, postBloc),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.all(10.0),
+          child: Text("1 Like = 1 Point"),
+        ),
+      ],
+    );
+  }
+
+  bool isLiked(UserBloc userBloc, List likes) {
+    return likes.map((like) => like['user_id']).contains(userBloc.user.id);
   }
 
   choiceActions(String choice, PostBloc postBloc) {
@@ -270,7 +242,11 @@ class _ShowPost extends State<ShowPost> {
         arguments: {
           "post": widget.post,
         },
-      );
+      ).then((postData) {
+        setState(() {
+          post = postData;
+        });
+      });
     }
 
     if (choice == "Delete Post") {
@@ -293,26 +269,84 @@ class _ShowPost extends State<ShowPost> {
   }
 
   void likePost(UserBloc userBloc, PostBloc postBloc) {
-    List<int> likesData = likes..add(userBloc.user.id);
+    Post postData = post..likes.add({"user_id": userBloc.user.id});
 
     setState(() {
-      likes = likesData;
+      post = postData;
     });
 
     postBloc.toggleFavorite(widget.post.id);
   }
 
   void unlikePost(UserBloc userBloc, PostBloc postBloc) {
-    List<int> likesData = likes..removeWhere((id) => id == userBloc.user.id);
+    Post postData = post
+      ..likes.removeWhere((like) => like['user_id'] == userBloc.user.id);
 
     setState(() {
-      likes = likesData;
+      post = postData;
     });
 
     postBloc.toggleFavorite(widget.post.id);
   }
 
-  void redeemPoints() {
-    //
+  void redeemPoints(PostBloc postBloc) async {
+    XsProgressHud.show(context);
+
+    final Post postData = await postBloc.redeemPoints(widget.post.id);
+
+    setState(() {
+      post = postData;
+    });
+
+    XsProgressHud.hide();
+  }
+
+  getRedeemButton(userBloc, postBloc) {
+    if (post.earnings != null) {
+      return Container(
+        margin: EdgeInsets.all(10.0),
+        child: Text(
+          "Redeemed @ ${post.earnings['points']} likes",
+          style: TextStyle(fontFamily: Fonts.titilliumWebRegular),
+        ),
+      );
+    }
+
+    if (userBloc.user.id == post.owner.id) {
+      return Container(
+        child: RaisedButton(
+          color: Colors.blue,
+          padding: EdgeInsets.all(0),
+          onPressed: () {
+            int minPoints = 20;
+
+            if (post.likes.length < minPoints) {
+              showErrorPopup(
+                context,
+                message: "Minimum $minPoints points required to redeem",
+              );
+            } else {
+              showConfirmationPopup(
+                context,
+                message: "You can only redeem once, are you sure ?",
+                onPressYes: () {
+                  redeemPoints(postBloc);
+                },
+              );
+            }
+          },
+          child: Text(
+            "Redeem",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: Fonts.titilliumWebSemiBold,
+              fontSize: 14.0,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container();
   }
 }

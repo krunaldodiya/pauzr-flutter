@@ -45,27 +45,35 @@ class _ViewProfilePage extends State<ViewProfilePage> {
     final PostBloc postBloc = Provider.of<PostBloc>(context);
 
     final User guestUserData = await userBloc.getGuestUser(widget.user.id);
-    final List<Post> postsData =
-        await postBloc.getPosts(loadMore: false, userId: widget.user.id);
-
     setState(() {
       guestUser = guestUserData;
-      posts = postsData;
     });
+
+    await getPosts(postBloc, false, widget.user.id);
 
     _scrollController.addListener(() async {
       var pixels = _scrollController.position.pixels;
       var maxScrollExtent = _scrollController.position.maxScrollExtent;
 
       if (pixels == maxScrollExtent) {
-        final List<Post> postsData =
-            await postBloc.getPosts(loadMore: true, userId: widget.user.id);
-
-        setState(() {
-          posts = postsData;
-        });
+        await getPosts(postBloc, true, widget.user.id);
       }
     });
+  }
+
+  Future getPosts(PostBloc postBloc, bool loadMore, int userId) async {
+    final List<Post> postsData = await postBloc.getPosts(
+      loadMore: false,
+      userId: widget.user.id,
+    );
+
+    setState(() {
+      posts = postsData;
+    });
+  }
+
+  bool isLiked(UserBloc userBloc, List likes) {
+    return likes.map((like) => like['user_id']).contains(userBloc.user.id);
   }
 
   @override
@@ -388,24 +396,43 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                 context,
                 routeList.show_post,
                 arguments: {"post": post},
-              );
+              ).then((post) {
+                getPosts(postBloc, false, widget.user.id);
+              });
             },
-            child: Container(
-              margin: EdgeInsets.all(3.0),
-              alignment: Alignment.center,
-              child: CachedNetworkImage(
-                imageUrl: "$baseUrl/storage/${post.url}",
-                placeholder: (context, url) {
-                  return Image.asset(
-                    "assets/images/loading.gif",
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return Icon(Icons.error);
-                },
-                fit: BoxFit.cover,
-                alignment: Alignment.center,
-              ),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.all(3.0),
+                  alignment: Alignment.center,
+                  child: CachedNetworkImage(
+                    imageUrl: "$baseUrl/storage/${post.url}",
+                    placeholder: (context, url) {
+                      return Image.asset(
+                        "assets/images/loading.gif",
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Icon(Icons.error);
+                    },
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    child: Icon(
+                      Icons.favorite,
+                      color: isLiked(userBloc, post.likes)
+                          ? Colors.pink
+                          : Colors.white,
+                      size: 18.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },

@@ -126,7 +126,7 @@ class PostBloc extends ChangeNotifier {
         loaded: true,
       );
 
-      return postsData;
+      return currentPost;
     } catch (error) {
       setState(loading: false, loaded: true);
     }
@@ -151,9 +151,9 @@ class PostBloc extends ChangeNotifier {
       final Response response = await _apiProvider.getPosts(page, userId);
       final results = response.data;
 
-      final List<Post> imageData = Post.fromList(results['posts']['data']);
+      final List<Post> postData = Post.fromList(results['posts']['data']);
       final int lastPage = results['posts']['last_page'];
-      final List<Post> postsData = posts..addAll(imageData);
+      final List<Post> postsData = posts..addAll(postData);
 
       setState(
         lastPage: lastPage,
@@ -180,6 +180,22 @@ class PostBloc extends ChangeNotifier {
     try {
       await _apiProvider.toggleFavorite(postId);
       setState(loading: false, loaded: true);
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
+  }
+
+  redeemPoints(int postId) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      final Response response = await _apiProvider.redeemPoints(postId);
+
+      final results = response.data;
+      final Post currentPost = Post.fromMap(results['post']);
+
+      setState(loading: false, loaded: true);
+      return currentPost;
     } catch (error) {
       setState(loading: false, loaded: true);
     }
