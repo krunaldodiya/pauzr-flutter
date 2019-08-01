@@ -12,7 +12,7 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/city.dart';
-import 'package:pauzr/src/providers/gallery.dart';
+import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
@@ -72,7 +72,7 @@ class _EditProfilePage extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
+    final PostBloc postBloc = Provider.of<PostBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -114,7 +114,7 @@ class _EditProfilePage extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(height: 20.0),
-              photoUpload(userBloc, galleryBloc),
+              photoUpload(userBloc, postBloc),
               EditableFormField(
                 cursorColor: theme.editProfile.cursorColor,
                 controller: nameController,
@@ -212,11 +212,11 @@ class _EditProfilePage extends State<EditProfilePage> {
     );
   }
 
-  photoUpload(UserBloc userBloc, GalleryBloc galleryBloc) {
+  photoUpload(UserBloc userBloc, PostBloc postBloc) {
     if (widget.shouldPop == true) {
       return GestureDetector(
         onTap: () {
-          uploadImage(userBloc, galleryBloc);
+          uploadImage(userBloc, postBloc);
         },
         child: Container(
           height: 120.0,
@@ -271,7 +271,7 @@ class _EditProfilePage extends State<EditProfilePage> {
     }
   }
 
-  void uploadImage(UserBloc userBloc, GalleryBloc galleryBloc) async {
+  void uploadImage(UserBloc userBloc, PostBloc postBloc) async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     final File file = await ImageCropper.cropImage(
       sourcePath: image.path,
@@ -287,8 +287,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     XsProgressHud.show(context);
     await userBloc.uploadAvatar(formdata);
-    await galleryBloc.getUserGallery(reload: false, userId: userBloc.user.id);
-
+    await postBloc.getPosts(loadMore: false, userId: userBloc.user.id);
     XsProgressHud.hide();
   }
 }

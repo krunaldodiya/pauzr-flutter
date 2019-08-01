@@ -70,8 +70,8 @@ class ApiProvider {
     return sendRequest(Api.getLotteryWinners, {"page": page});
   }
 
-  Future getUserGallery(int page, int userId) async {
-    return sendRequest(Api.getUserGallery, {"page": page, 'user_id': userId});
+  Future getPosts(int page, int userId) async {
+    return sendRequest(Api.getPosts, {"page": page, 'user_id': userId});
   }
 
   Future getLotteryHistory() async {
@@ -201,8 +201,39 @@ class ApiProvider {
     return sendRequest(Api.uploadAvatar, image);
   }
 
-  Future createPost(FormData image) async {
-    return sendRequest(Api.createPost, image);
+  Future createPost(String description, String photo) async {
+    return sendRequest(Api.createPost, {
+      "description": description,
+      "photo": photo,
+    });
+  }
+
+  Future getPostDetail(int postId) async {
+    return sendRequest(Api.getPostDetail, {
+      "post_id": postId,
+    });
+  }
+
+  Future deletePost(int postId) async {
+    return sendRequest(Api.deletePost, {
+      "post_id": postId,
+    });
+  }
+
+  Future editPost(
+    int postId,
+    String description,
+    String photo,
+  ) async {
+    return sendRequest(Api.editPost, {
+      "postId": postId,
+      "description": description,
+      "photo": photo,
+    });
+  }
+
+  Future uploadPostImage(FormData image) async {
+    return sendRequest(Api.uploadPostImage, image);
   }
 
   Future uploadGroupImage(FormData image) async {
@@ -229,7 +260,7 @@ class Api {
   static String getGuestUser = "$baseUrl/api/users/guest";
   static String getAdsKeywords = "$baseUrl/api/home/keywords";
   static String setAdImpression = "$baseUrl/api/ads/impression";
-  static String getUserGallery = "$baseUrl/api/users/gallery";
+  static String getPosts = "$baseUrl/api/posts/list";
   static String requestOtp = "$baseUrl/api/otp/request-otp";
   static String verifyOtp = "$baseUrl/api/otp/verify-otp";
   static String getCities = "$baseUrl/api/home/cities";
@@ -241,7 +272,10 @@ class Api {
   static String getProfessions = "$baseUrl/api/home/professions";
   static String updateProfile = "$baseUrl/api/users/update";
   static String uploadAvatar = "$baseUrl/api/users/avatar/upload";
+  static String getPostDetail = "$baseUrl/api/posts/detail";
   static String createPost = "$baseUrl/api/posts/create";
+  static String deletePost = "$baseUrl/api/posts/delete";
+  static String editPost = "$baseUrl/api/posts/edit";
   static String getWalletHistory = "$baseUrl/api/timer/points";
   static String getTimerHistory = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";
@@ -256,6 +290,7 @@ class Api {
   static String removeParticipants = "$baseUrl/api/groups/remove-participants";
   static String getGroups = "$baseUrl/api/groups/get";
   static String uploadGroupImage = "$baseUrl/api/groups/image/upload";
+  static String uploadPostImage = "$baseUrl/api/posts/image/upload";
   static String syncContacts = "$baseUrl/api/groups/sync-contacts";
   static String notifyError = "$baseUrl/api/error/notify";
 }

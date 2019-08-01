@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/gallery.dart';
+import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/user.dart';
-import 'package:pauzr/src/providers/gallery.dart';
+import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
@@ -32,6 +28,9 @@ class ViewProfilePage extends StatefulWidget {
 }
 
 class _ViewProfilePage extends State<ViewProfilePage> {
+  User guestUser;
+  List<Post> posts;
+
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -43,15 +42,28 @@ class _ViewProfilePage extends State<ViewProfilePage> {
 
   getInitialData() async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
+    final PostBloc postBloc = Provider.of<PostBloc>(context);
 
-    await userBloc.getGuestUser(widget.user.id);
-    await galleryBloc.getUserGallery(reload: false, userId: widget.user.id);
+    final User guestUserData = await userBloc.getGuestUser(widget.user.id);
+    final List<Post> postsData =
+        await postBloc.getPosts(loadMore: false, userId: widget.user.id);
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        galleryBloc.getUserGallery(reload: true, userId: widget.user.id);
+    setState(() {
+      guestUser = guestUserData;
+      posts = postsData;
+    });
+
+    _scrollController.addListener(() async {
+      var pixels = _scrollController.position.pixels;
+      var maxScrollExtent = _scrollController.position.maxScrollExtent;
+
+      if (pixels == maxScrollExtent) {
+        final List<Post> postsData =
+            await postBloc.getPosts(loadMore: true, userId: widget.user.id);
+
+        setState(() {
+          posts = postsData;
+        });
       }
     });
   }
@@ -66,14 +78,12 @@ class _ViewProfilePage extends State<ViewProfilePage> {
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    final GalleryBloc galleryBloc = Provider.of<GalleryBloc>(context);
+    final PostBloc postBloc = Provider.of<PostBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
-    final User guest = userBloc.guest;
-
     return Scaffold(
-      backgroundColor: theme.viewProfile.backgroundColor,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: theme.viewProfile.backgroundColor,
@@ -105,165 +115,183 @@ class _ViewProfilePage extends State<ViewProfilePage> {
         ],
       ),
       body: SafeArea(
-        child: userBloc.loading == true
-            ? Container(
+        child: userBloc.loading == true ||
+                postBloc.loading == true ||
+                guestUser == null
+            ? Center(child: CircularProgressIndicator())
+            : getBody(context, postBloc, userBloc),
+      ),
+    );
+  }
+
+  Container getBody(
+    BuildContext context,
+    PostBloc postBloc,
+    UserBloc userBloc,
+  ) {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(5.0),
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
                 color: Colors.white,
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              )
-            : Container(
-                color: Colors.white,
-                padding: EdgeInsets.all(5.0),
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 5.0,
-                            vertical: 10.0,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              ClipOval(
-                                child: CachedNetworkImage(
-                                  imageUrl: "$baseUrl/storage/${guest.avatar}",
-                                  placeholder: (context, url) {
-                                    return CircularProgressIndicator();
-                                  },
-                                  errorWidget: (context, url, error) {
-                                    return Icon(Icons.error);
-                                  },
-                                  width: 80.0,
-                                  height: 80.0,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                ),
-                              ),
-                              Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      galleryBloc.images.length.toString(),
-                                      style: TextStyle(
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    Container(height: 10.0),
-                                    Text(
-                                      "Posts",
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    routeList.follow_page,
-                                    arguments: {"type": "followers"},
-                                  );
-                                },
-                                child: Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        guest.followers.length.toString(),
-                                        style: TextStyle(
-                                          fontSize: 22.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Container(height: 10.0),
-                                      Text(
-                                        "Followers",
-                                        style: TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    routeList.follow_page,
-                                    arguments: {"type": "followings"},
-                                  );
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 5.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        guest.followings.length.toString(),
-                                        style: TextStyle(
-                                          fontSize: 22.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Container(height: 10.0),
-                                      Text(
-                                        "Following",
-                                        style: TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 3.0,
-                            vertical: 5.0,
-                          ),
-                          width: double.infinity,
-                          child: userBloc.user.id == guest.id
-                              ? RaisedButton(
-                                  child: Text(
-                                    "Create Post",
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    createPost(userBloc, galleryBloc);
-                                  },
-                                )
-                              : getFollowButton(userBloc),
-                        ),
-                      ]),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 5.0,
+                  vertical: 10.0,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: "$baseUrl/storage/${guestUser.avatar}",
+                        placeholder: (context, url) {
+                          return CircularProgressIndicator();
+                        },
+                        errorWidget: (context, url, error) {
+                          return Icon(Icons.error);
+                        },
+                        width: 80.0,
+                        height: 80.0,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
                     ),
-                    getGridView(galleryBloc),
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            posts.length.toString(),
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Container(height: 10.0),
+                          Text(
+                            "Posts",
+                            style: TextStyle(
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          routeList.follow_page,
+                          arguments: {
+                            "type": "followers",
+                            "guestUser": guestUser,
+                          },
+                        );
+                      },
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              guestUser.followers.length.toString(),
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Container(height: 10.0),
+                            Text(
+                              "Followers",
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          routeList.follow_page,
+                          arguments: {
+                            "type": "followings",
+                            "guestUser": guestUser,
+                          },
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 5.0),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              guestUser.followings.length.toString(),
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Container(height: 10.0),
+                            Text(
+                              "Following",
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 3.0,
+                  vertical: 5.0,
+                ),
+                width: double.infinity,
+                child: userBloc.user.id == guestUser.id
+                    ? RaisedButton(
+                        child: Text(
+                          "Create Post",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            routeList.manage_post,
+                            arguments: {"post": null},
+                          );
+
+                          // createPost(userBloc, PostBloc);
+                        },
+                      )
+                    : getFollowButton(userBloc),
+              ),
+            ]),
+          ),
+          getGridView(userBloc, postBloc),
+        ],
       ),
     );
   }
@@ -293,14 +321,20 @@ class _ViewProfilePage extends State<ViewProfilePage> {
       ),
       onPressed: () {
         alreadyFollowing
-            ? unfollowUser(userBloc, userBloc.guest.id, userBloc.guest.id)
-            : followUser(userBloc, userBloc.guest.id, userBloc.guest.id);
+            ? showConfirmationPopup(
+                context,
+                message: "Are you sure want to unfollow ?",
+                onPressYes: () {
+                  unfollowUser(userBloc, guestUser.id, guestUser.id);
+                },
+              )
+            : followUser(userBloc, guestUser.id, guestUser.id);
       },
     );
   }
 
-  getGridView(GalleryBloc galleryBloc) {
-    if (galleryBloc.loading == true) {
+  getGridView(UserBloc userBloc, PostBloc postBloc) {
+    if (userBloc.loading == true || postBloc.loading == true) {
       return SliverList(
         delegate: SliverChildListDelegate([
           Container(
@@ -318,7 +352,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
       );
     }
 
-    if (galleryBloc.images.length == 0) {
+    if (posts.length == 0) {
       return SliverList(
         delegate: SliverChildListDelegate([
           Container(
@@ -342,21 +376,21 @@ class _ViewProfilePage extends State<ViewProfilePage> {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          Gallery gallery = galleryBloc.images[index];
+          Post post = posts[index];
 
           return GestureDetector(
             onTap: () {
               Navigator.pushNamed(
                 context,
                 routeList.show_post,
-                arguments: {"gallery": gallery},
+                arguments: {"post": post},
               );
             },
             child: Container(
               margin: EdgeInsets.all(3.0),
               alignment: Alignment.center,
               child: CachedNetworkImage(
-                imageUrl: "$baseUrl/storage/${gallery.url}",
+                imageUrl: "$baseUrl/storage/${post.url}",
                 placeholder: (context, url) {
                   return CircularProgressIndicator();
                 },
@@ -369,28 +403,9 @@ class _ViewProfilePage extends State<ViewProfilePage> {
             ),
           );
         },
-        childCount: galleryBloc.images.length,
+        childCount: posts.length,
       ),
     );
-  }
-
-  void createPost(UserBloc userBloc, GalleryBloc galleryBloc) async {
-    final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    final File file = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      ratioX: 1.0,
-      ratioY: 1.0,
-      maxWidth: 512,
-      maxHeight: 512,
-    );
-
-    FormData formdata = FormData.from({
-      "image": UploadFileInfo(file, file.path),
-    });
-
-    XsProgressHud.show(context);
-    await galleryBloc.createPost(userBloc, galleryBloc, formdata);
-    XsProgressHud.hide();
   }
 
   void followUser(UserBloc userBloc, int followingId, int guestId) async {

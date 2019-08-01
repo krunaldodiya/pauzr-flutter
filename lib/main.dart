@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/providers/city.dart';
 import 'package:pauzr/src/providers/country.dart';
-import 'package:pauzr/src/providers/gallery.dart';
+import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/otp.dart';
@@ -35,8 +35,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<GalleryBloc>.value(
-          notifier: GalleryBloc(),
+        ChangeNotifierProvider<PostBloc>.value(
+          notifier: PostBloc(),
         ),
         ChangeNotifierProvider<LotteryBloc>.value(
           notifier: LotteryBloc(),

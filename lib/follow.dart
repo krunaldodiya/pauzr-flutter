@@ -7,13 +7,19 @@ import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class FollowPage extends StatefulWidget {
   final String type;
+  final User guestUser;
 
-  FollowPage({Key key, @required this.type}) : super(key: key);
+  FollowPage({
+    Key key,
+    @required this.type,
+    @required this.guestUser,
+  }) : super(key: key);
 
   _FollowPageState createState() => _FollowPageState();
 }
@@ -62,7 +68,7 @@ class _FollowPageState extends State<FollowPage>
             contentPadding: EdgeInsets.all(0),
             isThreeLine: false,
             title: Text(
-              userBloc.guest.name.toUpperCase(),
+              widget.guestUser.name.toUpperCase(),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
@@ -86,14 +92,14 @@ class _FollowPageState extends State<FollowPage>
           isScrollable: false,
           tabs: <Widget>[
             Text(
-              "Followers (${userBloc.guest.followers.length})",
+              "Followers (${widget.guestUser.followers.length})",
               style: TextStyle(
                 fontSize: 14.0,
                 fontFamily: Fonts.titilliumWebRegular,
               ),
             ),
             Text(
-              "Following (${userBloc.guest.followings.length})",
+              "Following (${widget.guestUser.followings.length})",
               style: TextStyle(
                 fontSize: 14.0,
                 fontFamily: Fonts.titilliumWebRegular,
@@ -106,13 +112,13 @@ class _FollowPageState extends State<FollowPage>
         controller: tabController,
         children: <Widget>[
           showFollowList(
-            userBloc.guest.followers
+            widget.guestUser.followers
                 .map((follower) => follower['follower_user'])
                 .toList(),
             userBloc,
           ),
           showFollowList(
-            userBloc.guest.followings
+            widget.guestUser.followings
                 .map((following) => following['following_user'])
                 .toList(),
             userBloc,
@@ -236,8 +242,14 @@ class _FollowPageState extends State<FollowPage>
       ),
       onPressed: () {
         alreadyFollowing
-            ? unfollowUser(userBloc, user["id"], userBloc.guest.id)
-            : followUser(userBloc, user["id"], userBloc.guest.id);
+            ? showConfirmationPopup(
+                context,
+                message: "Are you sure want to unfollow ?",
+                onPressYes: () {
+                  unfollowUser(userBloc, user["id"], widget.guestUser.id);
+                },
+              )
+            : followUser(userBloc, user["id"], widget.guestUser.id);
       },
     );
   }

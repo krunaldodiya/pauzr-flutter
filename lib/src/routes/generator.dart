@@ -16,6 +16,7 @@ import 'package:pauzr/src/screens/minutes/info.dart';
 import 'package:pauzr/src/screens/otp/request_otp.dart';
 import 'package:pauzr/src/screens/otp/verify_otp.dart';
 import 'package:pauzr/src/screens/points/info.dart';
+import 'package:pauzr/src/screens/posts/manage_post.dart';
 import 'package:pauzr/src/screens/show_photo.dart';
 import 'package:pauzr/src/screens/show_post.dart';
 import 'package:pauzr/src/screens/stop.dart';
@@ -61,6 +62,7 @@ class RouteGenerator {
           builder: (context) {
             return FollowPage(
               type: args['type'],
+              guestUser: args['guestUser'],
             );
           },
         );
@@ -121,7 +123,7 @@ class RouteGenerator {
       case routeList.show_post:
         return MaterialPageRoute(
           builder: (context) {
-            return ShowPost(gallery: args['gallery']);
+            return ShowPost(post: args['post']);
           },
         );
         break;
@@ -195,6 +197,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return ManageGroupPage(group: args['group']);
+          },
+        );
+        break;
+
+      case routeList.manage_post:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ManagePostPage(post: args['post']);
           },
         );
         break;

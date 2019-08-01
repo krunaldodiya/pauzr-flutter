@@ -30,22 +30,19 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
   }
 
   getInitialData() async {
-    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-
-    timerBloc.getQuotes();
-
     FirebaseAdMob.instance.initialize(appId: admobAppId);
-
     _interstitialAd = createInterstitialAd(userBloc)
       ..load()
       ..show();
+
+    final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
+    timerBloc.getQuotes();
   }
 
   @override
   void dispose() {
     _interstitialAd.dispose();
-
     super.dispose();
   }
 

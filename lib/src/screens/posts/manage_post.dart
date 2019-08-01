@@ -10,30 +10,29 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/validation.dart';
 import 'package:pauzr/src/helpers/vars.dart';
-import 'package:pauzr/src/models/group.dart';
-import 'package:pauzr/src/providers/group.dart';
+import 'package:pauzr/src/models/post.dart';
+import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/resources/api.dart';
-import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/users/editable.dart';
 import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
-class ManageGroupPage extends StatefulWidget {
-  final Group group;
+class ManagePostPage extends StatefulWidget {
+  final Post post;
 
-  ManageGroupPage({
+  ManagePostPage({
     Key key,
-    this.group,
+    this.post,
   }) : super(key: key);
 
-  _ManageGroupPageState createState() => _ManageGroupPageState();
+  _ManagePostPageState createState() => _ManagePostPageState();
 }
 
-class _ManageGroupPageState extends State<ManageGroupPage> {
+class _ManagePostPageState extends State<ManagePostPage> {
   ApiProvider _apiProvider = ApiProvider();
 
-  TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController photoController =
       TextEditingController(text: "default.jpeg");
@@ -42,18 +41,18 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   void initState() {
     super.initState();
 
-    if (widget.group != null) {
+    print(widget.post);
+
+    if (widget.post != null) {
       setState(() {
-        nameController.text = widget.group.name;
-        descriptionController.text = widget.group.description;
-        photoController.text = widget.group.photo;
+        descriptionController.text = widget.post.description;
+        photoController.text = widget.post.url;
       });
     }
   }
 
   @override
   void dispose() {
-    nameController.dispose();
     descriptionController.dispose();
     photoController.dispose();
 
@@ -63,7 +62,8 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
-    final GroupBloc groupBloc = Provider.of<GroupBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    final PostBloc postBloc = Provider.of<PostBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -72,7 +72,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
       appBar: AppBar(
         backgroundColor: theme.manageGroup.appBackgroundColor,
         title: Text(
-          widget.group != null ? "Update Group" : "Create Group",
+          widget.post != null ? "Update Post" : "Create Post",
           style: TextStyle(
             color: Colors.white,
             fontSize: 18.0,
@@ -80,15 +80,15 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           ),
         ),
         actions: <Widget>[
-          if (groupBloc.loading != true)
+          if (postBloc.loading != true)
             FlatButton(
               onPressed: () {
-                widget.group == null
-                    ? createGroup(groupBloc)
-                    : editGroup(groupBloc);
+                widget.post == null
+                    ? createPost(postBloc)
+                    : editGroup(postBloc);
               },
               child: Text(
-                widget.group != null ? "Submit" : "Next",
+                widget.post != null ? "Update" : "Create",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14.0,
@@ -120,10 +120,12 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
                   ),
                 ),
                 Center(
-                  child: groupBloc.loading == true
+                  child: postBloc.loading == true
                       ? CircularProgressIndicator()
                       : InkWell(
-                          onTap: uploadGroupImage,
+                          onTap: () {
+                            uploadPostImage(userBloc, postBloc);
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,35 +154,21 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
           Container(height: 10.0),
           EditableFormField(
             cursorColor: theme.manageGroup.cursorColor,
-            keyboardType: TextInputType.text,
-            maxLength: 20,
-            textColor: Colors.black,
-            borderColor: Colors.black,
-            labelColor: Colors.black,
-            controller: nameController,
-            labelText: "Group Name",
-            errorText: getErrorText(groupBloc.error, 'name'),
-          ),
-          EditableFormField(
-            cursorColor: theme.manageGroup.cursorColor,
             maxLength: 100,
             maxLines: 3,
             textColor: Colors.black,
             borderColor: Colors.black,
             labelColor: Colors.black,
             controller: descriptionController,
-            labelText: "Group Description",
-            errorText: getErrorText(groupBloc.error, 'description'),
-          ),
-          Expanded(
-            child: Container(),
+            labelText: "Description",
+            errorText: getErrorText(postBloc.error, 'description'),
           ),
         ],
       ),
     );
   }
 
-  void uploadGroupImage() async {
+  void uploadPostImage(UserBloc userBloc, PostBloc postBloc) async {
     final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     final File file = await ImageCropper.cropImage(
       sourcePath: image.path,
@@ -196,7 +184,7 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
 
     try {
       XsProgressHud.show(context);
-      final response = await _apiProvider.uploadGroupImage(formdata);
+      final response = await _apiProvider.uploadPostImage(formdata);
       XsProgressHud.hide();
 
       final results = response.data;
@@ -209,35 +197,24 @@ class _ManageGroupPageState extends State<ManageGroupPage> {
     }
   }
 
-  void createGroup(GroupBloc groupBloc) async {
-    String name = nameController.text;
+  void createPost(PostBloc postBloc) async {
     String description = descriptionController.text;
     String photo = photoController.text;
 
     XsProgressHud.show(context);
-
-    final Group group = await groupBloc.createGroup(name, description, photo);
-
+    await postBloc.createPost(description, photo);
     XsProgressHud.hide();
 
-    if (groupBloc.groups.length > 0) {
-      Navigator.pushReplacementNamed(
-        context,
-        routeList.add_group_participants,
-        arguments: {
-          "group": group,
-          "shouldPop": false,
-        },
-      );
-    }
+    Navigator.pop(context);
   }
 
-  void editGroup(GroupBloc groupBloc) async {
-    String name = nameController.text;
+  void editGroup(PostBloc postBloc) async {
     String description = descriptionController.text;
     String photo = photoController.text;
 
-    await groupBloc.editGroup(widget.group.id, name, description, photo);
+    XsProgressHud.show(context);
+    await postBloc.editPost(widget.post.id, description, photo);
+    XsProgressHud.hide();
 
     Navigator.pop(context);
   }

@@ -14,6 +14,7 @@ const String profession = "/profession";
 const String levels = "/levels";
 const String points = "/points";
 const String minutes = "/minutes";
+const String manage_post = "/manage_post";
 const String manage_group = "/manage_group";
 const String group_detail = "/group_detail";
 const String group_scoreboard = "/group_scoreboard";

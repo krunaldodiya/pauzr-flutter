@@ -92,7 +92,6 @@ class GroupBloc extends ChangeNotifier {
 
       final results = response.data;
       final Group currentGroup = Group.fromMap(results['group']);
-
       final List<Group> groupData = groups..add(currentGroup);
 
       setState(
@@ -120,7 +119,6 @@ class GroupBloc extends ChangeNotifier {
 
       final results = response.data;
       final Group currentGroup = Group.fromMap(results['group']);
-
       final List<Group> groupData = groups
           .map((group) => group.id == currentGroup.id ? currentGroup : group)
           .toList();

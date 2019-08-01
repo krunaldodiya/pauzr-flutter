@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:pauzr/src/models/city.dart';
 import 'package:pauzr/src/models/country.dart';
+import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/level.dart';
 import 'package:pauzr/src/models/state.dart';
 import 'package:pauzr/src/models/wallet.dart';
@@ -22,6 +23,7 @@ class User {
   final int status;
   final List followers;
   final List followings;
+  final List<Post> posts;
 
   User({
     this.id,
@@ -39,6 +41,7 @@ class User {
     this.status,
     this.followers,
     this.followings,
+    this.posts,
   });
 
   User copyWith(Map<String, dynamic> json) {
@@ -58,6 +61,7 @@ class User {
       status: json["status"] ?? this.status,
       followers: json["followers"] ?? this.followers,
       followings: json["followings"] ?? this.followings,
+      posts: json["posts"] ?? this.posts,
     );
   }
 

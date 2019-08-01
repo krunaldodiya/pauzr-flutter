@@ -1,7 +1,10 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/models/wallet.dart';
 import 'package:pauzr/src/providers/lottery.dart';
@@ -21,6 +24,8 @@ class LotteryPage extends StatefulWidget {
 }
 
 class _LotteryPageState extends State<LotteryPage> {
+  InterstitialAd _interstitialAd;
+
   int selectedLotteryIndex;
   bool revealed = false;
 
@@ -32,8 +37,20 @@ class _LotteryPageState extends State<LotteryPage> {
   }
 
   getInitialData() async {
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
+    _interstitialAd = createInterstitialAd(userBloc)
+      ..load()
+      ..show();
+
     final LotteryBloc lotteryBloc = Provider.of<LotteryBloc>(context);
     lotteryBloc.setLotteries(60);
+  }
+
+  @override
+  void dispose() {
+    _interstitialAd.dispose();
+    super.dispose();
   }
 
   @override

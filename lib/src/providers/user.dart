@@ -11,7 +11,6 @@ class UserBloc extends ChangeNotifier {
   bool loaded;
   Map error = const {};
   User user;
-  User guest;
   int tabIndex = 2;
   List<String> adsKeywords = [];
 
@@ -20,7 +19,6 @@ class UserBloc extends ChangeNotifier {
     bool loaded,
     Map error,
     User user,
-    User guest,
     int tabIndex,
     int adsKeywords,
   }) {
@@ -28,7 +26,6 @@ class UserBloc extends ChangeNotifier {
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
     this.user = user ?? this.user;
-    this.guest = guest ?? this.guest;
     this.tabIndex = tabIndex ?? this.tabIndex;
     this.adsKeywords = adsKeywords ?? this.adsKeywords;
 
@@ -102,7 +99,6 @@ class UserBloc extends ChangeNotifier {
 
       setState(
         user: User.fromMap(results['user']),
-        guest: User.fromMap(results['guest']),
         error: null,
         loading: false,
         loaded: true,
@@ -123,7 +119,6 @@ class UserBloc extends ChangeNotifier {
 
       setState(
         user: User.fromMap(results['user']),
-        guest: User.fromMap(results['guest']),
         error: null,
         loading: false,
         loaded: true,
@@ -174,11 +169,12 @@ class UserBloc extends ChangeNotifier {
       final results = response.data;
 
       setState(
-        guest: User.fromMap(results['user']),
         error: null,
         loading: false,
         loaded: true,
       );
+
+      return User.fromMap(results['user']);
     } catch (error) {
       setState(loading: false, loaded: true);
     }
