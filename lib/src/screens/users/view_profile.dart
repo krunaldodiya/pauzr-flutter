@@ -151,7 +151,11 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                       child: CachedNetworkImage(
                         imageUrl: "$baseUrl/storage/${guestUser.avatar}",
                         placeholder: (context, url) {
-                          return CircularProgressIndicator();
+                          return Image.asset(
+                            "assets/images/loading.gif",
+                            width: 80.0,
+                            height: 80.0,
+                          );
                         },
                         errorWidget: (context, url, error) {
                           return Icon(Icons.error);
@@ -392,7 +396,9 @@ class _ViewProfilePage extends State<ViewProfilePage> {
               child: CachedNetworkImage(
                 imageUrl: "$baseUrl/storage/${post.url}",
                 placeholder: (context, url) {
-                  return CircularProgressIndicator();
+                  return Image.asset(
+                    "assets/images/loading.gif",
+                  );
                 },
                 errorWidget: (context, url, error) {
                   return Icon(Icons.error);

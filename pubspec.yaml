@@ -54,6 +54,7 @@ flutter:
     - assets/images/woman.png
     - assets/images/screen.png
     - assets/images/icon.png
+    - assets/images/loading.gif
     - assets/images/intro/1.png
     - assets/images/intro/2.png
     - assets/images/intro/3.png

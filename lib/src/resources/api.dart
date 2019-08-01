@@ -16,6 +16,12 @@ class ApiProvider {
     });
   }
 
+  Future toggleFavorite(int postId) async {
+    return sendRequest(Api.toggleFavorite, {
+      "post_id": postId,
+    });
+  }
+
   Future getAdsKeywords() async {
     return sendRequest(Api.getAdsKeywords);
   }
@@ -276,6 +282,7 @@ class Api {
   static String createPost = "$baseUrl/api/posts/create";
   static String deletePost = "$baseUrl/api/posts/delete";
   static String editPost = "$baseUrl/api/posts/edit";
+  static String toggleFavorite = "$baseUrl/api/posts/like";
   static String getWalletHistory = "$baseUrl/api/timer/points";
   static String getTimerHistory = "$baseUrl/api/timer/minutes";
   static String getRankings = "$baseUrl/api/timer/rankings";

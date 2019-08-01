@@ -173,4 +173,15 @@ class PostBloc extends ChangeNotifier {
       );
     }
   }
+
+  toggleFavorite(int postId) async {
+    setState(loading: true, loaded: false);
+
+    try {
+      await _apiProvider.toggleFavorite(postId);
+      setState(loading: false, loaded: true);
+    } catch (error) {
+      setState(loading: false, loaded: true);
+    }
+  }
 }

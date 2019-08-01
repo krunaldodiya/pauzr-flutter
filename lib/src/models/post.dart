@@ -7,7 +7,7 @@ class Post {
   final String type;
   final String url;
   final String description;
-  final User user;
+  final User owner;
   final String when;
 
   Post({
@@ -15,7 +15,7 @@ class Post {
     this.type,
     this.url,
     this.description,
-    this.user,
+    this.owner,
     this.when,
   });
 
@@ -25,7 +25,7 @@ class Post {
       type: json["type"] ?? this.type,
       url: json["url"] ?? this.url,
       description: json["description"] ?? this.description,
-      user: json["user"] ?? this.user,
+      owner: json["owner"] ?? this.owner,
       when: json["when"] ?? this.when,
     );
   }
@@ -36,8 +36,8 @@ class Post {
       type: json['type'] != null ? json["type"] : null,
       url: json['url'] != null ? json["url"] : null,
       description: json['description'] != null ? json["description"] : null,
-      user: json['user'] != null
-          ? json["user"] is User ? json["user"] : User.fromMap(json["user"])
+      owner: json['owner'] != null
+          ? json["owner"] is User ? json["owner"] : User.fromMap(json["owner"])
           : null,
       when: json['when'] != null ? json["when"] : null,
     );

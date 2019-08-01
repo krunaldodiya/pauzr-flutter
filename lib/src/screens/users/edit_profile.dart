@@ -226,7 +226,11 @@ class _EditProfilePage extends State<EditProfilePage> {
             child: CachedNetworkImage(
               imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
               placeholder: (context, url) {
-                return CircularProgressIndicator();
+                return Image.asset(
+                  "assets/images/loading.gif",
+                  width: 120.0,
+                  height: 120.0,
+                );
               },
               errorWidget: (context, url, error) => Icon(Icons.error),
               width: 120.0,

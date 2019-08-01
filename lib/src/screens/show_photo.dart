@@ -33,7 +33,9 @@ class _ShowPhoto extends State<ShowPhoto> {
           child: CachedNetworkImage(
             imageUrl: widget.photo,
             placeholder: (context, url) {
-              return CircularProgressIndicator();
+              return Image.asset(
+                "assets/images/loading.gif",
+              );
             },
             errorWidget: (context, url, error) {
               return Icon(Icons.error);

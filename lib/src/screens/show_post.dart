@@ -81,7 +81,7 @@ class _ShowPost extends State<ShowPost> {
         ),
       ),
       body: SafeArea(
-        child: postBloc.loading == true || post == null
+        child: post == null
             ? Center(child: CircularProgressIndicator())
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -92,11 +92,11 @@ class _ShowPost extends State<ShowPost> {
                       leading: CircleAvatar(
                         radius: 22.0,
                         backgroundImage: CachedNetworkImageProvider(
-                          "$baseUrl/storage/${post.user.avatar}",
+                          "$baseUrl/storage/${post.owner.avatar}",
                         ),
                       ),
                       title: Text(
-                        post.user.name.toUpperCase(),
+                        post.owner.name.toUpperCase(),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -111,7 +111,7 @@ class _ShowPost extends State<ShowPost> {
                           fontFamily: Fonts.titilliumWebRegular,
                         ),
                       ),
-                      trailing: post.user.id == userBloc.user.id
+                      trailing: post.owner.id == userBloc.user.id
                           ? PopupMenuButton(
                               padding: EdgeInsets.all(10.0),
                               onSelected: (choice) {
@@ -158,13 +158,17 @@ class _ShowPost extends State<ShowPost> {
                     ),
                   InkWell(
                     onDoubleTap: () {
-                      return isLiked(userBloc) ? null : likePost(userBloc);
+                      return isLiked(userBloc)
+                          ? null
+                          : likePost(userBloc, postBloc);
                     },
                     child: Container(
                       child: CachedNetworkImage(
                         imageUrl: post.url,
                         placeholder: (context, url) {
-                          return CircularProgressIndicator();
+                          return Image.asset(
+                            "assets/images/loading.gif",
+                          );
                         },
                         errorWidget: (context, url, error) {
                           return Icon(Icons.error);
@@ -183,8 +187,8 @@ class _ShowPost extends State<ShowPost> {
                         InkWell(
                           onTap: () {
                             isLiked(userBloc)
-                                ? unlikePost(userBloc)
-                                : likePost(userBloc);
+                                ? unlikePost(userBloc, postBloc)
+                                : likePost(userBloc, postBloc);
                           },
                           child: Container(
                             child: Icon(
@@ -212,20 +216,27 @@ class _ShowPost extends State<ShowPost> {
                             color: Colors.blue,
                             padding: EdgeInsets.all(0),
                             onPressed: () {
-                              int minPoints = 20;
+                              int minPoints = 0;
 
                               if (likes.length < minPoints) {
                                 showErrorPopup(
                                   context,
                                   message:
-                                      "Minimum $minPoints points required to reedem",
+                                      "Minimum $minPoints points required to redeem",
                                 );
                               } else {
-                                reedemPoints();
+                                showConfirmationPopup(
+                                  context,
+                                  message:
+                                      "You can only redeem once, are you sure ?",
+                                  onPressYes: () {
+                                    redeemPoints();
+                                  },
+                                );
                               }
                             },
                             child: Text(
-                              "Reedem",
+                              "Redeem",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: Fonts.titilliumWebSemiBold,
@@ -281,23 +292,27 @@ class _ShowPost extends State<ShowPost> {
     Navigator.pop(context);
   }
 
-  void likePost(UserBloc userBloc) {
+  void likePost(UserBloc userBloc, PostBloc postBloc) {
     List<int> likesData = likes..add(userBloc.user.id);
 
     setState(() {
       likes = likesData;
     });
+
+    postBloc.toggleFavorite(widget.post.id);
   }
 
-  void unlikePost(UserBloc userBloc) {
+  void unlikePost(UserBloc userBloc, PostBloc postBloc) {
     List<int> likesData = likes..removeWhere((id) => id == userBloc.user.id);
 
     setState(() {
       likes = likesData;
     });
+
+    postBloc.toggleFavorite(widget.post.id);
   }
 
-  void reedemPoints() {
+  void redeemPoints() {
     //
   }
 }
