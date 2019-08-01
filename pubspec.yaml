@@ -1,6 +1,6 @@
 name: pauzr
 description: A time saver app
-version: 1.0.23+23
+version: 1.0.24+24
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
