@@ -6,12 +6,12 @@ import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/store.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
-import 'package:pauzr/src/screens/tabs/winners.dart';
+import 'package:pauzr/src/screens/tabs/notifications.dart';
 
 getTabsPage(int showTabIndex) {
   switch (showTabIndex) {
     case 0:
-      return WinnersPage();
+      return NotificationsPage();
       break;
 
     case 1:

@@ -96,10 +96,25 @@ class _ShowPost extends State<ShowPost> {
       children: <Widget>[
         Container(
           child: ListTile(
-            leading: CircleAvatar(
-              radius: 22.0,
-              backgroundImage: CachedNetworkImageProvider(
-                "$baseUrl/storage/${post.owner.avatar}",
+            leading: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: "$baseUrl/storage/${post.owner.avatar}",
+                placeholder: (context, url) {
+                  return Image.asset(
+                    "assets/images/loading.gif",
+                    width: 40.0,
+                    height: 40.0,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Icon(Icons.error);
+                },
+                width: 40.0,
+                height: 40.0,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               ),
             ),
             title: Text(
@@ -174,18 +189,24 @@ class _ShowPost extends State<ShowPost> {
               placeholder: (context, url) {
                 return Image.asset(
                   "assets/images/loading.gif",
+                  width: double.infinity,
+                  height: null,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
                 );
               },
               errorWidget: (context, url, error) {
                 return Icon(Icons.error);
               },
+              width: double.infinity,
+              height: null,
               fit: BoxFit.cover,
               alignment: Alignment.center,
             ),
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,6 +218,7 @@ class _ShowPost extends State<ShowPost> {
                       : likePost(userBloc, postBloc);
                 },
                 child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
                   child: Icon(
                     Icons.favorite,
                     color: isLiked(userBloc, post.likes)
@@ -206,26 +228,45 @@ class _ShowPost extends State<ShowPost> {
                   ),
                 ),
               ),
-              Container(width: 5.0),
-              Container(
-                child: Text(
-                  post.likes.length.toString(),
-                  style: TextStyle(
-                    fontFamily: Fonts.titilliumWebRegular,
-                    fontSize: 18.0,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
               Expanded(child: Container()),
               getRedeemButton(userBloc, postBloc),
             ],
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(10.0),
-          child: Text("1 Like = 1 Point"),
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              routeList.show_likes,
+              arguments: {
+                "likes": post.likes,
+              },
+            );
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            child: Text(
+              "${post.likes.length.toString()} ${post.likes.length > 1 ? 'likes' : 'like'}",
+              style: TextStyle(
+                fontFamily: Fonts.titilliumWebSemiBold,
+                fontSize: 18.0,
+                color: Colors.blue,
+              ),
+            ),
+          ),
         ),
+        if (userBloc.user.id == post.owner.id)
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            child: Text(
+              "1 Like = 1 Point",
+              style: TextStyle(
+                fontFamily: Fonts.titilliumWebRegular,
+                fontSize: 18.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -323,7 +364,7 @@ class _ShowPost extends State<ShowPost> {
             if (post.likes.length < minPoints) {
               showErrorPopup(
                 context,
-                message: "Minimum $minPoints points required to redeem",
+                message: "Minimum $minPoints likes required to redeem.",
               );
             } else {
               showConfirmationPopup(

@@ -94,9 +94,25 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
               dense: true,
               contentPadding: EdgeInsets.all(0),
               isThreeLine: true,
-              leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  "$baseUrl/storage/${group.photo}",
+              leading: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: "$baseUrl/storage/${group.photo}",
+                  placeholder: (context, url) {
+                    return Image.asset(
+                      "assets/images/loading.gif",
+                      width: 40.0,
+                      height: 40.0,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Icon(Icons.error);
+                  },
+                  width: 40.0,
+                  height: 40.0,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
                 ),
               ),
               title: Text(
@@ -234,8 +250,8 @@ class _GroupScoreboardPage extends State<GroupScoreboardPage>
     return choices;
   }
 
-  void changePeriod(value, rankingBloc) {
+  void changePeriod(String value, RankingBloc rankingBloc) {
     setState(() => period = value);
-    rankingBloc.getRankings(period, widget.group.id);
+    rankingBloc.getRankings(period, null, widget.group.id);
   }
 }

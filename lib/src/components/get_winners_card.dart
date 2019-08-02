@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
@@ -14,7 +15,7 @@ Card getRankCard(Lottery lotteryWinner, BuildContext context) {
   return Card(
     shape: Border.all(color: Colors.transparent, width: 1.0),
     elevation: 1.0,
-    margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+    margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
     child: Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
@@ -32,10 +33,22 @@ Card getRankCard(Lottery lotteryWinner, BuildContext context) {
         },
         child: ListTile(
           leading: ClipOval(
-            child: Image.network(
-              "$baseUrl/storage/${lotteryWinner.user.avatar}",
-              width: 60,
-              height: 60,
+            child: CachedNetworkImage(
+              imageUrl: "$baseUrl/storage/${lotteryWinner.user.avatar}",
+              placeholder: (context, url) {
+                return Image.asset(
+                  "assets/images/loading.gif",
+                  width: 50.0,
+                  height: 50.0,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                );
+              },
+              errorWidget: (context, url, error) {
+                return Icon(Icons.error);
+              },
+              width: 50.0,
+              height: 50.0,
               fit: BoxFit.cover,
               alignment: Alignment.center,
             ),

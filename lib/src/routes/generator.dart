@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pauzr/follow.dart';
 import 'package:pauzr/invite.dart';
+import 'package:pauzr/show_likes.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:pauzr/src/screens/earnings.dart';
 import 'package:pauzr/src/screens/group/add_group_participants.dart';
@@ -124,6 +125,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) {
             return ShowPost(post: args['post']);
+          },
+        );
+        break;
+
+      case routeList.show_likes:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ShowLikesPage(likes: args['likes']);
           },
         );
         break;

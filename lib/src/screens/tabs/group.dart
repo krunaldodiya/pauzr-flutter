@@ -155,10 +155,25 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 isThreeLine: false,
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: CachedNetworkImageProvider(
-                    "$baseUrl/storage/${group.photo}",
+                leading: ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: "$baseUrl/storage/${group.photo}",
+                    placeholder: (context, url) {
+                      return Image.asset(
+                        "assets/images/loading.gif",
+                        width: 40.0,
+                        height: 40.0,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Icon(Icons.error);
+                    },
+                    width: 40.0,
+                    height: 40.0,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
                   ),
                 ),
                 title: Text(group.name),

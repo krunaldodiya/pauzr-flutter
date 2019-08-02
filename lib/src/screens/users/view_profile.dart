@@ -125,7 +125,8 @@ class _ViewProfilePage extends State<ViewProfilePage> {
       body: SafeArea(
         child: userBloc.loading == true ||
                 postBloc.loading == true ||
-                guestUser == null
+                guestUser == null ||
+                posts == null
             ? Center(child: CircularProgressIndicator())
             : getBody(context, postBloc, userBloc),
       ),
@@ -161,15 +162,15 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                         placeholder: (context, url) {
                           return Image.asset(
                             "assets/images/loading.gif",
-                            width: 80.0,
-                            height: 80.0,
+                            width: 70.0,
+                            height: 70.0,
                           );
                         },
                         errorWidget: (context, url, error) {
                           return Icon(Icons.error);
                         },
-                        width: 80.0,
-                        height: 80.0,
+                        width: 70.0,
+                        height: 70.0,
                         fit: BoxFit.cover,
                         alignment: Alignment.center,
                       ),
@@ -410,11 +411,17 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     placeholder: (context, url) {
                       return Image.asset(
                         "assets/images/loading.gif",
+                        width: double.infinity,
+                        height: null,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
                       );
                     },
                     errorWidget: (context, url, error) {
                       return Icon(Icons.error);
                     },
+                    width: double.infinity,
+                    height: null,
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
                   ),

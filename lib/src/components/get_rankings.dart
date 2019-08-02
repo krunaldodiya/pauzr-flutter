@@ -56,10 +56,25 @@ class GetRanking {
             );
           },
           child: ListTile(
-            leading: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: CachedNetworkImageProvider(
-                "$baseUrl/storage/${ranking.user.avatar}",
+            leading: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: "$baseUrl/storage/${ranking.user.avatar}",
+                placeholder: (context, url) {
+                  return Image.asset(
+                    "assets/images/loading.gif",
+                    width: 50.0,
+                    height: 50.0,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Icon(Icons.error);
+                },
+                width: 50.0,
+                height: 50.0,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               ),
             ),
             title: Container(

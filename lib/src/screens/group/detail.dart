@@ -457,10 +457,25 @@ class _GroupDetailPage extends State<GroupDetailPage> {
       (participant) {
         data.add(
           ListTile(
-            leading: CircleAvatar(
-              radius: 20.0,
-              backgroundImage: CachedNetworkImageProvider(
-                "$baseUrl/storage/${participant.subscriber.avatar}",
+            leading: ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: "$baseUrl/storage/${participant.subscriber.avatar}",
+                placeholder: (context, url) {
+                  return Image.asset(
+                    "assets/images/loading.gif",
+                    width: 40.0,
+                    height: 40.0,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Icon(Icons.error);
+                },
+                width: 40.0,
+                height: 40.0,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               ),
             ),
             title: Text(

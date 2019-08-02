@@ -10,14 +10,14 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
 
-class WinnersPage extends StatefulWidget {
-  WinnersPage({Key key}) : super(key: key);
+class NotificationsPage extends StatefulWidget {
+  NotificationsPage({Key key}) : super(key: key);
 
   @override
-  _WinnersPage createState() => _WinnersPage();
+  _NotificationsPage createState() => _NotificationsPage();
 }
 
-class _WinnersPage extends State<WinnersPage>
+class _NotificationsPage extends State<NotificationsPage>
     with SingleTickerProviderStateMixin {
   String period;
 
@@ -69,7 +69,6 @@ class _WinnersPage extends State<WinnersPage>
           child: Icon(
             Ionicons.ios_gift,
             color: Color(0xff0D62A2),
-            // color: theme.home.fabIconColor,
             size: 24.0,
           ),
         ),
@@ -99,17 +98,7 @@ class _WinnersPage extends State<WinnersPage>
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.all(10.0),
-          child: Text(
-            "Country: ${userBloc.user.country.name}",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22.0,
-              fontFamily: Fonts.titilliumWebRegular,
-            ),
-          ),
-        ),
+        Container(height: 5.0),
         Expanded(
           child: ListView.builder(
             controller: scrollController,

@@ -11,6 +11,7 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
 
 class DrawerPage extends StatefulWidget {
   final UserBloc userBloc;
@@ -27,6 +28,14 @@ class DrawerPage extends StatefulWidget {
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+  String version = "0.0.0";
+
+  @override
+  void initState() {
+    super.initState();
+    getVersion();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = widget.themeBloc;
@@ -58,8 +67,18 @@ class _DrawerPageState extends State<DrawerPage> {
               child: ClipOval(
                 child: CachedNetworkImage(
                   imageUrl: "$baseUrl/storage/${user.avatar}",
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  placeholder: (context, url) {
+                    return Image.asset(
+                      "assets/images/loading.gif",
+                      width: 60.0,
+                      height: 60.0,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Icon(Icons.error);
+                  },
                   width: 60.0,
                   height: 60.0,
                   fit: BoxFit.cover,
@@ -71,6 +90,21 @@ class _DrawerPageState extends State<DrawerPage> {
               color: theme.drawerMenu.topBackgroundColor,
             ),
           ),
+          ListTile(
+            title: Text(
+              "v$version",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.track_changes,
+              color: Colors.white,
+            ),
+          ),
+          Divider(color: Colors.white),
           ListTile(
             title: Text(
               "Themes",
@@ -120,6 +154,23 @@ class _DrawerPageState extends State<DrawerPage> {
             ),
             onTap: () async {
               Navigator.pushNamed(context, routeList.earnings);
+            },
+          ),
+          ListTile(
+            title: Text(
+              "Points",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+                fontFamily: Fonts.titilliumWebRegular,
+              ),
+            ),
+            trailing: Icon(
+              Icons.attach_money,
+              color: Colors.white,
+            ),
+            onTap: () async {
+              Navigator.pushNamed(context, routeList.points);
             },
           ),
           Divider(color: Colors.white),
@@ -276,5 +327,13 @@ class _DrawerPageState extends State<DrawerPage> {
         ],
       ),
     );
+  }
+
+  void getVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    setState(() {
+      version = packageInfo.version;
+    });
   }
 }

@@ -55,10 +55,20 @@ AppBar getAppBar(
             child: ClipOval(
               child: CachedNetworkImage(
                 imageUrl: "$baseUrl/storage/${userBloc.user.avatar}",
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                width: 36.0,
-                height: 36.0,
+                placeholder: (context, url) {
+                  return Image.asset(
+                    "assets/images/loading.gif",
+                    width: 35.0,
+                    height: 35.0,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Icon(Icons.error);
+                },
+                width: 35.0,
+                height: 35.0,
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
@@ -77,7 +87,7 @@ String getTitle(int tabIndex) {
   String title;
 
   if (tabIndex == 0) {
-    title = "Winners";
+    title = "Notifications";
   }
 
   if (tabIndex == 1) {

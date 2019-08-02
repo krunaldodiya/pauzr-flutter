@@ -140,8 +140,6 @@ class PostBloc extends ChangeNotifier {
       setState(
         page: 1,
         posts: [],
-        loading: true,
-        loaded: false,
       );
     } else {
       setState(busy: true, page: page + 1);

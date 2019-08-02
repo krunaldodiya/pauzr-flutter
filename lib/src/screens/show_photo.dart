@@ -35,11 +35,17 @@ class _ShowPhoto extends State<ShowPhoto> {
             placeholder: (context, url) {
               return Image.asset(
                 "assets/images/loading.gif",
+                width: double.infinity,
+                height: null,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
               );
             },
             errorWidget: (context, url, error) {
               return Icon(Icons.error);
             },
+            width: double.infinity,
+            height: null,
             fit: BoxFit.cover,
             alignment: Alignment.center,
           ),
