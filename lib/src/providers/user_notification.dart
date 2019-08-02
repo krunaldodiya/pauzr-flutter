@@ -41,4 +41,18 @@ class UserNotificationBloc extends ChangeNotifier {
       setState(loading: false, loaded: true);
     }
   }
+
+  markAsRead(UserNotification notification) async {
+    try {
+      final Response response = await _apiProvider.markAsRead(notification.id);
+      final results = response.data;
+
+      final List<UserNotification> notifications =
+          UserNotification.fromList(results['notifications']);
+
+      setState(notifications: notifications);
+    } catch (error) {
+      print(error);
+    }
+  }
 }

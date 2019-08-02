@@ -2,6 +2,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/atp/screens/home.dart';
 import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
+import 'package:pauzr/src/atp/screens/user_notification.dart';
 import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/user_notifications.dart';
@@ -39,6 +40,7 @@ getTabsTheme(int showTabIndex, DefaultTheme theme) {
   Home home = theme.home;
   Timer timer = theme.timer;
   MainScoreboard mainScoreboard = theme.mainScoreboard;
+  UserNotification userNotification = theme.userNotification;
 
   switch (showTabIndex) {
     case 0:
@@ -58,7 +60,7 @@ getTabsTheme(int showTabIndex, DefaultTheme theme) {
       break;
 
     case 4:
-      return mainScoreboard;
+      return userNotification;
       break;
 
     default:

@@ -20,6 +20,7 @@ import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
+import 'package:pauzr/src/atp/screens/user_notification.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/black/add_group_participants.dart';
@@ -43,6 +44,7 @@ import 'package:pauzr/src/atp/themes/black/segment_bar.dart';
 import 'package:pauzr/src/atp/themes/black/stop.dart';
 import 'package:pauzr/src/atp/themes/black/tabs.dart';
 import 'package:pauzr/src/atp/themes/black/timer.dart';
+import 'package:pauzr/src/atp/themes/black/user_notification.dart';
 import 'package:pauzr/src/atp/themes/black/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/black/view_profile.dart';
 
@@ -93,4 +95,6 @@ class Black implements DefaultTheme {
   Stop stop = stopTheme;
   @override
   SegmentBar segmentBar = segmentBarTheme;
+  @override
+  UserNotification userNotification = userNotificationTheme;
 }

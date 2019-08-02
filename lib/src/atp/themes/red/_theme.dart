@@ -20,6 +20,7 @@ import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
+import 'package:pauzr/src/atp/screens/user_notification.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/red/add_group_participants.dart';
@@ -43,6 +44,7 @@ import 'package:pauzr/src/atp/themes/red/segment_bar.dart';
 import 'package:pauzr/src/atp/themes/red/stop.dart';
 import 'package:pauzr/src/atp/themes/red/tabs.dart';
 import 'package:pauzr/src/atp/themes/red/timer.dart';
+import 'package:pauzr/src/atp/themes/red/user_notification.dart';
 import 'package:pauzr/src/atp/themes/red/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/red/view_profile.dart';
 
@@ -93,4 +95,6 @@ class Red implements DefaultTheme {
   Stop stop = stopTheme;
   @override
   SegmentBar segmentBar = segmentBarTheme;
+  @override
+  UserNotification userNotification = userNotificationTheme;
 }

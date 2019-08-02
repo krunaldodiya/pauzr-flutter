@@ -37,7 +37,7 @@ dependency_overrides:
   firebase_analytics: ^4.0.1
   firebase_admob: ^0.9.0+2
   package_info: ^0.4.0+6
-  badges: ^1.1.0
+  timeago: ^2.0.18
 
 dev_dependencies:
   flutter_test:

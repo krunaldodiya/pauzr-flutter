@@ -20,6 +20,7 @@ import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
+import 'package:pauzr/src/atp/screens/user_notification.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/blue/add_group_participants.dart';
@@ -43,6 +44,7 @@ import 'package:pauzr/src/atp/themes/blue/segment_bar.dart';
 import 'package:pauzr/src/atp/themes/blue/stop.dart';
 import 'package:pauzr/src/atp/themes/blue/tabs.dart';
 import 'package:pauzr/src/atp/themes/blue/timer.dart';
+import 'package:pauzr/src/atp/themes/blue/user_notification.dart';
 import 'package:pauzr/src/atp/themes/blue/verify_otp.dart';
 import 'package:pauzr/src/atp/themes/blue/view_profile.dart';
 
@@ -93,4 +95,6 @@ class Blue implements DefaultTheme {
   Stop stop = stopTheme;
   @override
   SegmentBar segmentBar = segmentBarTheme;
+  @override
+  UserNotification userNotification = userNotificationTheme;
 }

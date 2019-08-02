@@ -36,6 +36,12 @@ class ApiProvider {
     return sendRequest(Api.getUserNotifications);
   }
 
+  Future markAsRead(String notificationId) async {
+    return sendRequest(Api.markAsRead, {
+      "notification_id": notificationId,
+    });
+  }
+
   Future followUser(int followingId, int guestId) async {
     return sendRequest(Api.followUser, {
       "following_id": followingId,
@@ -275,6 +281,7 @@ class Api {
   static String unfollowUser = "$baseUrl/api/users/unfollow";
   static String getGuestUser = "$baseUrl/api/users/guest";
   static String getUserNotifications = "$baseUrl/api/users/notifications";
+  static String markAsRead = "$baseUrl/api/users/notifications/read";
   static String getAdsKeywords = "$baseUrl/api/home/keywords";
   static String setAdImpression = "$baseUrl/api/ads/impression";
   static String getPosts = "$baseUrl/api/posts/list";

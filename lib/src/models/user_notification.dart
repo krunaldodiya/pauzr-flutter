@@ -8,6 +8,7 @@ class UserNotification {
   final String notifiableId;
   final Map data;
   final String readAt;
+  final String createdAt;
 
   UserNotification({
     this.id,
@@ -16,6 +17,7 @@ class UserNotification {
     this.notifiableId,
     this.data,
     this.readAt,
+    this.createdAt,
   });
 
   UserNotification copyWith(Map<String, dynamic> json) {
@@ -25,7 +27,8 @@ class UserNotification {
       notifiableType: json["notifiableType"] ?? this.notifiableType,
       notifiableId: json["notifiableId"] ?? this.notifiableId,
       data: json["data"] ?? this.data,
-      readAt: json["readAt"] ?? this.readAt,
+      readAt: json["read_at"] ?? this.readAt,
+      createdAt: json["created_at"] ?? this.createdAt,
     );
   }
 
@@ -37,7 +40,8 @@ class UserNotification {
           json['notifiableType'] != null ? json["notifiableType"] : null,
       notifiableId: json['notifiableId'] != null ? json["notifiableId"] : null,
       data: json['data'] != null ? json["data"] : null,
-      readAt: json['readAt'] != null ? json["readAt"] : null,
+      readAt: json['read_at'] != null ? json["read_at"] : null,
+      createdAt: json['created_at'] != null ? json["created_at"] : null,
     );
   }
 

@@ -20,6 +20,7 @@ import 'package:pauzr/src/atp/screens/segment_bar.dart';
 import 'package:pauzr/src/atp/screens/stop.dart';
 import 'package:pauzr/src/atp/screens/tabs.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
+import 'package:pauzr/src/atp/screens/user_notification.dart';
 import 'package:pauzr/src/atp/screens/verify_otp.dart';
 import 'package:pauzr/src/atp/screens/view_profile.dart';
 import 'package:pauzr/src/atp/themes/black/_theme.dart';
@@ -56,6 +57,7 @@ class DefaultTheme {
   Points points;
   Stop stop;
   SegmentBar segmentBar;
+  UserNotification userNotification;
 
   DefaultTheme({
     @required this.intro,
@@ -81,6 +83,7 @@ class DefaultTheme {
     @required this.points,
     @required this.stop,
     @required this.segmentBar,
+    @required this.userNotification,
   });
 
   static DefaultTheme defaultTheme(String themeName) {
@@ -110,6 +113,7 @@ class DefaultTheme {
       points: theme.points,
       stop: theme.stop,
       segmentBar: theme.segmentBar,
+      userNotification: theme.userNotification,
     );
   }
 }
