@@ -83,9 +83,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
           if (postBloc.loading != true)
             FlatButton(
               onPressed: () {
-                widget.post == null
-                    ? createPost(postBloc)
-                    : editGroup(postBloc);
+                widget.post == null ? createPost(postBloc) : editPost(postBloc);
               },
               child: Text(
                 widget.post != null ? "Update" : "Create",
@@ -208,7 +206,7 @@ class _ManagePostPageState extends State<ManagePostPage> {
     Navigator.pop(context);
   }
 
-  void editGroup(PostBloc postBloc) async {
+  void editPost(PostBloc postBloc) async {
     String description = descriptionController.text;
     String photo = photoController.text;
 

@@ -32,6 +32,10 @@ class ApiProvider {
     return sendRequest(Api.getAdsKeywords);
   }
 
+  Future getUserNotifications() async {
+    return sendRequest(Api.getUserNotifications);
+  }
+
   Future followUser(int followingId, int guestId) async {
     return sendRequest(Api.followUser, {
       "following_id": followingId,
@@ -270,6 +274,7 @@ class Api {
   static String followUser = "$baseUrl/api/users/follow";
   static String unfollowUser = "$baseUrl/api/users/unfollow";
   static String getGuestUser = "$baseUrl/api/users/guest";
+  static String getUserNotifications = "$baseUrl/api/users/notifications";
   static String getAdsKeywords = "$baseUrl/api/home/keywords";
   static String setAdImpression = "$baseUrl/api/ads/impression";
   static String getPosts = "$baseUrl/api/posts/list";

@@ -268,7 +268,7 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     if (userBloc.loaded == true && userBloc.error == null) {
       if (widget.shouldPop == true) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(userBloc.user);
       } else {
         Navigator.pushReplacementNamed(context, routeList.tab);
       }
@@ -291,7 +291,6 @@ class _EditProfilePage extends State<EditProfilePage> {
 
     XsProgressHud.show(context);
     await userBloc.uploadAvatar(formdata);
-    await postBloc.getPosts(loadMore: false, userId: userBloc.user.id);
     XsProgressHud.hide();
   }
 }

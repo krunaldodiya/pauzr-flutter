@@ -6,6 +6,7 @@ import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/post.dart';
+import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -17,8 +18,13 @@ import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class ShowPost extends StatefulWidget {
   final Post post;
+  final User guestUser;
 
-  ShowPost({Key key, @required this.post}) : super(key: key);
+  ShowPost({
+    Key key,
+    @required this.post,
+    @required this.guestUser,
+  }) : super(key: key);
 
   @override
   _ShowPost createState() => _ShowPost();
@@ -240,6 +246,7 @@ class _ShowPost extends State<ShowPost> {
               routeList.show_likes,
               arguments: {
                 "likes": post.likes,
+                "guestUser": widget.guestUser,
               },
             );
           },
@@ -284,16 +291,18 @@ class _ShowPost extends State<ShowPost> {
           "post": widget.post,
         },
       ).then((postData) {
-        setState(() {
-          post = postData;
-        });
+        if (postData != null) {
+          setState(() {
+            post = postData;
+          });
+        }
       });
     }
 
     if (choice == "Delete Post") {
       showConfirmationPopup(
         context,
-        message: "Are you sure want to delete ?",
+        message: "Delete This Post ?",
         onPressYes: () {
           deletePost(postBloc);
         },
@@ -310,7 +319,19 @@ class _ShowPost extends State<ShowPost> {
   }
 
   void likePost(UserBloc userBloc, PostBloc postBloc) {
-    Post postData = post..likes.add({"user_id": userBloc.user.id});
+    Post postData = post
+      ..likes.add({
+        "post_id": post.id,
+        "user_id": userBloc.user.id,
+        "user": {
+          "id": userBloc.user.id,
+          "name": userBloc.user.name,
+          "avatar": userBloc.user.avatar,
+          "city": {
+            "name": userBloc.user.city.name,
+          },
+        },
+      });
 
     setState(() {
       post = postData;

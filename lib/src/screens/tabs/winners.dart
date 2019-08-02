@@ -10,14 +10,14 @@ import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
 import 'package:provider/provider.dart';
 
-class NotificationsPage extends StatefulWidget {
-  NotificationsPage({Key key}) : super(key: key);
+class WinnersPage extends StatefulWidget {
+  WinnersPage({Key key}) : super(key: key);
 
   @override
-  _NotificationsPage createState() => _NotificationsPage();
+  _WinnersPage createState() => _WinnersPage();
 }
 
-class _NotificationsPage extends State<NotificationsPage>
+class _WinnersPage extends State<WinnersPage>
     with SingleTickerProviderStateMixin {
   String period;
 

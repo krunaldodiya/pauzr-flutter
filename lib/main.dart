@@ -4,13 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/providers/city.dart';
 import 'package:pauzr/src/providers/country.dart';
-import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/group.dart';
 import 'package:pauzr/src/providers/lottery.dart';
 import 'package:pauzr/src/providers/otp.dart';
+import 'package:pauzr/src/providers/post.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/providers/user.dart';
+import 'package:pauzr/src/providers/user_notification.dart';
 import 'package:pauzr/src/providers/wallet.dart';
 import 'package:pauzr/src/screens/app.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserNotificationBloc>.value(
+          notifier: UserNotificationBloc(),
+        ),
         ChangeNotifierProvider<PostBloc>.value(
           notifier: PostBloc(),
         ),

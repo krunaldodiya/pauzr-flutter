@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:pauzr/src/models/city.dart';
 import 'package:pauzr/src/models/country.dart';
-import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/level.dart';
+import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/state.dart';
 import 'package:pauzr/src/models/wallet.dart';
 
@@ -100,16 +100,6 @@ class User {
       status: json["status"] != null ? json["status"] : null,
       followers: json["followers"] != null ? json["followers"] : null,
       followings: json["followings"] != null ? json["followings"] : null,
-      // followers: json["followers"] != null
-      //     ? json["followers"] is List<Follower>
-      //         ? json["followers"]
-      //         : Follower.fromList(json["followers"])
-      //     : null,
-      // followings: json["followings"] != null
-      //     ? json["followings"] is List<Following>
-      //         ? json["followings"]
-      //         : Following.fromList(json["followings"])
-      //     : null,
     );
   }
 

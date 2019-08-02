@@ -87,7 +87,7 @@ String getTitle(int tabIndex) {
   String title;
 
   if (tabIndex == 0) {
-    title = "Notifications";
+    title = "Winners";
   }
 
   if (tabIndex == 1) {
@@ -103,7 +103,7 @@ String getTitle(int tabIndex) {
   }
 
   if (tabIndex == 4) {
-    title = "BazaaR";
+    title = "Notifications";
   }
 
   return title;

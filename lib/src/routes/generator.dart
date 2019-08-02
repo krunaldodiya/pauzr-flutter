@@ -124,7 +124,10 @@ class RouteGenerator {
       case routeList.show_post:
         return MaterialPageRoute(
           builder: (context) {
-            return ShowPost(post: args['post']);
+            return ShowPost(
+              post: args['post'],
+              guestUser: args['guestUser'],
+            );
           },
         );
         break;
@@ -132,7 +135,10 @@ class RouteGenerator {
       case routeList.show_likes:
         return MaterialPageRoute(
           builder: (context) {
-            return ShowLikesPage(likes: args['likes']);
+            return ShowLikesPage(
+              likes: args['likes'],
+              guestUser: args['guestUser'],
+            );
           },
         );
         break;

@@ -5,15 +5,20 @@ import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
+import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/list.dart' as routeList;
+import 'package:pauzr/src/screens/helpers/confirm.dart';
 import 'package:provider/provider.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class ShowLikesPage extends StatefulWidget {
   final List likes;
+  final User guestUser;
 
   ShowLikesPage({
     Key key,
     @required this.likes,
+    @required this.guestUser,
   }) : super(key: key);
 
   _ShowLikesPageState createState() => _ShowLikesPageState();
@@ -24,6 +29,7 @@ class _ShowLikesPageState extends State<ShowLikesPage>
   @override
   Widget build(BuildContext context) {
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+    final UserBloc userBloc = Provider.of<UserBloc>(context);
 
     final DefaultTheme theme = themeBloc.theme;
 
@@ -109,6 +115,7 @@ class _ShowLikesPageState extends State<ShowLikesPage>
                           fontFamily: Fonts.titilliumWebRegular,
                         ),
                       ),
+                      trailing: getFollowButton(userBloc, user),
                     ),
                   );
                 },
@@ -118,5 +125,56 @@ class _ShowLikesPageState extends State<ShowLikesPage>
         ),
       ),
     );
+  }
+
+  getFollowButton(UserBloc userBloc, user) {
+    if (userBloc.user.id == user['id']) return null;
+
+    List followingIds = userBloc.user.followings
+        .map((following) => following["following_user"]["id"])
+        .toList();
+
+    List followerIds = userBloc.user.followers
+        .map((follower) => follower["follower_user"]['id'])
+        .toList();
+
+    bool alreadyFollowing = followingIds.contains(user["id"]);
+
+    bool isFollower = followerIds.contains(user["id"]);
+
+    return FlatButton(
+      color: alreadyFollowing ? Colors.grey.shade300 : Colors.blue,
+      child: Text(
+        alreadyFollowing ? "Following" : isFollower ? "Follow Back" : "Follow",
+        style: TextStyle(
+          fontSize: 14.0,
+          fontWeight: FontWeight.bold,
+          color: alreadyFollowing ? Colors.black : Colors.white,
+        ),
+      ),
+      onPressed: () {
+        alreadyFollowing
+            ? showConfirmationPopup(
+                context,
+                message: "Are you sure want to unfollow ?",
+                onPressYes: () {
+                  unfollowUser(userBloc, user["id"], widget.guestUser.id);
+                },
+              )
+            : followUser(userBloc, user["id"], widget.guestUser.id);
+      },
+    );
+  }
+
+  void followUser(UserBloc userBloc, int followingId, int guestId) async {
+    XsProgressHud.show(context);
+    await userBloc.followUser(followingId, guestId);
+    XsProgressHud.hide();
+  }
+
+  void unfollowUser(UserBloc userBloc, int followingId, int guestId) async {
+    XsProgressHud.show(context);
+    await userBloc.unfollowUser(followingId, guestId);
+    XsProgressHud.hide();
   }
 }

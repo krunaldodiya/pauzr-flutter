@@ -4,14 +4,14 @@ import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
-import 'package:pauzr/src/screens/tabs/store.dart';
+import 'package:pauzr/src/screens/tabs/user_notifications.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
-import 'package:pauzr/src/screens/tabs/notifications.dart';
+import 'package:pauzr/src/screens/tabs/winners.dart';
 
 getTabsPage(int showTabIndex) {
   switch (showTabIndex) {
     case 0:
-      return NotificationsPage();
+      return WinnersPage();
       break;
 
     case 1:
@@ -27,7 +27,7 @@ getTabsPage(int showTabIndex) {
       break;
 
     case 4:
-      return StorePage();
+      return UserNotificationsPage();
       break;
 
     default:

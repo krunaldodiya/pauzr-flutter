@@ -11,7 +11,7 @@ Container getNavigationBar(UserBloc userBloc, DefaultTheme theme) {
 
   var items = [
     Icon(
-      Ionicons.ios_notifications,
+      Ionicons.ios_trophy,
       color: Colors.white,
       size: 25.0,
     ),
@@ -31,7 +31,7 @@ Container getNavigationBar(UserBloc userBloc, DefaultTheme theme) {
       size: 25.0,
     ),
     Icon(
-      MaterialCommunityIcons.shopping,
+      Ionicons.ios_notifications,
       color: Colors.white,
       size: 25.0,
     ),

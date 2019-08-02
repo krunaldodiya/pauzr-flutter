@@ -115,7 +115,13 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     arguments: {
                       "shouldPop": true,
                     },
-                  );
+                  ).then((user) {
+                    setState(() {
+                      guestUser = user;
+                    });
+
+                    getPosts(postBloc, false, widget.user.id);
+                  });
                 },
               ),
               margin: EdgeInsets.only(right: 10.0),
@@ -295,8 +301,6 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                             routeList.manage_post,
                             arguments: {"post": null},
                           );
-
-                          // createPost(userBloc, PostBloc);
                         },
                       )
                     : getFollowButton(userBloc),
@@ -396,7 +400,10 @@ class _ViewProfilePage extends State<ViewProfilePage> {
               Navigator.pushNamed(
                 context,
                 routeList.show_post,
-                arguments: {"post": post},
+                arguments: {
+                  "post": post,
+                  "guestUser": guestUser,
+                },
               ).then((post) {
                 getPosts(postBloc, false, widget.user.id);
               });
