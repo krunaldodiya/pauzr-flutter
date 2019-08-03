@@ -7,12 +7,12 @@ import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/user_notifications.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
-import 'package:pauzr/src/screens/tabs/winners.dart';
+import 'package:pauzr/src/screens/tabs/lottery.dart';
 
 getTabsPage(int showTabIndex) {
   switch (showTabIndex) {
     case 0:
-      return WinnersPage();
+      return LotteryPage();
       break;
 
     case 1:

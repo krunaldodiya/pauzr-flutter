@@ -6,39 +6,39 @@ import 'package:pauzr/src/resources/api.dart';
 class LotteryBloc extends ChangeNotifier {
   final ApiProvider _apiProvider = ApiProvider();
 
-  int lastPage;
-  int page = 1;
-  bool busy;
   bool loading;
   bool loaded;
   Map error = const {};
+  bool busy;
+  int page = 1;
+  int lastPage;
+  int total;
   List lotteries = [];
   List<Lottery> lotteryWinners = [];
   List<Lottery> lotteryHistory = [];
-  int total;
 
   setState({
-    int lastPage,
-    int page,
-    bool busy,
     bool loading,
     bool loaded,
     Map error,
+    bool busy,
+    int page,
+    int lastPage,
+    int total,
     List lotteries,
     List<Lottery> lotteryWinners,
     List<Lottery> lotteryHistory,
-    int total,
   }) {
-    this.lastPage = lastPage ?? this.lastPage;
-    this.page = page ?? this.page;
-    this.busy = busy ?? this.busy;
     this.loading = loading ?? this.loading;
     this.loaded = loaded ?? this.loaded;
     this.error = identical(error, {}) ? this.error : error;
+    this.busy = busy ?? this.busy;
+    this.page = page ?? this.page;
+    this.lastPage = lastPage ?? this.lastPage;
+    this.total = total ?? this.total;
     this.lotteries = lotteries ?? this.lotteries;
     this.lotteryWinners = lotteryWinners ?? this.lotteryWinners;
     this.lotteryHistory = lotteryHistory ?? this.lotteryHistory;
-    this.total = total ?? this.total;
 
     notifyListeners();
   }

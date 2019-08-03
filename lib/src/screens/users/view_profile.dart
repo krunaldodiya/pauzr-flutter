@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/favorite.dart';
 import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/post.dart';
@@ -72,8 +73,10 @@ class _ViewProfilePage extends State<ViewProfilePage> {
     });
   }
 
-  bool isLiked(UserBloc userBloc, List likes) {
-    return likes.map((like) => like['user_id']).contains(userBloc.user.id);
+  bool isLiked(UserBloc userBloc, List<Favorite> favorites) {
+    return favorites
+        .map((favorite) => favorite.user.id)
+        .contains(userBloc.user.id);
   }
 
   @override
@@ -439,7 +442,7 @@ class _ViewProfilePage extends State<ViewProfilePage> {
                     alignment: Alignment.topRight,
                     child: Icon(
                       Icons.favorite,
-                      color: isLiked(userBloc, post.likes)
+                      color: isLiked(userBloc, post.favorites)
                           ? Colors.pink
                           : Colors.white,
                       size: 18.0,

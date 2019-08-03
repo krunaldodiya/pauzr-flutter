@@ -5,6 +5,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/favorite.dart';
 import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/post.dart';
@@ -185,7 +186,7 @@ class _ShowPost extends State<ShowPost> {
           ),
         InkWell(
           onDoubleTap: () {
-            return isLiked(userBloc, post.likes)
+            return isLiked(userBloc, post.favorites)
                 ? null
                 : likePost(userBloc, postBloc);
           },
@@ -219,7 +220,7 @@ class _ShowPost extends State<ShowPost> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  isLiked(userBloc, post.likes)
+                  isLiked(userBloc, post.favorites)
                       ? unlikePost(userBloc, postBloc)
                       : likePost(userBloc, postBloc);
                 },
@@ -227,7 +228,7 @@ class _ShowPost extends State<ShowPost> {
                   margin: EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
                   child: Icon(
                     Icons.favorite,
-                    color: isLiked(userBloc, post.likes)
+                    color: isLiked(userBloc, post.favorites)
                         ? Colors.pink
                         : Colors.grey,
                     size: 26.0,
@@ -245,7 +246,7 @@ class _ShowPost extends State<ShowPost> {
               context,
               routeList.show_likes,
               arguments: {
-                "likes": post.likes,
+                "likes": post.favorites,
                 "guestUser": widget.guestUser,
               },
             );
@@ -253,7 +254,7 @@ class _ShowPost extends State<ShowPost> {
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Text(
-              "${post.likes.length.toString()} ${post.likes.length > 1 ? 'likes' : 'like'}",
+              "${post.favorites.length.toString()} ${post.favorites.length > 1 ? 'likes' : 'like'}",
               style: TextStyle(
                 fontFamily: Fonts.titilliumWebSemiBold,
                 fontSize: 18.0,
@@ -278,8 +279,10 @@ class _ShowPost extends State<ShowPost> {
     );
   }
 
-  bool isLiked(UserBloc userBloc, List likes) {
-    return likes.map((like) => like['user_id']).contains(userBloc.user.id);
+  bool isLiked(UserBloc userBloc, List<Favorite> favorites) {
+    return favorites
+        .map((favorite) => favorite.user.id)
+        .contains(userBloc.user.id);
   }
 
   choiceActions(String choice, PostBloc postBloc) {
@@ -320,18 +323,10 @@ class _ShowPost extends State<ShowPost> {
 
   void likePost(UserBloc userBloc, PostBloc postBloc) {
     Post postData = post
-      ..likes.add({
-        "post_id": post.id,
-        "user_id": userBloc.user.id,
-        "user": {
-          "id": userBloc.user.id,
-          "name": userBloc.user.name,
-          "avatar": userBloc.user.avatar,
-          "city": {
-            "name": userBloc.user.city.name,
-          },
-        },
-      });
+      ..favorites.add(Favorite.fromMap({
+        "postId": post.id,
+        "user": userBloc.user,
+      }));
 
     setState(() {
       post = postData;
@@ -342,7 +337,8 @@ class _ShowPost extends State<ShowPost> {
 
   void unlikePost(UserBloc userBloc, PostBloc postBloc) {
     Post postData = post
-      ..likes.removeWhere((like) => like['user_id'] == userBloc.user.id);
+      ..favorites
+          .removeWhere((favorite) => favorite.user.id == userBloc.user.id);
 
     setState(() {
       post = postData;
@@ -382,7 +378,7 @@ class _ShowPost extends State<ShowPost> {
           onPressed: () {
             int minPoints = 20;
 
-            if (post.likes.length < minPoints) {
+            if (post.favorites.length < minPoints) {
               showErrorPopup(
                 context,
                 message: "Minimum $minPoints likes required to redeem.",
