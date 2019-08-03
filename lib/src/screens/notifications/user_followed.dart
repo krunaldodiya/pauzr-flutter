@@ -24,6 +24,8 @@ class UserFollowed extends StatelessWidget {
     return Container(
       color: notification.readAt == null ? Colors.grey.shade200 : Colors.white,
       child: ListTile(
+        dense: true,
+        isThreeLine: false,
         onTap: () {
           markAsRead(notification);
 
