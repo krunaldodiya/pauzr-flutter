@@ -131,12 +131,11 @@ class _ShowLikesPageState extends State<ShowLikesPage>
     if (userBloc.user.id == user['id']) return null;
 
     List followingIds = userBloc.user.followings
-        .map((following) => following["following_user"]["id"])
+        .map((following) => following.followingId)
         .toList();
 
-    List followerIds = userBloc.user.followers
-        .map((follower) => follower["follower_user"]['id'])
-        .toList();
+    List followerIds =
+        userBloc.user.followers.map((follower) => follower.followerId).toList();
 
     bool alreadyFollowing = followingIds.contains(user["id"]);
 

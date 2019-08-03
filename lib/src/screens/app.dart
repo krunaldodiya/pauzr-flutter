@@ -1,8 +1,10 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
+import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
 import 'package:pauzr/src/routes/generator.dart';
@@ -36,6 +38,8 @@ class _MyAppState extends State<MyApp> {
   getInitialData() async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
     final ThemeBloc themeBloc = Provider.of<ThemeBloc>(context);
+
+    FirebaseAdMob.instance.initialize(appId: admobAppId);
 
     await themeBloc.setTheme(DefaultTheme.defaultTheme(widget.defaultTheme));
     await userBloc.getAuthUser();

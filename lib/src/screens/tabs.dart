@@ -5,7 +5,6 @@ import 'package:pauzr/bottom_navigation.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/tabs.dart';
-import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/timer.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -31,7 +30,6 @@ class _TabsPage extends State<TabsPage> with SingleTickerProviderStateMixin {
 
   getInitialData() async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
     _interstitialAd = createInterstitialAd(userBloc)
       ..load()
       ..show();

@@ -3,31 +3,45 @@ import 'package:pauzr/src/models/user.dart';
 
 @immutable
 class Following {
-  final List users;
+  final int id;
+  final int followerId;
+  final int followingId;
+  final User followingUser;
 
-  Following({this.users});
+  Following({
+    this.id,
+    this.followerId,
+    this.followingId,
+    this.followingUser,
+  });
 
   Following copyWith(Map<String, dynamic> json) {
     return Following(
-      users: json["follower_user"] ?? this.users,
+      id: json["id"] ?? this.id,
+      followerId: json["follower_id"] ?? this.followerId,
+      followingId: json["following_id"] ?? this.followingId,
+      followingUser: json["following_user"] ?? this.followingUser,
     );
   }
 
   static fromMap(Map<String, dynamic> json) {
     return Following(
-      users: json['follower_user'] != null
-          ? json["follower_user"] is User
-              ? json["follower_user"]
-              : User.fromMap(json["follower_user"])
+      id: json["id"] != null ? json["id"] : null,
+      followerId: json["follower_id"] != null ? json["follower_id"] : null,
+      followingId: json["following_id"] != null ? json["following_id"] : null,
+      followingUser: json['following_user'] != null
+          ? json["following_user"] is User
+              ? json["following_user"]
+              : User.fromMap(json["following_user"])
           : null,
     );
   }
 
   static fromList(List followings) {
-    List list = List();
+    List<Following> list = List<Following>();
 
     for (Map following in followings) {
-      list.add(following['following_user']);
+      list.add(Following.fromMap(following));
     }
 
     return list;

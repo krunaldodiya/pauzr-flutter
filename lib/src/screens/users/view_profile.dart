@@ -318,12 +318,11 @@ class _ViewProfilePage extends State<ViewProfilePage> {
 
   getFollowButton(UserBloc userBloc) {
     List followingIds = userBloc.user.followings
-        .map((following) => following["following_user"]['id'])
+        .map((following) => following.followingId)
         .toList();
 
-    List followerIds = userBloc.user.followers
-        .map((follower) => follower["follower_user"]['id'])
-        .toList();
+    List followerIds =
+        userBloc.user.followers.map((follower) => follower.followerId).toList();
 
     bool alreadyFollowing = followingIds.contains(widget.user.id);
 
@@ -460,13 +459,25 @@ class _ViewProfilePage extends State<ViewProfilePage> {
 
   void followUser(UserBloc userBloc, int followingId, int guestId) async {
     XsProgressHud.show(context);
-    await userBloc.followUser(followingId, guestId);
+
+    final User user = await userBloc.followUser(followingId, guestId);
+
+    setState(() {
+      guestUser = user;
+    });
+
     XsProgressHud.hide();
   }
 
   void unfollowUser(UserBloc userBloc, int followingId, int guestId) async {
     XsProgressHud.show(context);
-    await userBloc.unfollowUser(followingId, guestId);
+
+    final User user = await userBloc.unfollowUser(followingId, guestId);
+
+    setState(() {
+      guestUser = user;
+    });
+
     XsProgressHud.hide();
   }
 }

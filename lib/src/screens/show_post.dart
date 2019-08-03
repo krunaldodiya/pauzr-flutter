@@ -45,7 +45,6 @@ class _ShowPost extends State<ShowPost> {
 
   getInitialData() async {
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    FirebaseAdMob.instance.initialize(appId: admobAppId);
     _interstitialAd = createInterstitialAd(userBloc)
       ..load()
       ..show();

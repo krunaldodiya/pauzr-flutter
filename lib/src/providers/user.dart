@@ -103,6 +103,8 @@ class UserBloc extends ChangeNotifier {
         loading: false,
         loaded: true,
       );
+
+      return User.fromMap(results['guest']);
     } catch (error) {
       setState(loading: false, loaded: true);
     }
@@ -123,6 +125,8 @@ class UserBloc extends ChangeNotifier {
         loading: false,
         loaded: true,
       );
+
+      return User.fromMap(results['guest']);
     } catch (error) {
       setState(loading: false, loaded: true);
     }

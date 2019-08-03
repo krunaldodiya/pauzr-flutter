@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:pauzr/src/models/city.dart';
 import 'package:pauzr/src/models/country.dart';
+import 'package:pauzr/src/models/follower.dart';
+import 'package:pauzr/src/models/following.dart';
 import 'package:pauzr/src/models/level.dart';
 import 'package:pauzr/src/models/post.dart';
 import 'package:pauzr/src/models/state.dart';
@@ -21,8 +23,8 @@ class User {
   final Level level;
   final Wallet wallet;
   final int status;
-  final List followers;
-  final List followings;
+  final List<Follower> followers;
+  final List<Following> followings;
   final List<Post> posts;
 
   User({
@@ -98,8 +100,16 @@ class User {
               : Wallet.fromMap(json["wallet"])
           : null,
       status: json["status"] != null ? json["status"] : null,
-      followers: json["followers"] != null ? json["followers"] : null,
-      followings: json["followings"] != null ? json["followings"] : null,
+      followers: json["followers"] != null
+          ? json["followers"] is Follower
+              ? json["followers"]
+              : Follower.fromList(json["followers"])
+          : null,
+      followings: json["followings"] != null
+          ? json["followings"] is Following
+              ? json["followings"]
+              : Following.fromList(json["followings"])
+          : null,
     );
   }
 
