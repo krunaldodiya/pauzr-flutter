@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
+import 'package:pauzr/src/models/favorite.dart';
 import 'package:pauzr/src/models/user.dart';
 import 'package:pauzr/src/providers/theme.dart';
 import 'package:pauzr/src/providers/user.dart';
@@ -12,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 class ShowLikesPage extends StatefulWidget {
-  final List likes;
+  final List<Favorite> likes;
   final User guestUser;
 
   ShowLikesPage({
@@ -63,24 +64,26 @@ class _ShowLikesPageState extends State<ShowLikesPage>
                 shrinkWrap: true,
                 itemCount: widget.likes.length,
                 itemBuilder: (context, index) {
-                  Map user = widget.likes[index]['user'];
+                  final User user = widget.likes[index].user;
 
                   return Container(
                     color: Colors.white,
                     child: ListTile(
+                      dense: true,
+                      isThreeLine: false,
                       onTap: () {
                         Navigator.pushNamed(
                           context,
                           routeList.view_profile,
                           arguments: {
                             "shouldPop": true,
-                            "user": User.fromMap(user),
+                            "user": user,
                           },
                         );
                       },
                       leading: ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: "$baseUrl/storage/${user['avatar']}",
+                          imageUrl: "$baseUrl/storage/${user.avatar}",
                           placeholder: (context, url) {
                             return Image.asset(
                               "assets/images/loading.gif",
@@ -100,7 +103,7 @@ class _ShowLikesPageState extends State<ShowLikesPage>
                         ),
                       ),
                       title: Text(
-                        user['name'],
+                        user.name,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
@@ -108,7 +111,7 @@ class _ShowLikesPageState extends State<ShowLikesPage>
                         ),
                       ),
                       subtitle: Text(
-                        user['city']['name'],
+                        user.city.name,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12.0,
@@ -128,7 +131,7 @@ class _ShowLikesPageState extends State<ShowLikesPage>
   }
 
   getFollowButton(UserBloc userBloc, user) {
-    if (userBloc.user.id == user['id']) return null;
+    if (userBloc.user.id == user.id) return null;
 
     List followingIds = userBloc.user.followings
         .map((following) => following.followingId)
@@ -137,9 +140,9 @@ class _ShowLikesPageState extends State<ShowLikesPage>
     List followerIds =
         userBloc.user.followers.map((follower) => follower.followerId).toList();
 
-    bool alreadyFollowing = followingIds.contains(user["id"]);
+    bool alreadyFollowing = followingIds.contains(user.id);
 
-    bool isFollower = followerIds.contains(user["id"]);
+    bool isFollower = followerIds.contains(user.id);
 
     return FlatButton(
       color: alreadyFollowing ? Colors.grey.shade300 : Colors.blue,
@@ -157,10 +160,10 @@ class _ShowLikesPageState extends State<ShowLikesPage>
                 context,
                 message: "Are you sure want to unfollow ?",
                 onPressYes: () {
-                  unfollowUser(userBloc, user["id"], widget.guestUser.id);
+                  unfollowUser(userBloc, user.id, widget.guestUser.id);
                 },
               )
-            : followUser(userBloc, user["id"], widget.guestUser.id);
+            : followUser(userBloc, user.id, widget.guestUser.id);
       },
     );
   }
