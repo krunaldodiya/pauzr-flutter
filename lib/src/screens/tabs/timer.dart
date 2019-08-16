@@ -131,9 +131,9 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
                     margin: EdgeInsets.only(bottom: 50.0),
                     child: Row(
                       children: <Widget>[
+                        getTimerCard(10, "Minutes", theme),
                         getTimerCard(20, "Minutes", theme),
-                        getTimerCard(40, "Minutes", theme),
-                        getTimerCard(60, "Minutes", theme),
+                        getTimerCard(30, "Minutes", theme),
                       ],
                     ),
                   ),
