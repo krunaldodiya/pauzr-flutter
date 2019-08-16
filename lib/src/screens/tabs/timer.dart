@@ -22,7 +22,7 @@ class _TimerPage extends State<TimerPage> with SingleTickerProviderStateMixin {
   int quoteIndex = 0;
   var timer;
 
-  Map points = {20: 1, 40: 3, 60: 5};
+  Map points = {10: 5, 20: 10, 30: 20};
 
   @override
   void initState() {
