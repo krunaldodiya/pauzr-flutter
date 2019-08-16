@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:package_info/package_info.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/country.dart';
 import 'package:pauzr/src/resources/client.dart';
@@ -118,6 +119,8 @@ class ApiProvider {
     int otp,
     String fcmToken,
   ) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     return sendRequest(Api.verifyOtp, {
       "mobile": mobile,
       "country": {
@@ -128,6 +131,7 @@ class ApiProvider {
       },
       "otp": otp,
       "fcm_token": fcmToken,
+      "version": packageInfo.version,
     });
   }
 
