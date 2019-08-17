@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:countdown/countdown.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/notifications.dart';
 import 'package:pauzr/src/providers/theme.dart';
@@ -34,8 +32,6 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  InterstitialAd _interstitialAd;
-
   final EventChannel eventChannel = EventChannel('com.pauzr.org/info');
 
   int durationSeconds;
@@ -43,7 +39,17 @@ class _StopPage extends State<StopPage>
 
   _StopPage({this.durationSeconds, this.durationMintues});
 
-  Map points = {1: 0, 2: 0, 3: 0, 20: 1, 40: 3, 60: 5};
+  Map points = {
+    1: 1,
+    2: 3,
+    3: 5,
+    10: 5,
+    20: 10,
+    30: 20,
+    40: 40,
+    50: 50,
+    60: 60
+  };
 
   int notificationId = 1;
   var timerSubscription;
@@ -61,6 +67,8 @@ class _StopPage extends State<StopPage>
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     eventChannel.receiveBroadcastStream().listen((Object event) async {
+      print("event $event");
+
       prefs.setString("screenStatus", event);
     });
   }
@@ -69,10 +77,6 @@ class _StopPage extends State<StopPage>
     WidgetsBinding.instance.addObserver(this);
 
     final UserBloc userBloc = Provider.of<UserBloc>(context);
-    _interstitialAd = createInterstitialAd(userBloc)
-      ..load()
-      ..show();
-
     final TimerBloc timerBloc = Provider.of<TimerBloc>(context);
 
     CountDown cd = CountDown(
@@ -95,8 +99,6 @@ class _StopPage extends State<StopPage>
 
   @override
   void dispose() {
-    _interstitialAd.dispose();
-    onFailure();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -112,6 +114,8 @@ class _StopPage extends State<StopPage>
         {
           Future.delayed(Duration(seconds: 2), () async {
             final String screenStatus = prefs.getString("screenStatus");
+
+            print("screenStatus $screenStatus");
 
             if (screenStatus != "ACTION_SCREEN_OFF") {
               prefs.setString("pauseTime", DateTime.now().toString());
@@ -149,6 +153,8 @@ class _StopPage extends State<StopPage>
   Future onSelectNotification(String payload) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String pauseTimeString = prefs.getString("pauseTime");
+
+    print("pauseTimeString $pauseTimeString");
 
     if (pauseTimeString != null) {
       final DateTime currentTime = DateTime.now();
@@ -384,7 +390,7 @@ class _StopPage extends State<StopPage>
   }
 
   onFailure() {
-    print("failure");
+    print("onFailure");
 
     timerSubscription.cancel();
 
@@ -401,6 +407,8 @@ class _StopPage extends State<StopPage>
   }
 
   onSuccess(duration, UserBloc userBloc, TimerBloc timerBloc) async {
+    print("onSuccess");
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("pauseTime");
 
