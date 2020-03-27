@@ -3,8 +3,7 @@ import 'package:pauzr/src/atp/default.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/providers/category.dart';
 import 'package:pauzr/src/providers/theme.dart';
-import 'package:pauzr/src/resources/api.dart';
-import 'package:pauzr/src/resources/client.dart';
+
 import 'package:provider/provider.dart';
 
 class BazaarPage extends StatefulWidget {
