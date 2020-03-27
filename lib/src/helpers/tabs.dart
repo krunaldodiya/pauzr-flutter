@@ -3,16 +3,16 @@ import 'package:pauzr/src/atp/screens/home.dart';
 import 'package:pauzr/src/atp/screens/main_scoreboard.dart';
 import 'package:pauzr/src/atp/screens/timer.dart';
 import 'package:pauzr/src/atp/screens/user_notification.dart';
+import 'package:pauzr/src/screens/tabs/bazaar.dart';
 import 'package:pauzr/src/screens/tabs/group.dart';
 import 'package:pauzr/src/screens/tabs/main_scoreboard.dart';
 import 'package:pauzr/src/screens/tabs/user_notifications.dart';
 import 'package:pauzr/src/screens/tabs/timer.dart';
-import 'package:pauzr/src/screens/tabs/lottery.dart';
 
 getTabsPage(int showTabIndex) {
   switch (showTabIndex) {
     case 0:
-      return LotteryPage();
+      return BazaarPage();
       break;
 
     case 1:

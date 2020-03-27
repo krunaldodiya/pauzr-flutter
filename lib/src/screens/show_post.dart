@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:pauzr/src/atp/default.dart';
-import 'package:pauzr/src/helpers/admob.dart';
 import 'package:pauzr/src/helpers/fonts.dart';
 import 'package:pauzr/src/helpers/vars.dart';
 import 'package:pauzr/src/models/favorite.dart';
@@ -32,8 +30,6 @@ class ShowPost extends StatefulWidget {
 }
 
 class _ShowPost extends State<ShowPost> {
-  InterstitialAd _interstitialAd;
-
   Post post;
 
   @override
@@ -44,11 +40,6 @@ class _ShowPost extends State<ShowPost> {
   }
 
   getInitialData() async {
-    final UserBloc userBloc = Provider.of<UserBloc>(context);
-    _interstitialAd = createInterstitialAd(userBloc)
-      ..load()
-      ..show();
-
     final PostBloc postBloc = Provider.of<PostBloc>(context);
     final Post postData = await postBloc.getPostDetail(widget.post.id);
 
@@ -59,7 +50,6 @@ class _ShowPost extends State<ShowPost> {
 
   @override
   void dispose() {
-    _interstitialAd.dispose();
     super.dispose();
   }
 

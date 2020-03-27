@@ -11,7 +11,7 @@ Container getNavigationBar(UserBloc userBloc, DefaultTheme theme) {
 
   var items = [
     Icon(
-      Ionicons.ios_trophy,
+      Ionicons.ios_basket,
       color: Colors.white,
       size: 25.0,
     ),

@@ -145,6 +145,10 @@ class ApiProvider {
     return sendRequest(Api.getQuotes);
   }
 
+  Future getCategories() async {
+    return sendRequest(Api.categories);
+  }
+
   Future createGroup(String name, String description, String photo) async {
     return sendRequest(Api.createGroup, {
       "name": name,
@@ -280,6 +284,7 @@ class ApiProvider {
 }
 
 class Api {
+  static String categories = "$baseUrl/api/categories/all";
   static String me = "$baseUrl/api/users/me";
   static String followUser = "$baseUrl/api/users/follow";
   static String unfollowUser = "$baseUrl/api/users/unfollow";

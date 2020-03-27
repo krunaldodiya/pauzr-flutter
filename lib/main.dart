@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:pauzr/src/providers/category.dart';
 import 'package:pauzr/src/providers/city.dart';
 import 'package:pauzr/src/providers/country.dart';
 import 'package:pauzr/src/providers/group.dart';
@@ -21,6 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'src/providers/ranking.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Screen.keepOn(false);
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,6 +73,9 @@ void main() async {
         ),
         ChangeNotifierProvider<OtpBloc>.value(
           notifier: OtpBloc(),
+        ),
+        ChangeNotifierProvider<CategoryBloc>.value(
+          notifier: CategoryBloc(),
         ),
       ],
       child: MyApp(

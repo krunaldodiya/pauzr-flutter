@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show kReleaseMode;
 
 String appName = "PauzR";
-String appId = "https://play.google.com/store/apps/details?id=com.pauzr.org";
+String appId = "https://play.google.com/store/apps/details?id=com.pauzrapp.org";
 String shareText =
     "PauzR app is helping me put down my phone and increase my productivity. I use it everyday. You might like it too! Take the PauzR challenge: $appId";
 

@@ -29,7 +29,7 @@ class StopPage extends StatefulWidget {
 
 class _StopPage extends State<StopPage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  final EventChannel eventChannel = EventChannel('com.pauzr.org/info');
+  final EventChannel eventChannel = EventChannel('com.pauzrapp.org/info');
 
   final int duration;
 
